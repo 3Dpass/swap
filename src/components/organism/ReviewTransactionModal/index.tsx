@@ -2,7 +2,7 @@ import { FC } from "react";
 import Modal from "../../atom/Modal";
 import Button from "../../atom/Button";
 import { ButtonVariants, InputEditedType, TransactionTypes } from "../../../app/types/enum";
-import { ReactComponent as DotToken } from "../../../assets/img/dot-token.svg";
+import DotToken from "../../../assets/img/dot-token.svg?react";
 
 interface SwapSelectTokenModalProps {
   open: boolean;
@@ -52,7 +52,7 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
             {transactionType === TransactionTypes.createPool && "You pay"}
           </span>
           <span className="flex w-full items-center justify-between font-unbounded-variable text-heading-4 font-bold text-gray-400">
-            <div className="flex overflow-y-scroll">{inputValueA}</div>
+            <div className="flex overflow-y-auto">{inputValueA}</div>
             <DotToken />
           </span>
         </div>
@@ -64,7 +64,7 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
             {transactionType === TransactionTypes.createPool && "You pay"}
           </span>
           <span className="flex w-full items-center justify-between gap-6 font-unbounded-variable text-heading-4 font-bold text-gray-400">
-            <div className="flex overflow-y-scroll">{inputValueB}</div>
+            <div className="flex overflow-y-auto">{inputValueB}</div>
             <DotToken />
           </span>
         </div>

@@ -20,9 +20,9 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
-import { ReactComponent as DotToken } from "../../../assets/img/dot-token.svg";
-import { ReactComponent as SwitchArrow } from "../../../assets/img/switch-arrow.svg";
-import { ReactComponent as AssetTokenIcon } from "../../../assets/img/test-token.svg";
+import DotToken from "../../../assets/img/dot-token.svg?react";
+import SwitchArrow from "../../../assets/img/switch-arrow.svg?react";
+import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceAfterAssetsSwapUpdate, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { createPoolCardsArray, getPoolReserves } from "../../../services/poolServices";

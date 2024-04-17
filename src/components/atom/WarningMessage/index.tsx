@@ -1,4 +1,4 @@
-import { ReactComponent as WarningIcon } from "../../../assets/img/warning-icon.svg";
+import WarningIcon from "../../../assets/img/warning-icon.svg?react";
 
 type WarningMessageProps = {
   message: string;

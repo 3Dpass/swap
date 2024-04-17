@@ -1,8 +1,8 @@
 import { ApiPromise } from "@polkadot/api";
-import { InjectedExtension } from "@polkadot/extension-inject/types";
 import { ActionType } from "../../app/types/enum";
 import { TokenBalanceData } from "../../app/types";
 import type { WalletAccount } from "@talismn/connect-wallets";
+import { InjectedExtension } from "@polkadot/extension-inject/types";
 
 export interface WalletState {
   api: ApiPromise | null;

@@ -1,6 +1,6 @@
 import Button from "../../components/atom/Button";
 import { ButtonVariants, LiquidityPageType } from "../../app/types/enum";
-import { ReactComponent as AddIconPink } from "../../assets/img/add-icon-pink.svg";
+import AddIconPink from "../../assets/img/add-icon-pink.svg?react";
 import { LpTokenAsset } from "../../app/types";
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
@@ -86,8 +86,8 @@ const PoolDataCard = ({
                 {tokenBalances?.balance && selectedAccount.address
                   ? t("poolsPage.doNotHaveLiquidityPair")
                   : !tokenBalances?.balance && selectedAccount.address
-                  ? t("poolsPage.assetsWait")
-                  : t("poolsPage.connectWallet")}
+                    ? t("poolsPage.assetsWait")
+                    : t("poolsPage.connectWallet")}
               </div>
             )}
           </Button>
@@ -103,8 +103,8 @@ const PoolDataCard = ({
                 {tokenBalances?.balance && selectedAccount.address
                   ? t("poolsPage.doNotHaveLiquidityPair")
                   : !tokenBalances?.balance && selectedAccount.address
-                  ? t("poolsPage.assetsWait")
-                  : t("poolsPage.connectWallet")}
+                    ? t("poolsPage.assetsWait")
+                    : t("poolsPage.connectWallet")}
               </div>
             )}
           </Button>

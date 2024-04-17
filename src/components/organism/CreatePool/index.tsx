@@ -16,9 +16,9 @@ import {
   formatInputTokenValue,
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
-import { ReactComponent as BackArrow } from "../../../assets/img/back-arrow.svg";
-import { ReactComponent as DotToken } from "../../../assets/img/dot-token.svg";
-import { ReactComponent as AssetTokenIcon } from "../../../assets/img/test-token.svg";
+import BackArrow from "../../../assets/img/back-arrow.svg?react";
+import DotToken from "../../../assets/img/dot-token.svg?react";
+import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkCreatePoolGasFee, createPool, getAllLiquidityPoolsTokensMetadata } from "../../../services/poolServices";
@@ -279,7 +279,10 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
           formatDecimalsFromToken(selectedTokenB.assetTokenBalance?.replace(/[, ]/g, ""), selectedTokenB.decimals)
         )
       ) {
-        return { label: t("button.insufficientTokenAmount", { token: selectedTokenB.tokenSymbol }), disabled: true };
+        return {
+          label: t("button.insufficientTokenAmount", { token: selectedTokenB.tokenSymbol }),
+          disabled: true,
+        };
       }
 
       if (selectedNativeTokenNumber.gt(0) && selectedAssetTokenNumber.gt(0) && assetTokenMinValueExceeded) {

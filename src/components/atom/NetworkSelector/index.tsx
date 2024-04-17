@@ -1,10 +1,10 @@
 import { Key, ReactNode, useRef } from "react";
 import { NetworkKeys } from "../../../app/types/enum";
-import { ReactComponent as RococoIcon } from "../../../assets/img/rococo-icon.svg";
-import { ReactComponent as WestendIcon } from "../../../assets/img/westend-icon.svg";
-import { ReactComponent as KusamaIcon } from "../../../assets/img/kusama-icon.svg";
-import { ReactComponent as SelectedNetworkCheck } from "../../../assets/img/selected-token-check.svg";
-import { ReactComponent as DownArrow } from "../../../assets/img/down-arrow.svg";
+import RococoIcon from "../../../assets/img/rococo-icon.svg?react";
+import WestendIcon from "../../../assets/img/westend-icon.svg?react";
+import KusamaIcon from "../../../assets/img/kusama-icon.svg?react";
+import SelectedNetworkCheck from "../../../assets/img/selected-token-check.svg?react";
+import DownArrow from "../../../assets/img/down-arrow.svg?react";
 import useClickOutside from "../../../app/hooks/useClickOutside";
 import { useSearchParams } from "react-router-dom";
 
