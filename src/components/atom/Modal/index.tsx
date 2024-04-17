@@ -1,7 +1,7 @@
 import { FC, ReactNode, Fragment } from "react";
 import { Dialog, Transition } from "@headlessui/react";
-import { ReactComponent as ModalCloseIcon } from "../../../assets/img/modal-close-icon.svg";
-import { ReactComponent as BackArrow } from "../../../assets/img/back-arrow.svg";
+import ModalCloseIcon from "../../../assets/img/modal-close-icon.svg?react";
+import BackArrow from "../../../assets/img/back-arrow.svg?react";
 
 interface ModalProps {
   isOpen: boolean;

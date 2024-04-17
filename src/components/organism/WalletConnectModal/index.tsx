@@ -1,6 +1,6 @@
 import Button from "../../atom/Button";
 import Modal from "../../atom/Modal";
-import { ReactComponent as RandomTokenIcon } from "../../../assets/img/random-token-icon.svg";
+import RandomTokenIcon from "../../../assets/img/random-token-icon.svg?react";
 import { useState } from "react";
 import { WalletConnectSteps } from "../../../app/types/enum";
 import { ModalStepProps } from "../../../app/types";

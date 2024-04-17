@@ -21,9 +21,9 @@ import {
   truncateDecimalNumber,
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
-import { ReactComponent as BackArrow } from "../../../assets/img/back-arrow.svg";
-import { ReactComponent as DotToken } from "../../../assets/img/dot-token.svg";
-import { ReactComponent as AssetTokenIcon } from "../../../assets/img/test-token.svg";
+import BackArrow from "../../../assets/img/back-arrow.svg?react";
+import DotToken from "../../../assets/img/dot-token.svg?react";
+import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { assetTokenData, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkWithdrawPoolLiquidityGasFee, getPoolReserves, removeLiquidity } from "../../../services/poolServices";

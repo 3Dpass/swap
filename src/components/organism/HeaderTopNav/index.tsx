@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { NavLink, useLocation } from "react-router-dom";
 import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
-import { ReactComponent as AccountImage } from "../../../assets/img/account-image-icon.svg";
-import { ReactComponent as Logo } from "../../../assets/img/logo-icon.svg";
+import AccountImage from "../../../assets/img/account-image-icon.svg?react";
+import Logo from "../../../assets/img/logo-icon.svg?react";
 import { ActionType, ButtonVariants, NetworkKeys, WalletConnectSteps } from "../../../app/types/enum.ts";
 import { reduceAddress } from "../../../app/util/helper";
 import {
@@ -10,7 +10,7 @@ import {
   getSupportedWallets,
   handleDisconnect,
 } from "../../../services/polkadotWalletServices";
-import { useAppContext } from "../../../state/index.tsx";
+import { useAppContext } from "../../../state";
 import Button from "../../atom/Button/index.tsx";
 import { t } from "i18next";
 import { useEffect, useState } from "react";

@@ -1,8 +1,8 @@
 import { FC } from "react";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
-import { ReactComponent as ArrowLeft } from "../../../assets/img/arrow-left.svg";
-import { ReactComponent as ArrowRight } from "../../../assets/img/arrow-right.svg";
-import { ReactComponent as OpenLinkArrow } from "../../../assets/img/open-link-arrow.svg";
+import ArrowLeft from "../../../assets/img/arrow-left.svg?react";
+import ArrowRight from "../../../assets/img/arrow-right.svg?react";
+import OpenLinkArrow from "../../../assets/img/open-link-arrow.svg?react";
 import { useAppContext } from "../../../state";
 import Modal from "../../atom/Modal";
 

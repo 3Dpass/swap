@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { POOLS_ADD_LIQUIDITY } from "../../app/router/routes";
 import { PoolCardProps } from "../../app/types";
 import { ButtonVariants } from "../../app/types/enum";
-import { ReactComponent as TokenIcon } from "../../assets/img/token-icon.svg";
+import TokenIcon from "../../assets/img/token-icon.svg?react";
 import { LottieLarge } from "../../assets/loader";
 import Button from "../../components/atom/Button";
 import { useAppContext } from "../../state";

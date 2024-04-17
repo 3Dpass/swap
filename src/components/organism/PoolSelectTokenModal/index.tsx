@@ -1,10 +1,10 @@
 import { FC } from "react";
 import classNames from "classnames";
-import { ReactComponent as DotToken } from "../../../assets/img/dot-token.svg";
+import DotToken from "../../../assets/img/dot-token.svg?react";
 import { ActionType } from "../../../app/types/enum";
 import { formatDecimalsFromToken } from "../../../app/util/helper";
 import { useAppContext } from "../../../state";
-import { ReactComponent as CheckIcon } from "../../../assets/img/selected-token-check.svg";
+import CheckIcon from "../../../assets/img/selected-token-check.svg?react";
 import Modal from "../../atom/Modal";
 
 type TokenProps = {
