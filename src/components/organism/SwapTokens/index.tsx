@@ -546,8 +546,8 @@ const SwapTokens = () => {
   const getSwapTokenA = async () => {
     if (api) {
       const poolsAssetTokenIds = pools?.map((pool: any) => {
-        if (pool?.[0]?.[1].interior?.X2) {
-          const assetTokenIds = pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "").toString();
+        if (pool?.[0]?.[1].Asset) {
+          const assetTokenIds = pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString();
           return assetTokenIds;
         }
       });
@@ -562,15 +562,15 @@ const SwapTokens = () => {
 
       await Promise.all(
         pools.map(async (pool: any) => {
-          if (pool?.[0]?.[1]?.interior?.X2) {
+          if (pool?.[0]?.[1]?.Asset) {
             const poolReserve: any = await getPoolReserves(
               api,
-              pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+              pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
             );
 
             if (poolReserve?.length > 0) {
               const assetTokenMetadata: any = await api.query.poscanAssets.metadata(
-                pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+                pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
               );
 
               poolTokenPairsArray.push({
@@ -1252,12 +1252,12 @@ const SwapTokens = () => {
       if (selectedTokens.tokenA.tokenSymbol === nativeTokenSymbol && selectedTokenBValue.tokenValue !== "") {
         const poolSelected: any = pools?.find(
           (pool: any) =>
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
+            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
         );
         if (poolSelected) {
           const poolReserve: any = await getPoolReserves(
             api,
-            poolSelected?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
           );
 
           const assetTokenReserve = formatDecimalsFromToken(
@@ -1291,13 +1291,13 @@ const SwapTokens = () => {
       ) {
         const poolSelected: any = pools?.find(
           (pool: any) =>
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
+            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
         );
 
         if (poolSelected) {
           const poolReserve: any = await getPoolReserves(
             api,
-            poolSelected?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
           );
           const assetTokenReserve = formatDecimalsFromToken(
             poolReserve?.[1]?.replace(/[, ]/g, ""),
@@ -1333,18 +1333,18 @@ const SwapTokens = () => {
       ) {
         const poolSelectedA: any = pools?.find(
           (pool: any) =>
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
+            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
         );
 
         const poolSelectedB: any = pools?.find(
           (pool: any) =>
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
+            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
         );
 
         if (poolSelectedA && poolSelectedB) {
           const poolReserveA: any = await getPoolReserves(
             api,
-            poolSelectedA?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+            poolSelectedA?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
           );
 
           const assetTokenReserveA = formatDecimalsFromToken(
@@ -1389,7 +1389,7 @@ const SwapTokens = () => {
 
             const poolReserveB: any = await getPoolReserves(
               api,
-              poolSelectedB?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+              poolSelectedB?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
             );
 
             const assetTokenReserveB = formatDecimalsFromToken(

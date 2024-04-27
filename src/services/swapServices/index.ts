@@ -8,6 +8,7 @@ import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { SwapAction } from "../../store/swap/interface";
 import { WalletAction } from "../../store/wallet/interface";
+import { createAssetTokenId, createNativeTokenId } from "../poolServices";
 
 const { parents } = useGetNetwork();
 
@@ -49,23 +50,8 @@ export const swapNativeForAssetExactIn = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
 
@@ -107,7 +93,10 @@ export const swapNativeForAssetExactIn = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
 
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
@@ -149,23 +138,8 @@ export const swapNativeForAssetExactOut = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
 
@@ -207,7 +181,10 @@ export const swapNativeForAssetExactOut = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
             type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -248,32 +225,9 @@ export const swapAssetForAssetExactIn = async (
   tokenBDecimals: string,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenAId }],
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const thirdArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenBId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createAssetTokenId(api, assetTokenAId);
+  const secondArg = createNativeTokenId(api);
+  const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
 
@@ -315,7 +269,10 @@ export const swapAssetForAssetExactIn = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
             type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -356,32 +313,9 @@ export const swapAssetForAssetExactOut = async (
   tokenBDecimals: string,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenAId }],
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const thirdArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenBId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createAssetTokenId(api, assetTokenAId);
+  const secondArg = createNativeTokenId(api);
+  const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
 
@@ -423,7 +357,10 @@ export const swapAssetForAssetExactOut = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
             type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -462,23 +399,8 @@ export const checkSwapNativeForAssetExactInGasFee = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   const result = api.tx.assetConversion.swapExactTokensForTokens(
     reverse ? [secondArg, firstArg] : [firstArg, secondArg],
@@ -508,23 +430,8 @@ export const checkSwapNativeForAssetExactOutGasFee = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   const result = api.tx.assetConversion.swapTokensForExactTokens(
     reverse ? [firstArg, secondArg] : [secondArg, firstArg],
@@ -554,32 +461,9 @@ export const checkSwapAssetForAssetExactInGasFee = async (
   assetTokenBValue: string,
   dispatch: Dispatch<SwapAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenAId }],
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const thirdArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenBId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createAssetTokenId(api, assetTokenAId);
+  const secondArg = createNativeTokenId(api);
+  const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   const result = api.tx.assetConversion.swapExactTokensForTokens(
     [firstArg, secondArg, thirdArg],
@@ -609,32 +493,9 @@ export const checkSwapAssetForAssetExactOutGasFee = async (
   assetTokenBValue: string,
   dispatch: Dispatch<SwapAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenAId }],
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const thirdArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenBId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createAssetTokenId(api, assetTokenAId);
+  const secondArg = createNativeTokenId(api);
+  const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   const result = api.tx.assetConversion.swapTokensForExactTokens(
     [firstArg, secondArg, thirdArg],

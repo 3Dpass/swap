@@ -4,6 +4,7 @@ import { u8aToHex } from "@polkadot/util";
 import Decimal from "decimal.js";
 import useGetNetwork from "../../app/hooks/useGetNetwork";
 import { formatDecimalsFromToken } from "../../app/util/helper";
+import { createAssetTokenId, createNativeTokenId } from "../poolServices";
 
 const { parents } = useGetNetwork();
 
@@ -12,23 +13,8 @@ export const getAssetTokenFromNativeToken = async (
   assetTokenId: string | null,
   nativeTokenValue: string
 ) => {
-  const multiLocation = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
-
-  const multiLocation2 = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
+  const multiLocation = createAssetTokenId(api, assetTokenId);
+  const multiLocation2 = createNativeTokenId(api);
 
   const amount = api.createType("u128", nativeTokenValue).toU8a();
   const bool = api.createType("bool", false).toU8a();
@@ -53,23 +39,8 @@ export const getNativeTokenFromAssetToken = async (
   assetTokenId: string | null,
   assetTokenValue: string
 ) => {
-  const multiLocation = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
-
-  const multiLocation2 = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
+  const multiLocation = createAssetTokenId(api, assetTokenId);
+  const multiLocation2 = createNativeTokenId(api);
 
   const amount = api.createType("u128", assetTokenValue).toU8a();
   const bool = api.createType("bool", false).toU8a();
@@ -107,32 +78,9 @@ export const getAssetTokenAFromAssetTokenB = async (
   assetToken1Id: string,
   assetToken2Id: string
 ) => {
-  const multiLocation1 = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetToken1Id }],
-      },
-    })
-    .toU8a();
-
-  const nativeTokenMultiLocation = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const multiLocation2 = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetToken2Id }],
-      },
-    })
-    .toU8a();
+  const multiLocation1 = createAssetTokenId(api, assetToken1Id);
+  const nativeTokenMultiLocation = createNativeTokenId(api);
+  const multiLocation2 = createAssetTokenId(api, assetToken2Id);
 
   const token2Amount = api.createType("u128", assetToken2Value).toU8a();
 
@@ -163,32 +111,9 @@ export const getAssetTokenBFromAssetTokenA = async (
   assetToken1Id: string,
   assetToken2Id: string
 ) => {
-  const multiLocation1 = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetToken1Id }],
-      },
-    })
-    .toU8a();
-
-  const nativeTokenMultiLocation = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const multiLocation2 = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetToken2Id }],
-      },
-    })
-    .toU8a();
+  const multiLocation1 = createAssetTokenId(api, assetToken1Id);
+  const nativeTokenMultiLocation = createNativeTokenId(api);
+  const multiLocation2 = createAssetTokenId(api, assetToken2Id);
 
   const token1Amount = api.createType("u128", assetToken1Value).toU8a();
   const bool = api.createType("bool", false).toU8a();

@@ -105,8 +105,8 @@ const WithdrawPoolLiquidity = () => {
 
   const populateAssetToken = () => {
     pools?.forEach(async (pool: any) => {
-      if (pool?.[0]?.[1]?.interior?.X2) {
-        if (pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "").toString() === params?.id) {
+      if (pool?.[0]?.[1]?.Asset) {
+        if (pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString() === params?.id) {
           if (params?.id) {
             if (api) {
               const tokenAlreadySelected: any = await assetTokenData(params?.id, api);
@@ -334,12 +334,12 @@ const WithdrawPoolLiquidity = () => {
       if (selectedTokenNativeValue?.tokenValue !== "" && selectedTokenAssetValue?.tokenValue !== "") {
         const poolSelected: any = pools?.find(
           (pool: any) =>
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
+            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
         );
         if (poolSelected && selectedTokenNativeValue?.tokenValue && selectedTokenAssetValue?.tokenValue) {
           const poolReserve: any = await getPoolReserves(
             api,
-            poolSelected?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
+            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
           );
 
           const assetTokenReserve = formatDecimalsFromToken(

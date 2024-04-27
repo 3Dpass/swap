@@ -52,8 +52,8 @@ export const checkIfPoolAlreadyExists = (id: string, poolArray: AnyJson[]) => {
   if (id && poolArray) {
     exists = !!poolArray?.find((pool: any) => {
       return (
-        pool?.[0]?.[1]?.interior?.X2 &&
-        pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "").toString() === id
+        pool?.[0]?.[1]?.Asset &&
+        pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString() === id
       );
     });
   }

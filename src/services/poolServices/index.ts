@@ -73,23 +73,8 @@ export const getAllPools = async (api: ApiPromise) => {
 };
 
 export const getPoolReserves = async (api: ApiPromise, assetTokenId: string) => {
-  const multiLocation2 = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const multiLocation = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        X2: [{ PalletInstance: 50 }, { GeneralIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const multiLocation = createAssetTokenId(api, assetTokenId);
+  const multiLocation2 = createNativeTokenId(api);
 
   const encodedInput = new Uint8Array(multiLocation.length + multiLocation2.length);
   encodedInput.set(multiLocation2, 0);
@@ -104,6 +89,14 @@ export const getPoolReserves = async (api: ApiPromise, assetTokenId: string) => 
   return decoded.toHuman();
 };
 
+export function createNativeTokenId(api: ApiPromise) {
+  return api.createType("PalletAssetConversionNativeOrAssetId", { native: true }).toU8a();
+}
+
+export function createAssetTokenId(api: ApiPromise, assetTokenId: string | null) {
+  return api.createType("PalletAssetConversionNativeOrAssetId", { asset: assetTokenId }).toU8a();
+}
+
 export const createPool = async (
   api: ApiPromise,
   assetTokenId: string,
@@ -116,23 +109,8 @@ export const createPool = async (
   assetTokenDecimals: string,
   dispatch: Dispatch<PoolAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: true });
 
@@ -202,23 +180,8 @@ export const addLiquidity = async (
   assetTokenDecimals: string,
   dispatch: Dispatch<PoolAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: true });
 
@@ -272,7 +235,10 @@ export const addLiquidity = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactAddedLiquidityInPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
           const allPools = await getAllPools(api);
@@ -301,23 +267,8 @@ export const removeLiquidity = async (
   assetTokenDecimals: string,
   dispatch: Dispatch<PoolAction | WalletAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: true });
 
@@ -363,7 +314,10 @@ export const removeLiquidity = async (
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
           exactWithdrawnLiquidityFromPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
-          dispatch({ type: ActionType.SET_BLOCK_HASH_FINALIZED, payload: response.status.asFinalized.toString() });
+          dispatch({
+            type: ActionType.SET_BLOCK_HASH_FINALIZED,
+            payload: response.status.asFinalized.toString(),
+          });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
           const allPools = await getAllPools(api);
@@ -387,23 +341,8 @@ export const checkCreatePoolGasFee = async (
   account: any,
   dispatch: Dispatch<PoolAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   const result = api.tx.assetConversion.createPool(firstArg, secondArg);
   const { partialFee } = await result.paymentInfo(account.address);
@@ -428,23 +367,8 @@ export const checkAddPoolLiquidityGasFee = async (
   minAssetTokenValue: string,
   dispatch: Dispatch<PoolAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   const result = api.tx.assetConversion.addLiquidity(
     firstArg,
@@ -471,9 +395,8 @@ export const getAllLiquidityPoolsTokensMetadata = async (api: ApiPromise) => {
   const pools = await getAllPools(api);
   if (pools) {
     const poolsAssetTokenIds = pools?.map((pool: any) => {
-      if (pool?.[0]?.[1].interior?.X2) {
-        const poolsTokenIds = pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex.replace(/[, ]/g, "").toString();
-        return poolsTokenIds;
+      if (pool?.[0]?.[1].Asset) {
+        return pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString();
       }
     });
 
@@ -506,23 +429,8 @@ export const checkWithdrawPoolLiquidityGasFee = async (
   minAssetTokenValue: string,
   dispatch: Dispatch<PoolAction>
 ) => {
-  const firstArg = api
-    .createType("MultiLocation", {
-      parents: parents,
-      interior: {
-        here: null,
-      },
-    })
-    .toU8a();
-
-  const secondArg = api
-    .createType("MultiLocation", {
-      parents: 0,
-      interior: {
-        x2: [{ palletInstance: 50 }, { generalIndex: assetTokenId }],
-      },
-    })
-    .toU8a();
+  const firstArg = createNativeTokenId(api);
+  const secondArg = createAssetTokenId(api, assetTokenId);
 
   const result = api.tx.assetConversion.removeLiquidity(
     firstArg,
@@ -567,16 +475,12 @@ export const createPoolCardsArray = async (
           lpToken = lpTokenAsset.toHuman() as LpTokenAsset;
         }
 
-        if (pool?.[0]?.[1]?.interior?.X2) {
-          const poolReserve: any = await getPoolReserves(
-            apiPool,
-            pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
-          );
+        if (pool?.[0]?.[1]?.Asset) {
+          const assetTokenId = pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString();
+          const poolReserve: any = await getPoolReserves(apiPool, assetTokenId);
 
           if (poolReserve?.length > 0) {
-            const assetTokenMetadata: any = await apiPool.query.poscanAssets.metadata(
-              pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
-            );
+            const assetTokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool?.[0]?.[1]?.Asset);
 
             const assetToken = poolReserve?.[1]?.replace(/[, ]/g, "");
             let assetTokenFormated = formatDecimalsFromToken(assetToken, assetTokenMetadata.toHuman()?.decimals);
@@ -602,7 +506,7 @@ export const createPoolCardsArray = async (
               name: `${nativeTokenSymbol}–${assetTokenMetadata.toHuman()?.symbol}`,
               lpTokenAsset: lpToken ? lpToken : null,
               lpTokenId: lpTokenId,
-              assetTokenId: pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, ""),
+              assetTokenId: assetTokenId,
               totalTokensLocked: {
                 nativeToken: {
                   decimals: nativeTokenDecimals || "0",
