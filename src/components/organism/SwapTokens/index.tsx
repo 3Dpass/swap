@@ -569,7 +569,7 @@ const SwapTokens = () => {
             );
 
             if (poolReserve?.length > 0) {
-              const assetTokenMetadata: any = await api.query.assets.metadata(
+              const assetTokenMetadata: any = await api.query.poscanAssets.metadata(
                 pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
               );
 
@@ -831,7 +831,7 @@ const SwapTokens = () => {
     const token = tokenBalances?.assets?.filter((item: any) => selectedTokens.tokenB.tokenId === item.tokenId);
     if (token?.length === 0) {
       if (selectedTokenBValue.tokenValue && api) {
-        const assetTokenInfo: any = await api.query.assets.asset(selectedTokens.tokenB.tokenId);
+        const assetTokenInfo: any = await api.query.poscanAssets.asset(selectedTokens.tokenB.tokenId);
         const assetTokenMinBalance = assetTokenInfo.toHuman()?.minBalance;
         if (
           parseInt(formatInputTokenValue(tokenBValueForSwap.tokenValue, selectedTokens.tokenB.decimals)) <
@@ -986,7 +986,7 @@ const SwapTokens = () => {
       if (!poolAsset) {
         throw new Error("Pool asset not found");
       }
-      const assetTokenInfoB: any = await api!.query.assets.asset(selectedTokens.tokenB.tokenId);
+      const assetTokenInfoB: any = await api!.query.poscanAssets.asset(selectedTokens.tokenB.tokenId);
       const assetTokenMinBalanceB = assetTokenInfoB.toHuman()?.minBalance.replace(/[, ]/g, "");
       ({ formattedValueA, formattedValueB, priceCalcType, valueA, valueB, minAmountA, minAmountB } =
         getMaxClickAssetFromNativeValues({
@@ -999,7 +999,7 @@ const SwapTokens = () => {
       if (!poolAsset) {
         throw new Error("Pool asset not found");
       }
-      const assetTokenInfoA: any = await api!.query.assets.asset(selectedTokens.tokenA.tokenId);
+      const assetTokenInfoA: any = await api!.query.poscanAssets.asset(selectedTokens.tokenA.tokenId);
       const assetTokenMinBalanceA = assetTokenInfoA.toHuman()?.minBalance.replace(/[, ]/g, "");
       ({ formattedValueA, formattedValueB, priceCalcType, valueA, valueB, minAmountA, minAmountB } =
         getMaxClickNativeFromAssetValues({
@@ -1011,9 +1011,9 @@ const SwapTokens = () => {
       if (!poolAsset) {
         throw new Error("Pool asset not found");
       }
-      const assetTokenInfoA: any = await api!.query.assets.asset(selectedTokens.tokenA.tokenId);
+      const assetTokenInfoA: any = await api!.query.poscanAssets.asset(selectedTokens.tokenA.tokenId);
       const assetTokenMinAmountA = assetTokenInfoA.toHuman()?.minBalance.replace(/[, ]/g, "");
-      const assetTokenInfoB: any = await api!.query.assets.asset(selectedTokens.tokenB.tokenId);
+      const assetTokenInfoB: any = await api!.query.poscanAssets.asset(selectedTokens.tokenB.tokenId);
       const assetTokenMinAmountB = assetTokenInfoB.toHuman()?.minBalance.replace(/[, ]/g, "");
       ({ formattedValueA, formattedValueB, priceCalcType, valueA, valueB, minAmountA, minAmountB } =
         getMaxAssetFromAssetValues({ assetTokenMinAmountA, assetTokenMinAmountB, poolAsset }));

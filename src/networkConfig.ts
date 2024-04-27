@@ -8,22 +8,10 @@ type NetworkConfig = {
 };
 
 export const NETWORKS: Record<NetworkKeys, NetworkConfig> = {
-  [NetworkKeys.Westend]: {
-    nativeTokenSymbol: "WND",
-    rpcUrl: "wss://westmint-rpc.polkadot.io",
+  [NetworkKeys.P3D]: {
+    nativeTokenSymbol: "P3D",
+    rpcUrl: "wss://rpc.3dpscan.io",
     parents: 1,
-    assethubSubscanUrl: "https://westmint.statescan.io/#",
-  },
-  [NetworkKeys.Rococo]: {
-    nativeTokenSymbol: "ROC",
-    rpcUrl: "wss://rococo-asset-hub-rpc.polkadot.io/",
-    parents: 1,
-    assethubSubscanUrl: "https://assethub-rococo.subscan.io",
-  },
-  [NetworkKeys.Kusama]: {
-    nativeTokenSymbol: "KSM",
-    rpcUrl: "wss://kusama-asset-hub-rpc.polkadot.io/",
-    parents: 1,
-    assethubSubscanUrl: "https://assethub-kusama.subscan.io",
+    assethubSubscanUrl: "https://explorer.3dpassmining.info/",
   },
 };

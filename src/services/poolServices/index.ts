@@ -481,7 +481,7 @@ export const getAllLiquidityPoolsTokensMetadata = async (api: ApiPromise) => {
       if (item) {
         const poolReserves: any = await getPoolReserves(api, item);
         if (poolReserves?.length > 0) {
-          const poolsTokenMetadata = await api.query.assets.metadata(item);
+          const poolsTokenMetadata = await api.query.poscanAssets.metadata(item);
           const resultObject = {
             tokenId: item,
             assetTokenMetadata: poolsTokenMetadata.toHuman(),
@@ -563,7 +563,7 @@ export const createPoolCardsArray = async (
 
         let lpToken = null;
         if (selectedAccount?.address) {
-          const lpTokenAsset = await apiPool.query.poolAssets.account(lpTokenId, selectedAccount?.address);
+          const lpTokenAsset = await apiPool.query.poscanPoolassets.account(lpTokenId, selectedAccount?.address);
           lpToken = lpTokenAsset.toHuman() as LpTokenAsset;
         }
 
@@ -574,7 +574,7 @@ export const createPoolCardsArray = async (
           );
 
           if (poolReserve?.length > 0) {
-            const assetTokenMetadata: any = await apiPool.query.assets.metadata(
+            const assetTokenMetadata: any = await apiPool.query.poscanAssets.metadata(
               pool?.[0]?.[1]?.interior?.X2?.[1]?.GeneralIndex?.replace(/[, ]/g, "")
             );
 

@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { NavLink, useLocation } from "react-router-dom";
 import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
 import AccountImage from "../../../assets/img/account-image-icon.svg?react";
-import Logo from "../../../assets/img/logo-icon.svg?react";
+import Logo from "../../../assets/img/3dpass-logo.svg?react";
 import { ActionType, ButtonVariants, NetworkKeys, WalletConnectSteps } from "../../../app/types/enum.ts";
 import { reduceAddress } from "../../../app/util/helper";
 import {
@@ -92,7 +92,7 @@ const HeaderTopNav = () => {
   return (
     <>
       <nav className="flex h-[73px] items-center justify-between px-[23px]">
-        <div className="w-[400px]">
+        <div className="w-[120px]">
           <Logo />
         </div>
         <div className="flex gap-16 text-gray-200">
@@ -116,7 +116,7 @@ const HeaderTopNav = () => {
 
         <div className="flex w-[400px] items-center gap-8">
           <NetworkSelector
-            items={[{ name: NetworkKeys.Rococo }, { name: NetworkKeys.Westend }, { name: NetworkKeys.Kusama }]}
+            items={[{ name: NetworkKeys.P3D }]}
             networkSelected={window.localStorage.getItem("network") as NetworkKeys}
             isDropdownOpen={isDropdownOpen}
             setIsDropdownOpen={setIsDropdownOpen}

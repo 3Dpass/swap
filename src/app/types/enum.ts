@@ -80,9 +80,7 @@ export enum TokenPosition {
 }
 
 export enum NetworkKeys {
-  Westend = "westend",
-  Rococo = "rococo",
-  Kusama = "kusama",
+  P3D = "p3d",
 }
 
 export enum WalletConnectSteps {

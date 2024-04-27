@@ -37,7 +37,7 @@ export const getWalletTokensBalance = async (api: ApiPromise, walletAddress: str
   const tokenMetadata = api.registry.getChainProperties();
   const existentialDeposit = await api.consts.balances.existentialDeposit;
 
-  const allAssets = await api.query.assets.asset.entries();
+  const allAssets = await api.query.poscanAssets.asset.entries();
 
   const allChainAssets: { tokenData: AnyJson; tokenId: any }[] = [];
 
@@ -52,8 +52,8 @@ export const getWalletTokensBalance = async (api: ApiPromise, walletAddress: str
     const cleanedTokenId = item?.tokenId?.[0]?.replace(/[, ]/g, "");
     assetTokensDataPromises.push(
       Promise.all([
-        api.query.assets.account(cleanedTokenId, walletAddress),
-        api.query.assets.metadata(cleanedTokenId),
+        api.query.poscanAssets.account(cleanedTokenId, walletAddress),
+        api.query.poscanAssets.metadata(cleanedTokenId),
       ]).then(([tokenAsset, assetTokenMetadata]) => {
         if (tokenAsset.toHuman()) {
           const resultObject = {
@@ -93,7 +93,7 @@ export const getWalletTokensBalance = async (api: ApiPromise, walletAddress: str
 };
 
 export const assetTokenData = async (id: string, api: ApiPromise) => {
-  const assetTokenMetadata = await api.query.assets.metadata(id);
+  const assetTokenMetadata = await api.query.poscanAssets.metadata(id);
 
   const resultObject = {
     tokenId: id,
@@ -150,12 +150,12 @@ export const setTokenBalanceUpdate = async (
   });
   const existentialDeposit = await api.consts.balances.existentialDeposit;
 
-  const tokenAsset = await api.query.assets.account(assetId, walletAddress);
+  const tokenAsset = await api.query.poscanAssets.account(assetId, walletAddress);
 
-  const assetsUpdated = oldWalletBalance.assets;
+  const assetsUpdated = oldWalletBalance.poscanAssets;
 
   if (tokenAsset.toHuman()) {
-    const assetTokenMetadata = await api.query.assets.metadata(assetId);
+    const assetTokenMetadata = await api.query.poscanAssets.metadata(assetId);
 
     const resultObject = {
       tokenId: assetId,
@@ -201,14 +201,14 @@ export const setTokenBalanceAfterAssetsSwapUpdate = async (
     withSi: false,
   });
 
-  const tokenAssetA = await api.query.assets.account(assetAId, walletAddress);
-  const tokenAssetB = await api.query.assets.account(assetBId, walletAddress);
+  const tokenAssetA = await api.query.poscanAssets.account(assetAId, walletAddress);
+  const tokenAssetB = await api.query.poscanAssets.account(assetBId, walletAddress);
 
-  const assetsUpdated = oldWalletBalance.assets;
+  const assetsUpdated = oldWalletBalance.poscanAssets;
 
   if (tokenAssetA.toHuman() && tokenAssetB.toHuman()) {
-    const assetTokenAMetadata = await api.query.assets.metadata(assetAId);
-    const assetTokenBMetadata = await api.query.assets.metadata(assetBId);
+    const assetTokenAMetadata = await api.query.poscanAssets.metadata(assetAId);
+    const assetTokenBMetadata = await api.query.poscanAssets.metadata(assetBId);
 
     const resultObjectA = {
       tokenId: assetAId,

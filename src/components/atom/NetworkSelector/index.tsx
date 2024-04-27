@@ -1,8 +1,6 @@
 import { Key, ReactNode, useRef } from "react";
 import { NetworkKeys } from "../../../app/types/enum";
-import RococoIcon from "../../../assets/img/rococo-icon.svg?react";
-import WestendIcon from "../../../assets/img/westend-icon.svg?react";
-import KusamaIcon from "../../../assets/img/kusama-icon.svg?react";
+import P3DIcon from "../../../assets/img/3dpass-icon.svg?react";
 import SelectedNetworkCheck from "../../../assets/img/selected-token-check.svg?react";
 import DownArrow from "../../../assets/img/down-arrow.svg?react";
 import useClickOutside from "../../../app/hooks/useClickOutside";
@@ -49,9 +47,7 @@ const NetworkSelector = ({ networkSelected, items, isDropdownOpen, setIsDropdown
         type="button"
       >
         <span className="flex items-center gap-2">
-          {networkSelected === NetworkKeys.Kusama && <KusamaIcon width={20} height={20} />}
-          {networkSelected === NetworkKeys.Rococo && <RococoIcon width={20} height={20} />}
-          {networkSelected === NetworkKeys.Westend && <WestendIcon width={20} height={20} />}
+          {networkSelected === NetworkKeys.P3D && <P3DIcon width={20} height={20} />}
           {networkSelected}
         </span>
         <DownArrow />
@@ -65,9 +61,7 @@ const NetworkSelector = ({ networkSelected, items, isDropdownOpen, setIsDropdown
                 onClick={() => switchNetwork(item.name.toLowerCase())}
               >
                 <span className="flex items-center gap-1">
-                  {item.name.toLowerCase() === NetworkKeys.Kusama && <KusamaIcon width={20} height={20} />}
-                  {item.name.toLowerCase() === NetworkKeys.Rococo && <RococoIcon width={20} height={20} />}
-                  {item.name.toLowerCase() === NetworkKeys.Westend && <WestendIcon width={20} height={20} />}
+                  {item.name.toLowerCase() === NetworkKeys.P3D && <P3DIcon width={20} height={20} />}
                   {item.name}
                 </span>
                 {networkSelected === item.name.toLowerCase() && <SelectedNetworkCheck />}

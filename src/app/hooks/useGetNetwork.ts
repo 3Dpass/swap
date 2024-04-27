@@ -7,8 +7,8 @@ const useGetNetwork = () => {
   if (network) {
     return NETWORKS[network as NetworkKeys];
   } else {
-    window.localStorage.setItem("network", NetworkKeys.Kusama);
-    return NETWORKS[NetworkKeys.Kusama];
+    window.localStorage.setItem("network", NetworkKeys.P3D);
+    return NETWORKS[NetworkKeys.P3D];
   }
 };
 

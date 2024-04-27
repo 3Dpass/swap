@@ -230,7 +230,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
 
   const checkAssetTokenMinAmount = async () => {
     if (selectedTokenAssetValue && api && selectedTokenB.assetTokenId) {
-      const assetTokenInfo: any = await api.query.assets.asset(selectedTokenB.assetTokenId);
+      const assetTokenInfo: any = await api.query.poscanAssets.asset(selectedTokenB.assetTokenId);
       const assetTokenMinBalance = assetTokenInfo.toHuman()?.minBalance;
       if (!assetTokenMinBalance) return;
       const formattedMinTokenAmount = assetTokenMinBalance.replace(/[, ]/g, "");
