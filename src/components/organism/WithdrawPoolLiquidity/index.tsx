@@ -212,11 +212,11 @@ const WithdrawPoolLiquidity = () => {
       const assetTokenInfo: any = await api.query.poscanAssets.asset(selectedTokenB.assetTokenId);
       const assetTokenInfoMinBalance = assetTokenInfo?.toHuman()?.minBalance?.replace(/[, ]/g, "");
       const nativeTokenExistentialDeposit = tokenBalances?.existentialDeposit.replace(/[, ]/g, "");
-      const lpTokenTotalAsset: any = await api.query.poscanPoolassets.asset(location?.state?.lpTokenId);
+      const lpTokenTotalAsset: any = await api.query.poscanPoolAssets.asset(location?.state?.lpTokenId);
 
       const lpTotalAssetSupply = lpTokenTotalAsset.toHuman()?.supply?.replace(/[, ]/g, "");
 
-      const lpTokenUserAccount = await api.query.poscanPoolassets.account(
+      const lpTokenUserAccount = await api.query.poscanPoolAssets.account(
         location?.state?.lpTokenId,
         selectedAccount?.address
       );

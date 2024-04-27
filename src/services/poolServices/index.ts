@@ -563,7 +563,7 @@ export const createPoolCardsArray = async (
 
         let lpToken = null;
         if (selectedAccount?.address) {
-          const lpTokenAsset = await apiPool.query.poscanPoolassets.account(lpTokenId, selectedAccount?.address);
+          const lpTokenAsset = await apiPool.query.poscanPoolAssets.account(lpTokenId, selectedAccount?.address);
           lpToken = lpTokenAsset.toHuman() as LpTokenAsset;
         }
 
