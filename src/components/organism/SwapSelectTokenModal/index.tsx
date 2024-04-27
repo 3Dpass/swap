@@ -46,10 +46,10 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
         {tokensData.length > 0 ? (
           <>
             {tokensData?.map((item: any, index: number) => (
-              <div key={index} className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-purple-800">
+              <div key={index} className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-pink">
                 <button
                   className={classNames("flex items-center gap-3 px-4 py-3", {
-                    "rounded-md bg-purple-200 hover:bg-purple-800": item.tokenId === selected.tokenId,
+                    "rounded-md bg-purple-200 hover:bg-pink": item.tokenId === selected.tokenId,
                   })}
                   onClick={() =>
                     handleSelectToken({

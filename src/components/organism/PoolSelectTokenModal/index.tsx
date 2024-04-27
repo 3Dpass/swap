@@ -44,10 +44,10 @@ const PoolSelectTokenModal: FC<PoolSelectTokenModalProps> = ({ open, title, sele
         <div className="max-h-[504px] overflow-y-auto">
           {tokenBalances?.assets && tokenBalances?.assets.length > 0 ? (
             tokenBalances?.assets?.map((item: any, index: number) => (
-              <div key={index} className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-purple-800">
+              <div key={index} className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-pink">
                 <button
                   className={classNames("flex items-center gap-3 px-4 py-3", {
-                    "rounded-md bg-purple-200 hover:bg-purple-800": item.tokenId === selected?.assetTokenId,
+                    "rounded-md bg-purple-200 hover:bg-pink": item.tokenId === selected?.assetTokenId,
                   })}
                   onClick={() =>
                     handlePoolAssetTokeData(
