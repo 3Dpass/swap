@@ -41,16 +41,24 @@ const SwapAndPoolSuccessModal: FC<SwapAndPoolSuccessModalProps> = ({
           <div className="font-unbounded-variable text-heading-6">{contentTitle}</div>
           <div className="my-8 flex flex-col items-center justify-center gap-3">
             <div className="flex items-center justify-center gap-2 font-unbounded-variable">
-              {tokenA.icon} {tokenA.symbol}
+              <div className="w-12 flex-shrink-0">{tokenA.icon}</div>
+              {tokenA.symbol}
               <ArrowLeft />
               <ArrowRight />
-              {tokenB.symbol} {tokenB.icon}
+              <div className="w-12 flex-shrink-0">{tokenB.symbol}</div>
+              {tokenB.icon}
             </div>
             <div className="flex w-full justify-center text-gray-200">
               <div>{actionLabel}</div>
             </div>
             <div className="flex items-center justify-center gap-2 font-unbounded-variable text-medium">
-              {tokenA.icon} {tokenA.value} {tokenA.symbol} <ArrowRight /> {tokenB.icon} {tokenB.value} {tokenB.symbol}
+              <div className="w-12 flex-shrink-0">{tokenA.icon}</div>
+              {tokenA.value}
+              <div className="w-12 flex-shrink-0">{tokenA.symbol}</div>
+              <ArrowRight />
+              <div className="w-12 flex-shrink-0">{tokenB.icon}</div>
+              {tokenB.value}
+              <div className="w-12 flex-shrink-0">{tokenB.symbol}</div>
             </div>
           </div>
           <div className="flex flex-row items-center justify-center gap-1 font-unbounded-variable text-medium underline">
