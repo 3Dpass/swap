@@ -62,7 +62,7 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-3">
-                      <div>
+                      <div className="flex-shrink-0">
                         <DotToken width={36} height={36} />
                       </div>
                       <div className="flex flex-col items-start">

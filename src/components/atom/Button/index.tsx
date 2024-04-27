@@ -67,7 +67,7 @@ const Button = ({ children, disabled, className, icon, variant, onClick }: Butto
       onMouseLeave={() => setIsButtonHover(false)}
       type="button"
     >
-      {icon ? icon : null}
+      {icon ? <div className="flex-shrink-0 w-6">{icon}</div> : null}
       {children}
       {showArrowDownIcon()}
     </button>
