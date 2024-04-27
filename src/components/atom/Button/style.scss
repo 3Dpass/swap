@@ -4,7 +4,7 @@ button {
 
     &-pink {
       @extend .btn-primary;
-      @apply border border-green-950 bg-green-900 text-white hover:border-black hover:bg-black;
+      @apply border border-pink bg-pink text-white hover:border-black hover:bg-black;
 
       &-lg {
         @extend .btn-primary-pink;
@@ -71,7 +71,7 @@ button {
 
     &-pink {
       @extend .btn-select;
-      @apply bg-green-900 text-white hover:bg-black;
+      @apply bg-pink text-white hover:bg-black;
     }
 
     &-gray {

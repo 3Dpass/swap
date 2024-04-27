@@ -9,11 +9,11 @@ export default {
       },
       colors: {
         pink: {
-          DEFAULT: "#E6007A",
+          DEFAULT: "#14532d",
         },
         ghost: {
-          100: "#E6007A1A",
-          200: "#E6007A33",
+          100: "#14532d1A",
+          200: "#14532d33",
         },
         purple: {
           50: "#FBFCFE",
