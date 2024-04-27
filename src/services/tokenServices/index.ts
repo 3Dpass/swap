@@ -2,11 +2,8 @@ import { ApiPromise } from "@polkadot/api";
 import type { AnyJson } from "@polkadot/types/types/codec";
 import { u8aToHex } from "@polkadot/util";
 import Decimal from "decimal.js";
-import useGetNetwork from "../../app/hooks/useGetNetwork";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import { createAssetTokenId, createNativeTokenId } from "../poolServices";
-
-const { parents } = useGetNetwork();
 
 export const getAssetTokenFromNativeToken = async (
   api: ApiPromise,

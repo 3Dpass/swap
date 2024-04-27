@@ -2,15 +2,12 @@ import { ApiPromise } from "@polkadot/api";
 import { getWalletBySource, type WalletAccount } from "@talismn/connect-wallets";
 import { t } from "i18next";
 import { Dispatch } from "react";
-import useGetNetwork from "../../app/hooks/useGetNetwork";
 import { ActionType, ServiceResponseStatus } from "../../app/types/enum";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { SwapAction } from "../../store/swap/interface";
 import { WalletAction } from "../../store/wallet/interface";
 import { createAssetTokenId, createNativeTokenId } from "../poolServices";
-
-const { parents } = useGetNetwork();
 
 const checkIfExactError = (errorValue: string) => {
   return errorValue === t("swapPage.palletSlippageError");

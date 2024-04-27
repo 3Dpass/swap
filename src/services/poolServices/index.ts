@@ -14,7 +14,7 @@ import AssetTokenIcon from "../../assets/img/test-token.svg";
 import { PoolAction } from "../../store/pools/interface";
 import { WalletAction } from "../../store/wallet/interface";
 
-const { parents, nativeTokenSymbol } = useGetNetwork();
+const { nativeTokenSymbol } = useGetNetwork();
 
 const exactAddedLiquidityInPool = (
   itemEvents: any,
