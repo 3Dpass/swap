@@ -1,4 +1,4 @@
-# UI & Front-end for Asset Conversion pallet
+# DEX UI & Front-end for Asset Conversion pallet ([3DPRC-2](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md) standard supported)
 
 ## Table of contents
 
@@ -26,14 +26,12 @@
 
 ## Description
 
-This project is part of Polkadot initiative for building front-end and UI for Asset Conversion Pallet on Polkadot's AssetHub. Link to the proposal [here](https://polkadot.polkassembly.io/referenda/68). Currently, the app is deployed on Westend, Rococo and Kusama - [here](https://dotacp-demo.mvpworkshop.co/swap?network=kusama).
+2023 This project is part of Polkadot initiative for building front-end and UI for Asset Conversion Pallet on Polkadot's AssetHub. Link to the proposal [here](https://polkadot.polkassembly.io/referenda/68). Currently, the app is deployed on Westend, Rococo and Kusama - [here](https://dotacp-demo.mvpworkshop.co/swap?network=kusama).
 
+2024 - This project is part of 3DPass initiative, which stands for global support of [3DPRC-2 tokenization standard](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md). The app is deployed on The Ledger of Things [mainnet](https://github.com/3Dpass/3DP) - [here](https://swap.3dpscan.io)
 
 ## Useful links
 
-Link to [Figma file](https://www.figma.com/community/file/1309495648742675196/dotacp-ui-kit).
-Link to User story [document](https://docs.google.com/document/d/1EiRS3g4I1bvLaxou3UBr_CLzsnE-Uqp0QaRhNSHoB-o/edit#heading=h.94y7ctthwqt2).
-Link to the [GitHub project](https://github.com/orgs/MVPWorkshop/projects/11).
 All important information regarding the pallet communication is [here](./ASSET_CONVERSION_PALLET.md).
 
 ## How to install
