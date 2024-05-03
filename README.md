@@ -30,6 +30,17 @@
 
 2024 - This project is part of 3DPass initiative, which stands for global support of [3DPRC-2 tokenization standard](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md). The app is deployed on The Ledger of Things [mainnet](https://github.com/3Dpass/3DP) - [here](https://swap.3dpscan.io)
 
+The main difference between The Ledger of Things DEX and some standard `AssetConversion` Substrate pallet inteegration comes down to [3DPRC-2](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md) tokenization standard support. There is a [poscanAssets](https://github.com/3Dpass/3DP/tree/main/pallets/poscan-assets) pallet implemented into The Ledger of Things, which allows for dealing with both conventional Fungible tokens and 3DPRC-2 objects share-tokens. Whereas, the standard integration of the `AssetConversion` pallet leverages two instances of the `Assets` pallet supporting just regular Fungible Tokens only. 
+
+### Compare: 
+- Standard `AssetConversion` Substrate pallet implementation:
+  - standard `Assets` pallet (fungible tokens only) for tokens created by users
+  - standard `Assets` pallet (fungible tokens only) for Liquidity Pools tokens
+
+- The Ledger of Things featured integration of the `AssetConversion` pallet:
+  - `poscanAssets` custom pallet (fungible tokens & 3DPRC-2 objects share-tokens) for tokens created by users
+  - standard `poscanPoolAssets` pallet (fungible tokens only) for Liquidity Pools tokens
+
 ## Useful links
 
 All important information regarding the pallet communication is [here](./ASSET_CONVERSION_PALLET.md).
