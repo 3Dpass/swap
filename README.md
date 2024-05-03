@@ -26,7 +26,7 @@
 
 ## Description
 
-2023 This project is part of Polkadot initiative for building front-end and UI for Asset Conversion Pallet on Polkadot's AssetHub. Link to the proposal [here](https://polkadot.polkassembly.io/referenda/68). Currently, the app is deployed on Westend, Rococo and Kusama - [here](https://dotacp-demo.mvpworkshop.co/swap?network=kusama).
+2023 This project is part of Polkadot initiative for building front-end and UI for Asset Conversion Pallet on Polkadot's AssetHub. Link to the proposal [here](https://polkadot.polkassembly.io/referenda/68). Currently, the standard inplementation of the app is deployed on Westend, Rococo and Kusama - [here](https://dotacp-demo.mvpworkshop.co/swap?network=kusama).
 
 2024 - This project is part of 3DPass initiative, which stands for global support of [3DPRC-2 tokenization standard](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md). The app is deployed on The Ledger of Things [mainnet](https://github.com/3Dpass/3DP) - [here](https://swap.3dpscan.io)
 
