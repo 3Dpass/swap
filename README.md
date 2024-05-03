@@ -56,7 +56,7 @@ pnpm run test
 
 ## How to manually test the app
 
-If you wish to help us out and manually test the app on one of the two test networks(Westend/Rococo) please follow this [guide](./MANUAL_TESTING_GUIDE.md).
+If you wish to help us out and manually test the app on The Ledger of Things please follow this [guide](./MANUAL_TESTING_GUIDE.md).
 
 To report any bugs or security vulnerability found please follow the instructions under the issues section [here](./CONTRIBUTING.md).
 
