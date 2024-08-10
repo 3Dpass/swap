@@ -15,6 +15,10 @@ const Footer = () => {
               <span className="text-purple-400 underline">DEX Module API</span>
             </a>
             &nbsp;|&nbsp;
+            <a href="https://play.google.com/store/apps/details?id=com.threedpass.wallet" rel="noopener noreferrer" target="_blank">
+              <span className="text-purple-400 underline">Android Wallet</span>
+            </a>
+            &nbsp;|&nbsp;
             <span className="text-gray-400">{t("footer.poweredBy")}&nbsp;</span>
             <a href="https://mvpworkshop.co/" rel="noopener noreferrer" target="_blank">
               <span className="text-purple-400 underline">{t("footer.company")}</span>
