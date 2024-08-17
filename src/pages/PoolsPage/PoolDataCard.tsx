@@ -111,7 +111,7 @@ const PoolDataCard = ({
         </div>
       </div>
       <div className="flex gap-2">
-        <div className="flex basis-1/2 flex-col items-center justify-end">
+        <div className="flex basis-1/2 flex-col items-start justify-end">
           <div className="flex flex-col items-start">
             <span className="flex gap-1 text-large font-medium">
               <img src={nativeTokenIcon} alt="assetToken" width={16} height={16} />
