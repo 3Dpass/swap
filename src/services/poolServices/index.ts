@@ -513,13 +513,13 @@ export const createPoolCardsArray = async (
               lpTokenId: lpTokenId,
               assetTokenId: asset2TokenId,
               totalTokensLocked: {
-                nativeToken: {
+                asset1Token: {
                   decimals: nativeTokenDecimals || "0",
                   icon: pool[0][0] === "Native" ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: nativeTokenFormatted,
                   value: nativeToken,
                 },
-                assetToken: {
+                asset2Token: {
                   decimals: assetTokenDecimals,
                   icon: AssetTokenIcon,
                   formattedValue: assetTokenFormated,

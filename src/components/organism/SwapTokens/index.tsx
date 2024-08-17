@@ -779,8 +779,8 @@ const SwapTokens = () => {
           if (poolNative)
             setNativeTokensInPool(
               formatDecimalsFromToken(
-                poolNative.totalTokensLocked.nativeToken.value,
-                poolNative.totalTokensLocked.nativeToken.decimals
+                poolNative.totalTokensLocked.asset1Token.value,
+                poolNative.totalTokensLocked.asset1Token.decimals
               )
             );
         }
@@ -791,8 +791,8 @@ const SwapTokens = () => {
           if (poolAsset)
             setAssetTokensInPool(
               formatDecimalsFromToken(
-                poolAsset.totalTokensLocked.assetToken.value,
-                poolAsset.totalTokensLocked.assetToken.decimals
+                poolAsset.totalTokensLocked.asset2Token.value,
+                poolAsset.totalTokensLocked.asset2Token.decimals
               )
             );
         }
@@ -812,8 +812,8 @@ const SwapTokens = () => {
 
           if (poolAssetTokenB && poolAssetTokenA) {
             if (
-              parseFloat(poolAssetTokenB?.totalTokensLocked.nativeToken.formattedValue) < 1 ||
-              parseFloat(poolAssetTokenA?.totalTokensLocked.nativeToken.formattedValue) < 1
+              parseFloat(poolAssetTokenB?.totalTokensLocked.asset1Token.formattedValue) < 1 ||
+              parseFloat(poolAssetTokenA?.totalTokensLocked.asset1Token.formattedValue) < 1
             ) {
               setLiquidityLow(true);
             } else {
@@ -878,11 +878,11 @@ const SwapTokens = () => {
       .toFixed();
     const formattedValueA = formatDecimalsFromToken(valueA, selectedTokens.tokenA.decimals);
 
-    const valueB = new Decimal(poolAsset.totalTokensLocked.nativeToken.value)
+    const valueB = new Decimal(poolAsset.totalTokensLocked.asset1Token.value)
       .minus(nativeTokenExistentialDeposit) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
 
-    const formattedValueB = formatDecimalsFromToken(valueB, poolAsset.totalTokensLocked.nativeToken.decimals);
+    const formattedValueB = formatDecimalsFromToken(valueB, poolAsset.totalTokensLocked.asset1Token.decimals);
     return {
       formattedValueA,
       formattedValueB,
@@ -917,7 +917,7 @@ const SwapTokens = () => {
       .toFixed();
     const formattedValueA = formatDecimalsFromToken(valueA, selectedTokens.tokenA.decimals);
 
-    const valueB = new Decimal(poolAsset.totalTokensLocked.assetToken.value)
+    const valueB = new Decimal(poolAsset.totalTokensLocked.asset2Token.value)
       .minus(assetTokenMinBalance) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
 
@@ -949,10 +949,10 @@ const SwapTokens = () => {
       .toFixed();
     const formattedValueA = formatDecimalsFromToken(valueA, selectedTokens.tokenA.decimals);
 
-    const valueB = new Decimal(poolAsset.totalTokensLocked.assetToken.value)
+    const valueB = new Decimal(poolAsset.totalTokensLocked.asset2Token.value)
       .minus(assetTokenMinAmountB) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
-    const formattedValueB = poolAsset.totalTokensLocked.assetToken.formattedValue;
+    const formattedValueB = poolAsset.totalTokensLocked.asset2Token.formattedValue;
 
     return {
       formattedValueA,

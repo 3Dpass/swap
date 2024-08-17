@@ -14,8 +14,8 @@ export type PoolCardProps = {
   lpTokenId: string | null;
   assetTokenId: string;
   totalTokensLocked: {
-    nativeToken: Token;
-    assetToken: Token;
+    asset1Token: Token;
+    asset2Token: Token;
   };
 };
 
