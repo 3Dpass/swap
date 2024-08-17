@@ -475,19 +475,24 @@ export const createPoolCardsArray = async (
           lpToken = lpTokenAsset.toHuman() as LpTokenAsset;
         }
 
-        if (pool?.[0]?.[1]?.Asset) {
-          const assetTokenId = pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString();
-          const poolReserve: any = await getPoolReserves(apiPool, assetTokenId);
+        if (pool?.[0]) {
+          const asset2TokenId = pool[0][1]?.Asset.replace(/[, ]/g, "").toString();
+          const poolReserve: any = await getPoolReserves(apiPool, asset2TokenId);
 
           if (poolReserve?.length > 0) {
-            const assetTokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool?.[0]?.[1]?.Asset);
+            let nativeTokenSymbolOrAsset = nativeTokenSymbol;
+            if (pool[0][0] != "Native") {
+              const asset1TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][0]?.Asset);
+              nativeTokenSymbolOrAsset = asset1TokenMetadata.toHuman()?.symbol;
+            }
+            const asset2TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][1]?.Asset);
 
             const assetToken = poolReserve?.[1]?.replace(/[, ]/g, "");
-            let assetTokenFormated = formatDecimalsFromToken(assetToken, assetTokenMetadata.toHuman()?.decimals);
+            let assetTokenFormated = formatDecimalsFromToken(assetToken, asset2TokenMetadata.toHuman()?.decimals);
             if (new Decimal(assetTokenFormated).gte(1)) {
               assetTokenFormated = new Decimal(assetTokenFormated).toFixed(4);
             }
-            const assetTokenDecimals = assetTokenMetadata.toHuman()?.decimals;
+            const assetTokenDecimals = asset2TokenMetadata.toHuman()?.decimals;
             const assetTokenFormattedWithDecimals = formatDecimalsFromToken(
               poolReserve?.[1]?.replace(/[, ]/g, ""),
               assetTokenDecimals
@@ -503,10 +508,10 @@ export const createPoolCardsArray = async (
             }
 
             poolCardsArray.push({
-              name: `${nativeTokenSymbol}–${assetTokenMetadata.toHuman()?.symbol}`,
+              name: `${nativeTokenSymbolOrAsset}–${asset2TokenMetadata.toHuman()?.symbol}`,
               lpTokenAsset: lpToken ? lpToken : null,
               lpTokenId: lpTokenId,
-              assetTokenId: assetTokenId,
+              assetTokenId: asset2TokenId,
               totalTokensLocked: {
                 nativeToken: {
                   decimals: nativeTokenDecimals || "0",
