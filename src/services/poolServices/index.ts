@@ -497,7 +497,9 @@ export const createPoolCardsArray = async (
 
             const formatTokenAmount = (amount: string, decimals: string) => {
               const formatted = formatDecimalsFromToken(amount, decimals);
-              return new Decimal(formatted).gte(1) ? new Decimal(formatted).toFixed(4) : formatted;
+              return new Decimal(formatted).gte(1)
+                ? new Decimal(formatted).toFixed(2)
+                : new Decimal(formatted).toFixed(6);
             };
 
             const asset1Amount = poolReserves[0]?.replace(/[, ]/g, "") ?? "0";
