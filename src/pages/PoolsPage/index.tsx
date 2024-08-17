@@ -43,7 +43,7 @@ const PoolsPage = () => {
               <Button
                 onClick={navigateToAddLiquidity}
                 variant={ButtonVariants.btnPrimaryPinkLg}
-                disabled={selectedAccount && tokenBalances ? false : true}
+                disabled={!(selectedAccount && tokenBalances)}
               >
                 {t("button.newPosition")}
               </Button>
