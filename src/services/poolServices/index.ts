@@ -479,7 +479,7 @@ export const createPoolCardsArray = async (
           const asset2TokenId = pool[0][1]?.Asset.replace(/[, ]/g, "").toString();
           const poolReserve: any = await getPoolReserves(apiPool, asset2TokenId);
 
-          if (poolReserve?.length > 0) {
+          if (poolReserve?.length > 1) {
             let nativeTokenSymbolOrAsset = nativeTokenSymbol;
             if (pool[0][0] != "Native") {
               const asset1TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][0]?.Asset);
@@ -487,21 +487,21 @@ export const createPoolCardsArray = async (
             }
             const asset2TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][1]?.Asset);
 
-            const assetToken = poolReserve?.[1]?.replace(/[, ]/g, "");
+            const assetToken = poolReserve[1]?.replace(/[, ]/g, "");
             let assetTokenFormated = formatDecimalsFromToken(assetToken, asset2TokenMetadata.toHuman()?.decimals);
             if (new Decimal(assetTokenFormated).gte(1)) {
               assetTokenFormated = new Decimal(assetTokenFormated).toFixed(4);
             }
             const assetTokenDecimals = asset2TokenMetadata.toHuman()?.decimals;
             const assetTokenFormattedWithDecimals = formatDecimalsFromToken(
-              poolReserve?.[1]?.replace(/[, ]/g, ""),
+              poolReserve[1]?.replace(/[, ]/g, ""),
               assetTokenDecimals
             );
             if (new Decimal(assetToken).gte(1)) {
               assetTokenFormated = new Decimal(assetTokenFormattedWithDecimals).toFixed(4);
             }
 
-            const nativeToken = poolReserve?.[0]?.replace(/[, ]/g, "");
+            const nativeToken = poolReserve[0]?.replace(/[, ]/g, "");
             let nativeTokenFormatted = formatDecimalsFromToken(nativeToken, nativeTokenDecimals || "0");
             if (new Decimal(nativeTokenFormatted).gte(1)) {
               nativeTokenFormatted = new Decimal(nativeTokenFormatted).toFixed(4);
@@ -515,7 +515,7 @@ export const createPoolCardsArray = async (
               totalTokensLocked: {
                 nativeToken: {
                   decimals: nativeTokenDecimals || "0",
-                  icon: NativeTokenIcon,
+                  icon: pool[0][0] === "Native" ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: nativeTokenFormatted,
                   value: nativeToken,
                 },
