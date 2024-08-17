@@ -476,54 +476,55 @@ export const createPoolCardsArray = async (
         }
 
         if (pool?.[0]) {
-          const asset2TokenId = pool[0][1]?.Asset.replace(/[, ]/g, "").toString();
-          const poolReserve: any = await getPoolReserves(apiPool, asset2TokenId);
+          const [asset1, asset2] = pool[0];
+          const asset1IsNative = asset1 === "Native";
+          const asset2IsNative = asset2 === "Native";
 
-          if (poolReserve?.length > 1) {
-            let nativeTokenSymbolOrAsset = nativeTokenSymbol;
-            if (pool[0][0] != "Native") {
-              const asset1TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][0]?.Asset);
-              nativeTokenSymbolOrAsset = asset1TokenMetadata.toHuman()?.symbol;
-            }
-            const asset2TokenMetadata: any = await apiPool.query.poscanAssets.metadata(pool[0][1]?.Asset);
+          const asset1TokenId = asset1IsNative ? null : asset1.Asset.replace(/[, ]/g, "");
+          const asset2TokenId = asset2IsNative ? null : asset2.Asset.replace(/[, ]/g, "");
 
-            const assetToken = poolReserve[1]?.replace(/[, ]/g, "");
-            let assetTokenFormated = formatDecimalsFromToken(assetToken, asset2TokenMetadata.toHuman()?.decimals);
-            if (new Decimal(assetTokenFormated).gte(1)) {
-              assetTokenFormated = new Decimal(assetTokenFormated).toFixed(4);
-            }
-            const assetTokenDecimals = asset2TokenMetadata.toHuman()?.decimals;
-            const assetTokenFormattedWithDecimals = formatDecimalsFromToken(
-              poolReserve[1]?.replace(/[, ]/g, ""),
-              assetTokenDecimals
-            );
-            if (new Decimal(assetToken).gte(1)) {
-              assetTokenFormated = new Decimal(assetTokenFormattedWithDecimals).toFixed(4);
-            }
+          const poolReserves: any = await getPoolReserves(apiPool, asset1IsNative ? asset2TokenId : asset1TokenId);
 
-            const nativeToken = poolReserve[0]?.replace(/[, ]/g, "");
-            let nativeTokenFormatted = formatDecimalsFromToken(nativeToken, nativeTokenDecimals || "0");
-            if (new Decimal(nativeTokenFormatted).gte(1)) {
-              nativeTokenFormatted = new Decimal(nativeTokenFormatted).toFixed(4);
-            }
+          if (poolReserves?.length > 1) {
+            const [asset1Metadata, asset2Metadata] = await Promise.all([
+              asset1IsNative
+                ? Promise.resolve({ symbol: nativeTokenSymbol, decimals: nativeTokenDecimals })
+                : apiPool.query.poscanAssets.metadata(asset1TokenId).then((m) => m.toHuman()),
+              asset2IsNative
+                ? Promise.resolve({ symbol: nativeTokenSymbol, decimals: nativeTokenDecimals })
+                : apiPool.query.poscanAssets.metadata(asset2TokenId).then((m) => m.toHuman()),
+            ]);
+
+            const formatTokenAmount = (amount: string, decimals: string) => {
+              const formatted = formatDecimalsFromToken(amount, decimals);
+              return new Decimal(formatted).gte(1) ? new Decimal(formatted).toFixed(4) : formatted;
+            };
+
+            const asset1Amount = poolReserves[0]?.replace(/[, ]/g, "") ?? "0";
+            const asset2Amount = poolReserves[1]?.replace(/[, ]/g, "") ?? "0";
+
+            const asset1Symbol = (asset1Metadata as any)?.symbol ?? "Unknown";
+            const asset2Symbol = (asset2Metadata as any)?.symbol ?? "Unknown";
+            const asset1Decimals = (asset1Metadata as any)?.decimals ?? "0";
+            const asset2Decimals = (asset2Metadata as any)?.decimals ?? "0";
 
             poolCardsArray.push({
-              name: `${nativeTokenSymbolOrAsset}–${asset2TokenMetadata.toHuman()?.symbol}`,
-              lpTokenAsset: lpToken ? lpToken : null,
+              name: `${asset1Symbol}–${asset2Symbol}`,
+              lpTokenAsset: lpToken,
               lpTokenId: lpTokenId,
-              assetTokenId: asset2TokenId,
+              assetTokenId: asset2IsNative ? asset1TokenId : asset2TokenId,
               totalTokensLocked: {
                 asset1Token: {
-                  decimals: nativeTokenDecimals || "0",
-                  icon: pool[0][0] === "Native" ? NativeTokenIcon : AssetTokenIcon,
-                  formattedValue: nativeTokenFormatted,
-                  value: nativeToken,
+                  decimals: asset1Decimals,
+                  icon: asset1IsNative ? NativeTokenIcon : AssetTokenIcon,
+                  formattedValue: formatTokenAmount(asset1Amount, asset1Decimals),
+                  value: asset1Amount,
                 },
                 asset2Token: {
-                  decimals: assetTokenDecimals,
-                  icon: AssetTokenIcon,
-                  formattedValue: assetTokenFormated,
-                  value: assetToken,
+                  decimals: asset2Decimals,
+                  icon: asset2IsNative ? NativeTokenIcon : AssetTokenIcon,
+                  formattedValue: formatTokenAmount(asset2Amount, asset2Decimals),
+                  value: asset2Amount,
                 },
               },
             });
@@ -532,9 +533,7 @@ export const createPoolCardsArray = async (
       })
     );
 
-    poolCardsArray.sort((a, b) => {
-      return a.name.localeCompare(b.name);
-    });
+    poolCardsArray.sort((a, b) => a.name.localeCompare(b.name));
 
     poolCardsArray.sort((a, b) => {
       if (a.lpTokenAsset === null) return 1;
