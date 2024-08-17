@@ -67,4 +67,5 @@ export type Token = {
   value: string;
   decimals: string;
   formattedValue: string;
+  symbol: string;
 };

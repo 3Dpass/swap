@@ -62,10 +62,12 @@ const PoolsPage = () => {
                   <PoolDataCard
                     tokenPair={item.name}
                     asset1Tokens={item.totalTokensLocked.asset1Token.formattedValue}
+                    asset1TokenSymbol={item.totalTokensLocked.asset1Token.symbol}
                     asset2Tokens={item.totalTokensLocked.asset2Token.formattedValue}
+                    asset2TokenSymbol={item.totalTokensLocked.asset2Token.symbol}
                     lpTokenAsset={item.lpTokenAsset}
-                    asset2TokenIcon={item.totalTokensLocked.asset2Token.icon}
                     asset1TokenIcon={item.totalTokensLocked.asset1Token.icon}
+                    asset2TokenIcon={item.totalTokensLocked.asset2Token.icon}
                     assetTokenId={item.assetTokenId}
                     lpTokenId={item.lpTokenId}
                   />

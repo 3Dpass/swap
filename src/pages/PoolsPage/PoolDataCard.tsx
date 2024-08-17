@@ -11,8 +11,10 @@ import { useAppContext } from "../../state";
 type PoolDataCardProps = {
   tokenPair: string;
   asset1Tokens: string;
+  asset1TokenSymbol: string;
   asset1TokenIcon: string;
   asset2Tokens: string;
+  asset2TokenSymbol: string;
   asset2TokenIcon: string;
   lpTokenAsset: LpTokenAsset | null;
   assetTokenId: string;
@@ -22,7 +24,9 @@ type PoolDataCardProps = {
 const PoolDataCard = ({
   tokenPair,
   asset1Tokens,
+  asset1TokenSymbol,
   asset2Tokens,
+  asset2TokenSymbol,
   lpTokenAsset,
   asset1TokenIcon,
   asset2TokenIcon,
@@ -115,11 +119,17 @@ const PoolDataCard = ({
           <div className="flex flex-col items-start">
             <span className="flex gap-1 text-large font-medium">
               <img src={asset1TokenIcon} alt="assetToken" width={16} height={16} />
-              {asset1Tokens}
+              <div className="flex items-baseline gap-1">
+                {asset1Tokens}
+                <span className="text-xs text-gray-200">{asset1TokenSymbol}</span>
+              </div>
             </span>
             <span className="flex gap-1 text-large font-medium">
               <img src={asset2TokenIcon} alt="assetToken" width={16} height={16} />
-              {asset2Tokens}
+              <div className="flex items-baseline gap-1">
+                {asset2Tokens}
+                <span className="text-xs text-gray-200">{asset2TokenSymbol}</span>
+              </div>
             </span>
           </div>
           <p className="text-small font-medium uppercase text-gray-200">{t("poolDataCard.totalTokensLocked")}</p>

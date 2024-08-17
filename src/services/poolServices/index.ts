@@ -521,12 +521,14 @@ export const createPoolCardsArray = async (
                   icon: asset1IsNative ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: formatTokenAmount(asset1Amount, asset1Decimals),
                   value: asset1Amount,
+                  symbol: asset1Symbol,
                 },
                 asset2Token: {
                   decimals: asset2Decimals,
                   icon: asset2IsNative ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: formatTokenAmount(asset2Amount, asset2Decimals),
                   value: asset2Amount,
+                  symbol: asset2Symbol,
                 },
               },
             });
