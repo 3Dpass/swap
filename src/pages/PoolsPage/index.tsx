@@ -61,11 +61,11 @@ const PoolsPage = () => {
                 <div key={index}>
                   <PoolDataCard
                     tokenPair={item.name}
-                    nativeTokens={item.totalTokensLocked.asset1Token.formattedValue}
-                    assetTokens={item.totalTokensLocked.asset2Token.formattedValue}
+                    asset1Tokens={item.totalTokensLocked.asset1Token.formattedValue}
+                    asset2Tokens={item.totalTokensLocked.asset2Token.formattedValue}
                     lpTokenAsset={item.lpTokenAsset}
-                    assetTokenIcon={item.totalTokensLocked.asset2Token.icon}
-                    nativeTokenIcon={item.totalTokensLocked.asset1Token.icon}
+                    asset2TokenIcon={item.totalTokensLocked.asset2Token.icon}
+                    asset1TokenIcon={item.totalTokensLocked.asset1Token.icon}
                     assetTokenId={item.assetTokenId}
                     lpTokenId={item.lpTokenId}
                   />

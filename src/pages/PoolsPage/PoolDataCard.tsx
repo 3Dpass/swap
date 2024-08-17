@@ -10,10 +10,10 @@ import { useAppContext } from "../../state";
 
 type PoolDataCardProps = {
   tokenPair: string;
-  nativeTokens: string;
-  nativeTokenIcon: string;
-  assetTokens: string;
-  assetTokenIcon: string;
+  asset1Tokens: string;
+  asset1TokenIcon: string;
+  asset2Tokens: string;
+  asset2TokenIcon: string;
   lpTokenAsset: LpTokenAsset | null;
   assetTokenId: string;
   lpTokenId: string | null;
@@ -21,11 +21,11 @@ type PoolDataCardProps = {
 
 const PoolDataCard = ({
   tokenPair,
-  nativeTokens,
-  assetTokens,
+  asset1Tokens,
+  asset2Tokens,
   lpTokenAsset,
-  nativeTokenIcon,
-  assetTokenIcon,
+  asset1TokenIcon,
+  asset2TokenIcon,
   assetTokenId,
   lpTokenId,
 }: PoolDataCardProps) => {
@@ -64,10 +64,10 @@ const PoolDataCard = ({
         <div className="relative flex basis-2/5 flex-col font-unbounded-variable">
           <div className="relative flex">
             <span className="">
-              <img src={nativeTokenIcon} alt="native icon" width={32} height={32} />
+              <img src={asset1TokenIcon} alt="native icon" width={32} height={32} />
             </span>
             <span className="relative right-2">
-              <img src={assetTokenIcon} alt="asset icon" width={32} height={32} />
+              <img src={asset2TokenIcon} alt="asset icon" width={32} height={32} />
             </span>
           </div>
           {tokenPair}
@@ -114,12 +114,12 @@ const PoolDataCard = ({
         <div className="flex basis-1/2 flex-col items-start justify-end">
           <div className="flex flex-col items-start">
             <span className="flex gap-1 text-large font-medium">
-              <img src={nativeTokenIcon} alt="assetToken" width={16} height={16} />
-              {nativeTokens}
+              <img src={asset1TokenIcon} alt="assetToken" width={16} height={16} />
+              {asset1Tokens}
             </span>
             <span className="flex gap-1 text-large font-medium">
-              <img src={assetTokenIcon} alt="assetToken" width={16} height={16} />
-              {assetTokens}
+              <img src={asset2TokenIcon} alt="assetToken" width={16} height={16} />
+              {asset2Tokens}
             </span>
           </div>
           <p className="text-small font-medium uppercase text-gray-200">{t("poolDataCard.totalTokensLocked")}</p>
