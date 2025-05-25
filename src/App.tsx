@@ -16,7 +16,7 @@ const App: FC = () => {
 
   useEffect(() => {
     if (walletConnected && api) {
-      connectWalletAndFetchBalance(dispatch, api, walletConnected).then();
+      connectWalletAndFetchBalance(dispatch, api, walletConnected, false).then();
     }
   }, [api]);
 

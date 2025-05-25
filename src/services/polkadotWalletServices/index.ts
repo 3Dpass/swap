@@ -116,7 +116,8 @@ export const getSupportedWallets = () => {
 const setTokenBalance = async (
   dispatch: Dispatch<WalletAction | PoolAction>,
   api: any,
-  selectedAccount: WalletAccount
+  selectedAccount: WalletAccount,
+  showToast: boolean = true
 ) => {
   if (api) {
     dispatch({ type: ActionType.SET_ASSET_LOADING, payload: true });
@@ -129,7 +130,9 @@ const setTokenBalance = async (
 
       LocalStorage.set("wallet-connected", selectedAccount);
 
-      dotAcpToast.success("Wallet successfully connected!");
+      if (showToast) {
+        dotAcpToast.success("Wallet successfully connected!");
+      }
     } catch (error) {
       dotAcpToast.error(`Wallet connection error: ${error}`);
     } finally {
@@ -262,7 +265,8 @@ export const handleDisconnect = (dispatch: Dispatch<WalletAction | PoolAction>) 
 export const connectWalletAndFetchBalance = async (
   dispatch: Dispatch<WalletAction | PoolAction>,
   api: any,
-  account: WalletAccount
+  account: WalletAccount,
+  showToast: boolean = true
 ) => {
   dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: true });
   const wallet = getWalletBySource(account.wallet?.extensionName);
@@ -271,7 +275,7 @@ export const connectWalletAndFetchBalance = async (
   LocalStorage.set("wallet-connected", account);
   dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: false });
   try {
-    await setTokenBalance(dispatch, api, account);
+    await setTokenBalance(dispatch, api, account, showToast);
   } catch (error) {
     dotAcpToast.error(`Wallet connection error: ${error}`);
   }
