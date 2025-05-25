@@ -15,7 +15,7 @@
     "test": "pnpm jest",
     "check:packages": "pnpm up --latest --interactive",
     "prepare": "husky",
-    "postinstall": "husky",
+    "postinstall": "husky || true",
     "setup": "pnpm install && husky"
   },
   "lint-staged": {
