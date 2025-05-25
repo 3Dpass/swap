@@ -1,7 +1,7 @@
 import { t } from "i18next";
 import Button from "../../atom/Button";
 
-export type FallbackProps = {
+type FallbackProps = {
   error: Error | undefined;
   resetErrorBoundary: () => void;
 };

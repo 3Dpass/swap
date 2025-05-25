@@ -30,7 +30,7 @@ export const setupPolkadotApi = async () => {
   return api;
 };
 
-export const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) => {
+const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) => {
   const now = await api.query.timestamp.now();
   const { nonce, data: balance } = await api.query.system.account(walletAddress);
   const nextNonce = await api.rpc.system.accountNextIndex(walletAddress);
@@ -108,7 +108,7 @@ export const getSupportedWallets = () => {
   return supportedWallets;
 };
 
-export const setTokenBalance = async (
+const setTokenBalance = async (
   dispatch: Dispatch<WalletAction | PoolAction>,
   api: any,
   selectedAccount: WalletAccount

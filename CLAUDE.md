@@ -10,6 +10,7 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Run tests**: `pnpm run test` or `pnpm jest`
 - **Run linting**: `pnpm run lint`
 - **Run TypeScript check**: `pnpm run typecheck`
+- **Analyze unused dependencies**: `pnpm run knip`
 - **Preview production build**: `pnpm run preview`
 - **Commit with conventional commits**: `pnpm run commit`
 - **Check for package updates**: `pnpm run check:packages`

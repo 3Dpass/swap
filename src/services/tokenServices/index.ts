@@ -149,59 +149,6 @@ export type SellMaxToken = {
   minAmount: string;
 };
 
-// Not in use, needs to be better implemented to replace sellMax
-export const sellMax2 = async ({
-  api,
-  priceCalcType,
-  tokenA,
-  tokenBinPool,
-}: {
-  api: ApiPromise;
-  priceCalcType: PriceCalcType;
-  tokenA: SellMaxToken;
-  tokenBinPool: SellMaxToken;
-}) => {
-  let priceB: string;
-  let amountA = new Decimal(0);
-
-  switch (priceCalcType) {
-    case PriceCalcType.AssetFromAsset:
-      priceB = (await getAssetTokenBFromAssetTokenA(api, "1", tokenA.id, tokenBinPool.id!))!
-        .toString()
-        .replace(/[, ]/g, "");
-      break;
-    case PriceCalcType.AssetFromNative:
-      priceB = (await getAssetTokenFromNativeToken(api, tokenBinPool.id, "1000000000000"))!
-        .toString()
-        .replace(/[, ]/g, "");
-      break;
-    case PriceCalcType.NativeFromAsset:
-      priceB = (await getNativeTokenFromAssetToken(api, tokenA.id, "10"))!.toString().replace(/[, ]/g, "");
-      break;
-    default:
-      throw new Error("Unsupported price calculation type");
-  }
-
-  const amountB = new Decimal(tokenA.value).div(priceB).floor();
-
-  if (amountB.lt(tokenBinPool.value)) {
-    if (amountB.plus(tokenBinPool.minAmount).lte(tokenBinPool.value)) {
-      amountA = amountB.mul(priceB).floor();
-    }
-    // Do something with amountB
-  } else {
-    // If the amount of tokenB is greater than the max amount of tokenB in the pool, use the max amount of tokenB in the pool
-    const amountB2 = new Decimal(tokenBinPool.value).sub(tokenBinPool.minAmount);
-    if (amountB2.gte(tokenBinPool.minAmount)) {
-      // Ensure that the amount of tokenB is greater than the min amount of tokenB in the pool
-      amountA = amountB2.mul(priceB).floor();
-    }
-    if (amountA.gt(tokenA.minAmount)) {
-      // We can't sell less than the min amount of tokenA
-      amountA = new Decimal(0);
-    }
-  }
-};
 export const sellMax = async ({
   api,
   priceCalcType,
@@ -248,7 +195,7 @@ export const sellMax = async ({
   return formatDecimalsFromToken(optimalTokenA, tokenA.decimals);
 };
 
-export const findOptimalTokenA = async ({
+const findOptimalTokenA = async ({
   tokenA,
   maxTokenB,
   step,
