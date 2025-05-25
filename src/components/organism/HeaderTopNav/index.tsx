@@ -21,7 +21,7 @@ import type { Timeout } from "react-number-format/types/types";
 import type { Wallet, WalletAccount } from "@talismn/connect-wallets";
 import dotAcpToast from "../../../app/util/toast.ts";
 import { LottieSmall } from "../../../assets/loader/index.tsx";
-import NetworkSelector from "../../atom/NetworkSelector/index.tsx";
+import useClickOutside from "../../../app/hooks/useClickOutside.ts";
 
 const HeaderTopNav = () => {
   const { state, dispatch } = useAppContext();
@@ -32,8 +32,9 @@ const HeaderTopNav = () => {
   const [modalStep, setModalStep] = useState<ModalStepProps>({ step: WalletConnectSteps.stepExtensions });
   const [walletConnectOpen, setWalletConnectOpen] = useState(false);
   const [supportedWallets, setSupportedWallets] = useState<Wallet[]>([] as Wallet[]);
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
 
+  const mobileMenuRef = useClickOutside(() => setMobileMenuOpen(false));
   const walletConnected = LocalStorage.get("wallet-connected");
 
   const connectWallet = () => {
@@ -89,16 +90,59 @@ const HeaderTopNav = () => {
     setSupportedWallets(wallets);
   }, []);
 
+  const WalletButton = () => {
+    if (walletConnectLoading) {
+      return (
+        <Button
+          onClick={connectWallet}
+          variant={ButtonVariants.btnPrimaryPinkSm}
+          disabled={walletConnectLoading}
+          className="min-w-[110px] sm:min-w-[130px]"
+        >
+          <LottieSmall />
+        </Button>
+      );
+    }
+
+    if (walletConnected) {
+      return (
+        <div className="flex items-center gap-2 sm:gap-4">
+          <div className="hidden sm:flex flex-col text-gray-300 items-end">
+            <div className="font-[500] text-sm sm:text-base">{walletAccount?.name || "Account"}</div>
+            <div className="text-[10px] sm:text-small">{reduceAddress(walletAccount?.address, 6, 6)}</div>
+          </div>
+          <button onClick={() => disconnectWallet()} className="p-1 hover:opacity-80 transition-opacity">
+            <AccountImage className="w-8 h-8 sm:w-9 sm:h-9" />
+          </button>
+        </div>
+      );
+    }
+
+    return (
+      <Button 
+        onClick={connectWallet} 
+        variant={ButtonVariants.btnPrimaryPinkSm} 
+        disabled={walletConnectLoading}
+        className="min-w-[110px] sm:min-w-[130px]"
+      >
+        {t("button.connectWallet")}
+      </Button>
+    );
+  };
+
   return (
     <>
-      <nav className="flex h-[73px] items-center justify-between px-[23px]">
-        <div className="w-[120px]">
-          <Logo />
+      <nav className="flex h-[60px] sm:h-[70px] items-center justify-between px-4 sm:px-6 lg:px-10 relative">
+        {/* Logo - fixed size, no distortion */}
+        <div className="flex-shrink-0">
+          <Logo className="w-[110px] sm:w-[130px] lg:w-[150px] h-auto" />
         </div>
-        <div className="flex gap-16 text-gray-200">
+
+        {/* Desktop Navigation */}
+        <div className="hidden md:flex gap-6 lg:gap-12 xl:gap-16 text-gray-200">
           <NavLink
             to={SWAP_ROUTE}
-            className={classNames("font-unbounded-variable tracking-[.96px]", {
+            className={classNames("font-unbounded-variable text-base lg:text-lg tracking-[.96px] hover:text-gray-400 transition-colors", {
               "text-gray-400": location.pathname.includes(SWAP_ROUTE),
             })}
           >
@@ -106,7 +150,7 @@ const HeaderTopNav = () => {
           </NavLink>
           <NavLink
             to={POOLS_ROUTE}
-            className={classNames("font-unbounded-variable tracking-[.96px]", {
+            className={classNames("font-unbounded-variable text-base lg:text-lg tracking-[.96px] hover:text-gray-400 transition-colors", {
               "text-gray-400": location.pathname.includes(POOLS_ROUTE),
             })}
           >
@@ -114,43 +158,60 @@ const HeaderTopNav = () => {
           </NavLink>
         </div>
 
-        <div className="flex w-[400px] items-center gap-8">
-          <NetworkSelector
-            items={[{ name: NetworkKeys.P3D }]}
-            networkSelected={window.localStorage.getItem("network") as NetworkKeys}
-            isDropdownOpen={isDropdownOpen}
-            setIsDropdownOpen={setIsDropdownOpen}
-          />
-          {walletConnected ? (
-            <>
-              {walletConnectLoading ? (
-                <Button
-                  onClick={connectWallet}
-                  variant={ButtonVariants.btnPrimaryPinkLg}
-                  disabled={walletConnectLoading}
-                >
-                  <LottieSmall />
-                </Button>
-              ) : (
-                <div className="flex items-center justify-center gap-[26px]">
-                  <div className="flex flex-col text-gray-300">
-                    <div className="font-[500]">{walletAccount?.name || "Account"}</div>
-                    <div className="text-small">{reduceAddress(walletAccount?.address, 6, 6)}</div>
-                  </div>
-                  <div>
-                    <button onClick={() => disconnectWallet()}>
-                      <AccountImage />
-                    </button>
-                  </div>
-                </div>
-              )}
-            </>
-          ) : (
-            <Button onClick={connectWallet} variant={ButtonVariants.btnPrimaryPinkLg} disabled={walletConnectLoading}>
-              {walletConnectLoading ? <LottieSmall /> : t("button.connectWallet")}
-            </Button>
-          )}
+        {/* Desktop Wallet Button */}
+        <div className="hidden md:flex items-center">
+          <WalletButton />
         </div>
+
+        {/* Mobile Menu Button and Wallet */}
+        <div className="flex md:hidden items-center gap-2">
+          <WalletButton />
+          <button
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            className="p-2 text-gray-200 hover:text-gray-400 transition-colors"
+            aria-label="Toggle menu"
+          >
+            <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path 
+                strokeLinecap="round" 
+                strokeLinejoin="round" 
+                strokeWidth={2} 
+                d={mobileMenuOpen ? "M6 18L18 6M6 6l12 12" : "M4 6h16M4 12h16M4 18h16"}
+              />
+            </svg>
+          </button>
+        </div>
+
+        {/* Mobile Menu Dropdown */}
+        {mobileMenuOpen && (
+          <div 
+            ref={mobileMenuRef}
+            className="absolute top-full left-0 right-0 bg-white border-t border-gray-50 shadow-xl md:hidden z-50"
+          >
+            <div className="flex flex-col p-4 gap-2">
+              <NavLink
+                to={SWAP_ROUTE}
+                onClick={() => setMobileMenuOpen(false)}
+                className={classNames("font-unbounded-variable text-base py-3 px-4 rounded-lg transition-colors", {
+                  "text-white bg-pink": location.pathname.includes(SWAP_ROUTE),
+                  "text-black hover:bg-gray-50": !location.pathname.includes(SWAP_ROUTE),
+                })}
+              >
+                {t("button.swap")}
+              </NavLink>
+              <NavLink
+                to={POOLS_ROUTE}
+                onClick={() => setMobileMenuOpen(false)}
+                className={classNames("font-unbounded-variable text-base py-3 px-4 rounded-lg transition-colors", {
+                  "text-white bg-pink": location.pathname.includes(POOLS_ROUTE),
+                  "text-black hover:bg-gray-50": !location.pathname.includes(POOLS_ROUTE),
+                })}
+              >
+                {t("button.pool")}
+              </NavLink>
+            </div>
+          </div>
+        )}
       </nav>
 
       <WalletConnectModal

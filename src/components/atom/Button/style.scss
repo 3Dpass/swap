@@ -1,6 +1,6 @@
 button {
   &.btn-primary {
-    @apply flex w-full items-center justify-center gap-2 rounded-full font-unbounded-variable font-normal;
+    @apply flex w-full items-center justify-center gap-2 rounded-lg sm:rounded-xl font-unbounded-variable font-normal;
 
     &-pink {
       @extend .btn-primary;
@@ -13,7 +13,7 @@ button {
 
       &-sm {
         @extend .btn-primary-pink;
-        @apply px-4 py-3 text-small;
+        @apply px-3 py-2 sm:px-4 sm:py-3 text-small;
       }
     }
 
@@ -34,7 +34,7 @@ button {
   }
 
   &.btn-secondary {
-    @apply box-border flex w-full items-center justify-center rounded-full  px-4 py-3 font-unbounded-variable text-small font-normal;
+    @apply box-border flex w-full items-center justify-center rounded-lg sm:rounded-xl px-4 py-3 font-unbounded-variable text-small font-normal;
 
     &-white {
       @extend .btn-secondary;
@@ -67,7 +67,7 @@ button {
   }
 
   &.btn-select {
-    @apply flex w-full items-center justify-center gap-2 rounded-full px-3 py-1.5 font-inter text-large font-normal;
+    @apply flex w-full items-center justify-center gap-2 rounded-lg px-2.5 py-1.5 sm:px-3 sm:py-2 font-inter text-medium sm:text-large font-normal;
 
     &-pink {
       @extend .btn-select;
