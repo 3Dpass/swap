@@ -29,20 +29,20 @@ const PoolsPage = () => {
   };
 
   return (
-    <div className="flex items-center justify-center px-28 pb-16">
+    <div className="flex items-center justify-center px-4 sm:px-8 lg:px-28 pb-16">
       <div className="flex w-full max-w-[1280px] flex-col">
-        <div className="flex items-center justify-between px-6 py-8">
-          <div className="flex flex-col  gap-[4px] leading-[120%]">
-            <div className="font-unbounded-variable text-heading-5 font-[700] tracking-[.046px] text-gray-400">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 px-4 sm:px-6 py-6 sm:py-8">
+          <div className="flex flex-col gap-[4px] leading-[120%]">
+            <div className="font-unbounded-variable text-heading-4 sm:text-heading-5 font-[700] tracking-[.046px] text-gray-400">
               {t("poolsPage.pools")}
             </div>
-            <div className="tracking-[.2px] text-gray-300">{t("poolsPage.earnFeesByProvidingLiquidity")}</div>
+            <div className="text-sm sm:text-base tracking-[.2px] text-gray-300">{t("poolsPage.earnFeesByProvidingLiquidity")}</div>
           </div>
           <div>
             {selectedAccount && Object.keys(selectedAccount).length > 0 ? (
               <Button
                 onClick={navigateToAddLiquidity}
-                variant={ButtonVariants.btnPrimaryPinkLg}
+                variant={ButtonVariants.btnPrimaryPinkSm}
                 disabled={!(selectedAccount && tokenBalances)}
               >
                 {t("button.newPosition")}
@@ -55,7 +55,7 @@ const PoolsPage = () => {
             <LottieLarge />
           </div>
         ) : pools.length > 0 && poolsCards.length > 0 ? (
-          <div className="grid grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
             {poolsCards.map((item: PoolCardProps, index: number) => {
               return (
                 <div key={index}>
