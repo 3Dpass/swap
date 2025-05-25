@@ -59,19 +59,21 @@ const PoolSelectTokenModal: FC<PoolSelectTokenModalProps> = ({ open, title, sele
                   }
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex gap-3">
-                      <div className="drop-shadow-md">
-                        <TokenIcon tokenSymbol={item.assetTokenMetadata.symbol} className="h-12 w-12" />
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0 drop-shadow-md">
+                        <TokenIcon tokenSymbol={item.assetTokenMetadata.symbol} className="h-16 w-16" />
                       </div>
-                      <div className="flex flex-col items-start">
-                        <div className="text-gray-400 group-hover:text-white">{item.assetTokenMetadata.name}</div>
-                        <div className="text-small text-gray-300 group-hover:text-white">
+                      <div className="flex flex-col items-start justify-center">
+                        <div className="font-unbounded-variable text-base font-bold text-gray-900 group-hover:text-white">
+                          {item.assetTokenMetadata.name}
+                        </div>
+                        <div className="text-sm text-gray-500 group-hover:text-white">
                           {item.assetTokenMetadata.symbol}
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <div className="text-[12px] group-hover:text-white">
+                      <div className="font-mono text-sm font-medium text-gray-900 group-hover:text-white">
                         {item.tokenId
                           ? formatDecimalsFromToken(
                               Number(item.tokenAsset.balance.replace(/[, ]/g, "")),

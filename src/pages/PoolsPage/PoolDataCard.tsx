@@ -85,11 +85,11 @@ const PoolDataCard = ({
       <div className="flex items-start justify-between p-5 pb-4">
         <div className="flex min-w-0 flex-1 items-center gap-3">
           <div className="relative flex flex-shrink-0 items-center">
-            <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white p-1 shadow-md">
-              <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-10 w-10" />
+            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 shadow-md">
+              <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-14 w-14" />
             </div>
-            <div className="relative z-0 -ml-3 flex h-12 w-12 items-center justify-center rounded-full bg-white p-1 shadow-md">
-              <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-10 w-10" />
+            <div className="relative z-0 -ml-4 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 shadow-md">
+              <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-14 w-14" />
             </div>
           </div>
           <div className="min-w-0 flex-1">
@@ -119,8 +119,8 @@ const PoolDataCard = ({
           </h4>
           <div className="space-y-3">
             <div className="flex items-center gap-3">
-              <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-5 w-5" />
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
+                <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-7 w-7" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
@@ -132,8 +132,8 @@ const PoolDataCard = ({
               </div>
             </div>
             <div className="flex items-center gap-3">
-              <div className="flex h-6 w-6 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-5 w-5" />
+              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
+                <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-7 w-7" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">

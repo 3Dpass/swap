@@ -61,20 +61,23 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
                   }
                 >
                   <div className="flex w-full items-center justify-between">
-                    <div className="flex gap-3">
+                    <div className="flex items-center gap-4">
                       <div className="flex-shrink-0 drop-shadow-md">
-                        <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-12 w-12" />
+                        <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-16 w-16" />
                       </div>
-                      <div className="flex flex-col items-start">
+                      <div className="flex flex-col items-start justify-center">
                         <div
-                          className={classNames("text-gray-400 group-hover:text-white", {
-                            "text-black": item.tokenId === selected.tokenId,
-                          })}
+                          className={classNames(
+                            "font-unbounded-variable text-base font-bold text-gray-900 group-hover:text-white",
+                            {
+                              "text-black": item.tokenId === selected.tokenId,
+                            }
+                          )}
                         >
                           {item.assetTokenMetadata.name}
                         </div>
                         <div
-                          className={classNames("text-small text-gray-300 group-hover:text-white", {
+                          className={classNames("text-sm text-gray-500 group-hover:text-white", {
                             "text-black": item.tokenId === selected.tokenId,
                           })}
                         >
@@ -83,7 +86,7 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <div className="text-[12px] group-hover:text-white">
+                      <div className="font-mono text-sm font-medium text-gray-900 group-hover:text-white">
                         {item.tokenId && item.tokenAsset.balance !== 0
                           ? formatDecimalsFromToken(
                               Number(item.tokenAsset.balance.replace(/[, ]/g, "")),
