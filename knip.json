@@ -2,5 +2,6 @@
   "ignore": [
     "src/app/types/index.ts:Token"
   ],
-  "ignoreDependencies": []
+  "ignoreDependencies": [],
+  "ignoreExportsUsedInFile": true
 }

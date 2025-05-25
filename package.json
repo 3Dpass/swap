@@ -14,7 +14,9 @@
     "commit": "cz",
     "test": "pnpm jest",
     "check:packages": "pnpm up --latest --interactive",
-    "prepare": "husky"
+    "prepare": "husky",
+    "postinstall": "husky",
+    "setup": "pnpm install && husky"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

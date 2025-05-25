@@ -50,6 +50,19 @@ All important information regarding the pallet communication is [here](./ASSET_C
 
 ## How to install
 
+### Quick Start
+
+For new developers (recommended):
+
+```sh
+git clone <repository-url>
+cd swap
+pnpm run setup
+pnpm run dev
+```
+
+This will install dependencies, configure git hooks automatically, and start the development server.
+
 ### Install All Packages
 
 ```sh

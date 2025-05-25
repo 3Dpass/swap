@@ -1,1 +1,4 @@
+echo "🔍 Running knip analysis..."
+pnpm exec knip || echo "⚠️ Knip found some issues (see above), but commit continues..."
+echo "🧹 Running lint-staged..."
 pnpm exec lint-staged

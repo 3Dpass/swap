@@ -4,6 +4,15 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ## Commands
 
+### Project Setup
+For new developers cloning the repository:
+```bash
+git clone <repository-url>
+cd swap
+pnpm run setup
+```
+This will install dependencies and automatically configure git hooks.
+
 ### Development
 - **Run development server**: `pnpm run dev`
 - **Build for production**: `pnpm run build`
@@ -17,12 +26,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Pre-commit Hooks
 The project uses Husky and lint-staged to ensure code quality before commits:
+- **Knip**: Analyzes unused dependencies and exports (warnings only)
 - **Prettier**: Automatically formats code
 - **ESLint**: Fixes linting issues and checks for errors
 - **TypeScript**: Validates types with `tsc --noEmit`
 - **Commitlint**: Ensures commit messages follow conventional commits format
 
-All checks run automatically on `git commit`. If any check fails, the commit will be blocked.
+#### Automatic Setup
+Git hooks are automatically installed when:
+- Running `pnpm install` (via postinstall script)
+- Running `pnpm run setup`
+- Running `pnpm run prepare`
+
+This ensures all team members have the same code quality checks without manual setup.
 
 ### Commit Style
 - Use conventional commits
