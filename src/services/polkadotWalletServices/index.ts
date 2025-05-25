@@ -270,7 +270,7 @@ export const connectWalletAndFetchBalance = async (
 ) => {
   dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: true });
   const wallet = getWalletBySource(account.wallet?.extensionName);
-  wallet?.enable("DOT-ACP");
+  wallet?.enable("P3D-ACP");
   dispatch({ type: ActionType.SET_SELECTED_ACCOUNT, payload: account });
   LocalStorage.set("wallet-connected", account);
   dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: false });

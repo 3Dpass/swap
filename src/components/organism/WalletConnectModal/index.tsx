@@ -54,7 +54,7 @@ const WalletConnectModal = ({
                       <Button
                         className="btn-secondary-white"
                         onClick={async () => {
-                          await wallet?.enable("DOT-ACP");
+                          await wallet?.enable("P3D-ACP");
                           const accounts: WalletAccount[] = await wallet?.getAccounts();
                           handleContinueClick(accounts);
                         }}
