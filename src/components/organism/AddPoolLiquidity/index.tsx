@@ -15,6 +15,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
+import { formatBalanceForMaxClick } from "../../../app/util/tokenBalance";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
 import { LottieMedium } from "../../../assets/loader";
@@ -502,6 +503,17 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
       }
     }
   }, [addLiquidityLoading]);
+
+  const onMaxClickTokenA = () => {
+    const formattedBalance = formatBalanceForMaxClick(selectedTokenA.tokenBalance, selectedTokenA.nativeTokenDecimals);
+    if (formattedBalance) setSelectedTokenAValue(formattedBalance);
+  };
+
+  const onMaxClickTokenB = () => {
+    const formattedBalance = formatBalanceForMaxClick(selectedTokenB.assetTokenBalance, selectedTokenB.decimals);
+    if (formattedBalance) setSelectedTokenBValue(formattedBalance);
+  };
+
   return (
     <div className="flex max-w-[460px] flex-col gap-4">
       {tokenBId?.id && poolExists === false ? (
@@ -525,6 +537,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
             selectDisabled={true}
             disabled={addLiquidityLoading}
             assetLoading={assetLoading}
+            onMaxClick={onMaxClickTokenA}
           />
           <TokenAmountInput
             tokenText={selectedTokenB?.tokenSymbol}
@@ -538,6 +551,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
             selectDisabled={!tokenBId?.id}
             disabled={addLiquidityLoading}
             assetLoading={assetLoading}
+            onMaxClick={onMaxClickTokenB}
           />
           <div className="mt-1 text-small">{transferGasFeesMessage}</div>
           <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">

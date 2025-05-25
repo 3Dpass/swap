@@ -15,6 +15,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
+import { formatBalanceForMaxClick } from "../../../app/util/tokenBalance";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
 import { LottieMedium } from "../../../assets/loader";
@@ -397,6 +398,16 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
     }
   }, [createPoolLoading]);
 
+  const onMaxClickTokenA = () => {
+    const formattedBalance = formatBalanceForMaxClick(selectedTokenA.tokenBalance, selectedTokenA.nativeTokenDecimals);
+    if (formattedBalance) setSelectedTokenAValue(formattedBalance);
+  };
+
+  const onMaxClickTokenB = () => {
+    const formattedBalance = formatBalanceForMaxClick(selectedTokenB.assetTokenBalance, selectedTokenB.decimals);
+    if (formattedBalance) setSelectedTokenBValue(formattedBalance);
+  };
+
   return (
     <>
       {poolExists ? (
@@ -422,6 +433,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               selectDisabled={true}
               disabled={createPoolLoading || !selectedAccount || !tokenBalances?.assets}
               assetLoading={assetLoading}
+              onMaxClick={onMaxClickTokenA}
             />
             <TokenAmountInput
               tokenText={selectedTokenB?.tokenSymbol}
@@ -436,6 +448,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               disabled={createPoolLoading || !selectedAccount || !tokenBalances?.assets}
               selectDisabled={createPoolLoading || !selectedAccount}
               assetLoading={assetLoading}
+              onMaxClick={onMaxClickTokenB}
             />
             <div className="mt-1 text-small">{transferGasFeesMessage}</div>
 

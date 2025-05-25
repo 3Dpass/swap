@@ -20,6 +20,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
+import { formatBalanceForMaxClick } from "../../../app/util/tokenBalance";
 import SwitchArrow from "../../../assets/img/switch-arrow.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceAfterAssetsSwapUpdate, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
@@ -1079,6 +1080,14 @@ const SwapTokens = () => {
     });
   };
 
+  const onMaxClickTokenB = () => {
+    const formattedBalance = formatBalanceForMaxClick(
+      selectedTokens.tokenB.tokenBalance,
+      selectedTokens.tokenB.decimals
+    );
+    if (formattedBalance) tokenBValue(formattedBalance);
+  };
+
   useEffect(() => {
     if (switchTokensEnabled) {
       if (inputEdited.inputType === InputEditedType.exactIn) {
@@ -1462,6 +1471,7 @@ const SwapTokens = () => {
           onSetTokenValue={(value) => tokenBValue(value)}
           disabled={!selectedAccount || swapLoading || !tokenBalances?.assets || poolsTokenMetadata.length === 0}
           assetLoading={assetLoading}
+          onMaxClick={onMaxClickTokenB}
         />
         <button
           className="absolute top-[170px]"

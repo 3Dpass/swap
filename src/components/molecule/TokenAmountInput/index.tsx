@@ -116,17 +116,25 @@ const TokenAmountInput = ({
           <span className="text-[13px] tracking-[0.2px] text-black text-opacity-50">({withdrawAmountPercentage}%)</span>
         ) : null}
         <div className="flex w-full justify-end pr-1 text-medium text-gray-200">
-          Balance:{" "}
-          {tokenId && tokenText && Number(tokenBalance) !== 0
-            ? formatDecimalsFromToken(Number(tokenBalance?.replace(/[, ]/g, "")), tokenDecimals as string)
-            : tokenBalance || 0}
+          <span>Balance: </span>
+          <button
+            className={`ml-1 transition-colors ${onMaxClick && !disabled ? "cursor-pointer hover:text-pink" : "cursor-default"}`}
+            onClick={() => onMaxClick && !disabled && onMaxClick()}
+            disabled={disabled || !onMaxClick}
+            type="button"
+          >
+            {tokenId && tokenText && Number(tokenBalance) !== 0
+              ? formatDecimalsFromToken(Number(tokenBalance?.replace(/[, ]/g, "")), tokenDecimals as string)
+              : tokenBalance || 0}
+          </button>
           {tokenText &&
             onMaxClick &&
             process.env.VITE_ENABLE_EXPERIMENTAL_MAX_TOKENS_SWAP &&
             process.env.VITE_ENABLE_EXPERIMENTAL_MAX_TOKENS_SWAP == "true" && (
               <button
-                className="inline-flex h-5 w-11 flex-col items-start justify-start gap-2 px-1.5 text-pink"
+                className="ml-2 inline-flex h-5 w-11 flex-col items-start justify-start gap-2 px-1.5 text-pink"
                 onClick={onMaxClick}
+                type="button"
               >
                 MAX
               </button>
