@@ -2,7 +2,7 @@ import classNames from "classnames";
 import { NavLink, useLocation } from "react-router-dom";
 import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
 import AccountImage from "../../../assets/img/account-image-icon.svg?react";
-import Logo from "../../../assets/img/3dpass-logo.svg?react";
+import Logo from "../../../assets/img/3dpswap-logo.svg?react";
 import { ActionType, ButtonVariants, NetworkKeys, WalletConnectSteps } from "../../../app/types/enum.ts";
 import { reduceAddress } from "../../../app/util/helper";
 import {
