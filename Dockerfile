@@ -2,7 +2,7 @@
 
 # Adjust NODE_VERSION as desired
 ARG NODE_VERSION=20.10.0
-FROM node:${NODE_VERSION}-slim as base
+FROM node:${NODE_VERSION}-slim AS base
 
 LABEL fly_launch_runtime="Vite"
 
@@ -18,7 +18,7 @@ RUN npm install -g pnpm@$PNPM_VERSION
 
 
 # Throw-away build stage to reduce size of final image
-FROM base as build
+FROM base AS build
 
 # Install packages needed to build node modules
 RUN apt-get update -qq && \
@@ -26,7 +26,7 @@ RUN apt-get update -qq && \
 
 # Install node modules
 COPY --link package.json pnpm-lock.yaml ./
-RUN pnpm install --frozen-lockfile --prod=false
+RUN pnpm install --no-frozen-lockfile --prod=false
 
 # Copy application code
 COPY --link . .
@@ -35,7 +35,7 @@ COPY --link . .
 RUN pnpm run build
 
 # Remove development dependencies
-RUN pnpm prune --prod
+RUN pnpm prune --prod --ignore-scripts
 
 
 # Final stage for app image
