@@ -94,15 +94,19 @@ To add a custom icon for a new token:
 
 2. **Update the configuration**: Edit `./src/config/tokenIcons.ts` to add your token:
    ```typescript
+   // Import your token icon at the top of the file
+   import MYTOKENIcon from '../assets/img/tokens/MYTOKEN.svg';
+   
+   // Add it to the TOKEN_ICONS mapping
    export const TOKEN_ICONS: Record<string, string> = {
      // ... existing tokens
-     "MYTOKEN": "MYTOKEN.svg",  // or "MYTOKEN.png" for PNG icons
+     MYTOKEN: MYTOKENIcon,
    };
    ```
 
 3. **Submit a pull request**: Create a pull request with your changes to have the icon added to the official deployment.
 
-**Important**: Only tokens explicitly listed in the configuration will display custom icons. All other tokens will use the default icon. This prevents unnecessary network requests for non-existent icons.
+**Important**: Icons must be imported as modules for proper bundling. Only tokens explicitly listed in the configuration will display custom icons. All other tokens will use the default icon.
 
 ### Multilingual Support with i18n:
 
