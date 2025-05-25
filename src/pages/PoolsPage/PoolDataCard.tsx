@@ -1,4 +1,5 @@
 import Button from "../../components/atom/Button";
+import TokenIcon from "../../components/atom/TokenIcon";
 import { ButtonVariants, LiquidityPageType } from "../../app/types/enum";
 import AddIconPink from "../../assets/img/add-icon-pink.svg?react";
 import { LpTokenAsset } from "../../app/types";
@@ -12,10 +13,8 @@ type PoolDataCardProps = {
   tokenPair: string;
   asset1Tokens: string;
   asset1TokenSymbol: string;
-  asset1TokenIcon: string;
   asset2Tokens: string;
   asset2TokenSymbol: string;
-  asset2TokenIcon: string;
   lpTokenAsset: LpTokenAsset | null;
   assetTokenId: string;
   lpTokenId: string | null;
@@ -28,8 +27,6 @@ const PoolDataCard = ({
   asset2Tokens,
   asset2TokenSymbol,
   lpTokenAsset,
-  asset1TokenIcon,
-  asset2TokenIcon,
   assetTokenId,
   lpTokenId,
 }: PoolDataCardProps) => {
@@ -68,10 +65,10 @@ const PoolDataCard = ({
         <div className="relative flex basis-2/5 flex-col font-unbounded-variable">
           <div className="relative flex">
             <span className="">
-              <img src={asset1TokenIcon} alt="native icon" width={32} height={32} />
+              <TokenIcon tokenSymbol={asset1TokenSymbol} className="w-8 h-8" />
             </span>
             <span className="relative right-2">
-              <img src={asset2TokenIcon} alt="asset icon" width={32} height={32} />
+              <TokenIcon tokenSymbol={asset2TokenSymbol} className="w-8 h-8" />
             </span>
           </div>
           {tokenPair}
@@ -118,14 +115,14 @@ const PoolDataCard = ({
         <div className="flex basis-1/2 flex-col items-start justify-end">
           <div className="flex flex-col items-start">
             <span className="flex gap-1 text-large font-medium">
-              <img src={asset1TokenIcon} alt="assetToken" width={16} height={16} />
+              <TokenIcon tokenSymbol={asset1TokenSymbol} className="w-4 h-4" />
               <div className="flex items-baseline gap-1">
                 {asset1Tokens}
                 <span className="text-xs text-gray-200">{asset1TokenSymbol}</span>
               </div>
             </span>
             <span className="flex gap-1 text-large font-medium">
-              <img src={asset2TokenIcon} alt="assetToken" width={16} height={16} />
+              <TokenIcon tokenSymbol={asset2TokenSymbol} className="w-4 h-4" />
               <div className="flex items-baseline gap-1">
                 {asset2Tokens}
                 <span className="text-xs text-gray-200">{asset2TokenSymbol}</span>

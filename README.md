@@ -84,6 +84,26 @@ The project uses Tailwind.css for styling, making it easy to customize the look 
 
 In addition to <b>tailwind.css</b>, you can also customize images, fonts, and global SCSS (Sass) styles. These assets can be found in the `./src/assets/` directory. Developers can replace existing images, add new fonts, or make changes to the global SCSS to tailor the project's visual elements to their needs.
 
+### Adding Token Icons:
+
+To add a custom icon for a new token:
+
+1. **Add the icon file**: Place your token icon file in the `./src/assets/img/tokens/` directory. Supported formats:
+   - SVG (recommended): `MYTOKEN.svg`
+   - PNG: `MYTOKEN.png`
+
+2. **Update the configuration**: Edit `./src/config/tokenIcons.ts` to add your token:
+   ```typescript
+   export const TOKEN_ICONS: Record<string, string> = {
+     // ... existing tokens
+     "MYTOKEN": "MYTOKEN.svg",  // or "MYTOKEN.png" for PNG icons
+   };
+   ```
+
+3. **Submit a pull request**: Create a pull request with your changes to have the icon added to the official deployment.
+
+**Important**: Only tokens explicitly listed in the configuration will display custom icons. All other tokens will use the default icon. This prevents unnecessary network requests for non-existent icons.
+
 ### Multilingual Support with i18n:
 
 For projects with a global audience, multilingual support is crucial. The project uses i18n for translation and dynamic text changes. Developers can configure language support in the `./src/app/config/i18n/index.ts` file and provide translations in different languages in the `./src/app/translations/` directory. This makes it easy to add new languages and ensure that your decentralized exchange is accessible to users from around the world.

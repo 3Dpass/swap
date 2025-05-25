@@ -1,11 +1,11 @@
 import { FC } from "react";
 import classNames from "classnames";
-import DotToken from "../../../assets/img/dot-token.svg?react";
 import { ActionType } from "../../../app/types/enum";
 import { formatDecimalsFromToken } from "../../../app/util/helper";
 import { useAppContext } from "../../../state";
 import CheckIcon from "../../../assets/img/selected-token-check.svg?react";
 import Modal from "../../atom/Modal";
+import TokenIcon from "../../atom/TokenIcon";
 
 type TokenProps = {
   tokenSymbol: string;
@@ -61,7 +61,10 @@ const PoolSelectTokenModal: FC<PoolSelectTokenModalProps> = ({ open, title, sele
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-3">
                       <div>
-                        <DotToken width={36} height={36} />
+                        <TokenIcon 
+                          tokenSymbol={item.assetTokenMetadata.symbol}
+                          className="w-9 h-9"
+                        />
                       </div>
                       <div className="flex flex-col items-start">
                         <div className="text-gray-400 group-hover:text-white">{item.assetTokenMetadata.name}</div>

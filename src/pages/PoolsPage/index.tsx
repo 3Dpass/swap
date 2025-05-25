@@ -66,8 +66,6 @@ const PoolsPage = () => {
                     asset2Tokens={item.totalTokensLocked.asset2Token.formattedValue}
                     asset2TokenSymbol={item.totalTokensLocked.asset2Token.symbol}
                     lpTokenAsset={item.lpTokenAsset}
-                    asset1TokenIcon={item.totalTokensLocked.asset1Token.icon}
-                    asset2TokenIcon={item.totalTokensLocked.asset2Token.icon}
                     assetTokenId={item.assetTokenId}
                     lpTokenId={item.lpTokenId}
                   />

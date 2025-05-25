@@ -20,9 +20,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
-import DotToken from "../../../assets/img/dot-token.svg?react";
 import SwitchArrow from "../../../assets/img/switch-arrow.svg?react";
-import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceAfterAssetsSwapUpdate, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { createPoolCardsArray, getPoolReserves } from "../../../services/poolServices";
@@ -48,6 +46,7 @@ import {
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button";
 import WarningMessage from "../../atom/WarningMessage";
+import TokenIcon from "../../atom/TokenIcon";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import ReviewTransactionModal from "../ReviewTransactionModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
@@ -1461,7 +1460,7 @@ const SwapTokens = () => {
           tokenId={selectedTokens.tokenA?.tokenId}
           tokenDecimals={selectedTokens.tokenA?.decimals}
           labelText={t("tokenAmountInput.youPay")}
-          tokenIcon={<DotToken />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenA?.tokenSymbol} className="w-6 h-6" />}
           tokenValue={selectedTokenAValue?.tokenValue}
           onClick={() => fillTokenPairsAndOpenModal(TokenSelection.TokenA)}
           onSetTokenValue={(value) => tokenAValue(value)}
@@ -1476,7 +1475,7 @@ const SwapTokens = () => {
           tokenId={selectedTokens.tokenB?.tokenId}
           tokenDecimals={selectedTokens.tokenB?.decimals}
           labelText={t("tokenAmountInput.youReceive")}
-          tokenIcon={<DotToken />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenB?.tokenSymbol} className="w-6 h-6" />}
           tokenValue={selectedTokenBValue?.tokenValue}
           onClick={() => fillTokenPairsAndOpenModal(TokenSelection.TokenB)}
           onSetTokenValue={(value) => tokenBValue(value)}
@@ -1635,22 +1634,22 @@ const SwapTokens = () => {
           tokenA={{
             symbol: selectedTokens.tokenA.tokenSymbol,
             value: swapExactInTokenAmount.toString(),
-            icon:
-              selectedTokens.tokenA.tokenSymbol === nativeTokenSymbol ? (
-                <DotToken />
-              ) : (
-                <AssetTokenIcon width={24} height={24} />
-              ),
+            icon: (
+              <TokenIcon 
+                tokenSymbol={selectedTokens.tokenA.tokenSymbol} 
+                className="w-6 h-6" 
+              />
+            ),
           }}
           tokenB={{
             symbol: selectedTokens.tokenB.tokenSymbol,
             value: swapExactOutTokenAmount.toString(),
-            icon:
-              selectedTokens.tokenB.tokenSymbol === nativeTokenSymbol ? (
-                <DotToken />
-              ) : (
-                <AssetTokenIcon width={24} height={24} />
-              ),
+            icon: (
+              <TokenIcon 
+                tokenSymbol={selectedTokens.tokenB.tokenSymbol} 
+                className="w-6 h-6" 
+              />
+            ),
           }}
           actionLabel="Swapped"
         />

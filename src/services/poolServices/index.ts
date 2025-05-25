@@ -9,8 +9,6 @@ import { LpTokenAsset, PoolCardProps } from "../../app/types";
 import { ActionType, ServiceResponseStatus } from "../../app/types/enum";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
-import NativeTokenIcon from "../../assets/img/dot-token.svg";
-import AssetTokenIcon from "../../assets/img/test-token.svg";
 import { PoolAction } from "../../store/pools/interface";
 import { WalletAction } from "../../store/wallet/interface";
 
@@ -518,14 +516,12 @@ export const createPoolCardsArray = async (
               totalTokensLocked: {
                 asset1Token: {
                   decimals: asset1Decimals,
-                  icon: asset1IsNative ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: formatTokenAmount(asset1Amount, asset1Decimals),
                   value: asset1Amount,
                   symbol: asset1Symbol,
                 },
                 asset2Token: {
                   decimals: asset2Decimals,
-                  icon: asset2IsNative ? NativeTokenIcon : AssetTokenIcon,
                   formattedValue: formatTokenAmount(asset2Amount, asset2Decimals),
                   value: asset2Amount,
                   symbol: asset2Symbol,

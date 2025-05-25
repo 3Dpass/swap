@@ -2,9 +2,9 @@ import classNames from "classnames";
 import { FC } from "react";
 import { TokenProps } from "../../../app/types";
 import { formatDecimalsFromToken } from "../../../app/util/helper";
-import DotToken from "../../../assets/img/dot-token.svg?react";
 import CheckIcon from "../../../assets/img/selected-token-check.svg?react";
 import Modal from "../../atom/Modal";
+import TokenIcon from "../../atom/TokenIcon";
 
 interface SelectTokenPayload {
   id: string;
@@ -63,7 +63,10 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-3">
                       <div className="flex-shrink-0">
-                        <DotToken width={36} height={36} />
+                        <TokenIcon 
+                          tokenSymbol={item.assetTokenMetadata?.symbol}
+                          className="w-9 h-9"
+                        />
                       </div>
                       <div className="flex flex-col items-start">
                         <div

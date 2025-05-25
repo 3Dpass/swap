@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="279.314 121.653 87.84 87.84" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+        <linearGradient id="paint0_linear_302_20" x1="35.8971" y1="17.9776" x2="14.5509" y2="17.9776"
+                        gradientUnits="userSpaceOnUse" gradientTransform="matrix(1, 0, 0, 1, 291.36738, 133.621706)">
+            <stop stop-color="#0B828C"/>
+            <stop offset="1" stop-color="#00EB81"/>
+        </linearGradient>
+        <linearGradient id="paint1_linear_302_20" x1="35.8971" y1="31.7183" x2="14.5509" y2="31.7183"
+                        gradientUnits="userSpaceOnUse" gradientTransform="matrix(1, 0, 0, 1, 291.36738, 133.621706)">
+            <stop stop-color="#0B828C"/>
+            <stop offset="1" stop-color="#00EB81"/>
+        </linearGradient>
+        <linearGradient id="paint2_linear_302_20" x1="35.8971" y1="45.6369" x2="14.5509" y2="45.6369"
+                        gradientUnits="userSpaceOnUse" gradientTransform="matrix(1, 0, 0, 1, 291.36738, 133.621706)">
+            <stop stop-color="#0B828C"/>
+            <stop offset="1" stop-color="#00EB81"/>
+        </linearGradient>
+    </defs>
+    <ellipse style="fill: rgb(56, 56, 56);" cx="323.234" cy="165.573" rx="43.92" ry="43.92"
+             transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)"/>
+    <path d="M 323.424 159.576 L 298.454 150.562 L 298.454 143.621 L 323.424 152.636 L 323.424 159.576 Z"
+          fill="url(#paint0_linear_302_20)" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)"/>
+    <path d="M 323.308 173.314 L 298.368 164.3 L 298.368 157.359 L 323.308 166.373 L 323.308 173.314 Z"
+          fill="url(#paint1_linear_302_20)" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)"/>
+    <path d="M 323.308 187.224 L 298.368 178.21 L 298.368 171.298 L 323.308 180.284 L 323.308 187.224 Z"
+          fill="url(#paint2_linear_302_20)" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)"/>
+    <path
+        d="M 348.249 189.298 L 348.422 154.709 L 323.481 145.695 L 323.481 152.636 L 341.596 159.173 L 341.596 179.967 L 323.28 173.343 L 323.28 180.284 L 348.249 189.298 Z"
+        fill="#0B828C" transform="matrix(1, 0, 0, 1, 0, 3.552713678800501e-15)"/>
+</svg>
