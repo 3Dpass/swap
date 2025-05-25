@@ -64,11 +64,11 @@ const PoolDataCard = ({
       <div className="flex gap-2">
         <div className="relative flex basis-2/5 flex-col font-unbounded-variable">
           <div className="relative flex">
-            <span className="">
-              <TokenIcon tokenSymbol={asset1TokenSymbol} className="w-8 h-8" />
+            <span className="relative z-10 drop-shadow-md">
+              <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-10 w-10" />
             </span>
-            <span className="relative right-2">
-              <TokenIcon tokenSymbol={asset2TokenSymbol} className="w-8 h-8" />
+            <span className="relative z-0 -ml-2 drop-shadow-md">
+              <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-10 w-10" />
             </span>
           </div>
           {tokenPair}
@@ -115,14 +115,14 @@ const PoolDataCard = ({
         <div className="flex basis-1/2 flex-col items-start justify-end">
           <div className="flex flex-col items-start">
             <span className="flex gap-1 text-large font-medium">
-              <TokenIcon tokenSymbol={asset1TokenSymbol} className="w-4 h-4" />
+              <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-5 w-5" />
               <div className="flex items-baseline gap-1">
                 {asset1Tokens}
                 <span className="text-xs text-gray-200">{asset1TokenSymbol}</span>
               </div>
             </span>
             <span className="flex gap-1 text-large font-medium">
-              <TokenIcon tokenSymbol={asset2TokenSymbol} className="w-4 h-4" />
+              <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-5 w-5" />
               <div className="flex items-baseline gap-1">
                 {asset2Tokens}
                 <span className="text-xs text-gray-200">{asset2TokenSymbol}</span>

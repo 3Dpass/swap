@@ -562,10 +562,7 @@ const SwapTokens = () => {
       await Promise.all(
         pools.map(async (pool: any) => {
           if (pool?.[0]?.[1]?.Asset) {
-            const poolReserve: any = await getPoolReserves(
-              api,
-              pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-            );
+            const poolReserve: any = await getPoolReserves(api, pool?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
             if (poolReserve?.length > 0) {
               const assetTokenMetadata: any = await api.query.poscanAssets.metadata(
@@ -1250,14 +1247,10 @@ const SwapTokens = () => {
     if (api) {
       if (selectedTokens.tokenA.tokenSymbol === nativeTokenSymbol && selectedTokenBValue.tokenValue !== "") {
         const poolSelected: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
         );
         if (poolSelected) {
-          const poolReserve: any = await getPoolReserves(
-            api,
-            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-          );
+          const poolReserve: any = await getPoolReserves(api, poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
           const assetTokenReserve = formatDecimalsFromToken(
             poolReserve?.[1]?.replace(/[, ]/g, ""),
@@ -1289,15 +1282,11 @@ const SwapTokens = () => {
         selectedTokenAValue.tokenValue !== ""
       ) {
         const poolSelected: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
         );
 
         if (poolSelected) {
-          const poolReserve: any = await getPoolReserves(
-            api,
-            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-          );
+          const poolReserve: any = await getPoolReserves(api, poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
           const assetTokenReserve = formatDecimalsFromToken(
             poolReserve?.[1]?.replace(/[, ]/g, ""),
             selectedTokens.tokenA.decimals
@@ -1331,20 +1320,15 @@ const SwapTokens = () => {
         selectedTokenAValue.tokenValue !== ""
       ) {
         const poolSelectedA: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenA.tokenId
         );
 
         const poolSelectedB: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokens.tokenB.tokenId
         );
 
         if (poolSelectedA && poolSelectedB) {
-          const poolReserveA: any = await getPoolReserves(
-            api,
-            poolSelectedA?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-          );
+          const poolReserveA: any = await getPoolReserves(api, poolSelectedA?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
           const assetTokenReserveA = formatDecimalsFromToken(
             poolReserveA?.[1]?.replace(/[, ]/g, ""),
@@ -1386,10 +1370,7 @@ const SwapTokens = () => {
 
             const priceImpactTokenA = new Decimal(1).minus(priceBeforeSwapA.div(priceAfterSwapA));
 
-            const poolReserveB: any = await getPoolReserves(
-              api,
-              poolSelectedB?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-            );
+            const poolReserveB: any = await getPoolReserves(api, poolSelectedB?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
             const assetTokenReserveB = formatDecimalsFromToken(
               poolReserveA?.[1]?.replace(/[, ]/g, ""),
@@ -1460,7 +1441,7 @@ const SwapTokens = () => {
           tokenId={selectedTokens.tokenA?.tokenId}
           tokenDecimals={selectedTokens.tokenA?.decimals}
           labelText={t("tokenAmountInput.youPay")}
-          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenA?.tokenSymbol} className="w-6 h-6" />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenA?.tokenSymbol} className="h-8 w-8" />}
           tokenValue={selectedTokenAValue?.tokenValue}
           onClick={() => fillTokenPairsAndOpenModal(TokenSelection.TokenA)}
           onSetTokenValue={(value) => tokenAValue(value)}
@@ -1475,7 +1456,7 @@ const SwapTokens = () => {
           tokenId={selectedTokens.tokenB?.tokenId}
           tokenDecimals={selectedTokens.tokenB?.decimals}
           labelText={t("tokenAmountInput.youReceive")}
-          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenB?.tokenSymbol} className="w-6 h-6" />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokens.tokenB?.tokenSymbol} className="h-8 w-8" />}
           tokenValue={selectedTokenBValue?.tokenValue}
           onClick={() => fillTokenPairsAndOpenModal(TokenSelection.TokenB)}
           onSetTokenValue={(value) => tokenBValue(value)}
@@ -1634,22 +1615,12 @@ const SwapTokens = () => {
           tokenA={{
             symbol: selectedTokens.tokenA.tokenSymbol,
             value: swapExactInTokenAmount.toString(),
-            icon: (
-              <TokenIcon 
-                tokenSymbol={selectedTokens.tokenA.tokenSymbol} 
-                className="w-6 h-6" 
-              />
-            ),
+            icon: <TokenIcon tokenSymbol={selectedTokens.tokenA.tokenSymbol} className="h-8 w-8" />,
           }}
           tokenB={{
             symbol: selectedTokens.tokenB.tokenSymbol,
             value: swapExactOutTokenAmount.toString(),
-            icon: (
-              <TokenIcon 
-                tokenSymbol={selectedTokens.tokenB.tokenSymbol} 
-                className="w-6 h-6" 
-              />
-            ),
+            icon: <TokenIcon tokenSymbol={selectedTokens.tokenB.tokenSymbol} className="h-8 w-8" />,
           }}
           actionLabel="Swapped"
         />

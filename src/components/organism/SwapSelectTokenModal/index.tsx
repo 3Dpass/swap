@@ -62,11 +62,8 @@ const SwapSelectTokenModal: FC<SwapSelectTokenModalProps> = ({
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-3">
-                      <div className="flex-shrink-0">
-                        <TokenIcon 
-                          tokenSymbol={item.assetTokenMetadata?.symbol}
-                          className="w-9 h-9"
-                        />
+                      <div className="flex-shrink-0 drop-shadow-md">
+                        <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-12 w-12" />
                       </div>
                       <div className="flex flex-col items-start">
                         <div

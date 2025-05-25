@@ -60,11 +60,8 @@ const PoolSelectTokenModal: FC<PoolSelectTokenModalProps> = ({ open, title, sele
                 >
                   <div className="flex w-full items-center justify-between">
                     <div className="flex gap-3">
-                      <div>
-                        <TokenIcon 
-                          tokenSymbol={item.assetTokenMetadata.symbol}
-                          className="w-9 h-9"
-                        />
+                      <div className="drop-shadow-md">
+                        <TokenIcon tokenSymbol={item.assetTokenMetadata.symbol} className="h-12 w-12" />
                       </div>
                       <div className="flex flex-col items-start">
                         <div className="text-gray-400 group-hover:text-white">{item.assetTokenMetadata.name}</div>
