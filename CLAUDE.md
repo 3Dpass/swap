@@ -13,6 +13,20 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Commit with conventional commits**: `pnpm run commit`
 - **Check for package updates**: `pnpm run check:packages`
 
+### Commit Style
+- Use conventional commits
+- Structure: `<type>(<optional scope>): <description>`
+- Types include: 
+  - `feat`: New feature
+  - `fix`: Bug fix
+  - `docs`: Documentation changes
+  - `style`: Code formatting
+  - `refactor`: Code refactoring
+  - `test`: Adding or modifying tests
+  - `chore`: Maintenance tasks
+- Example: `feat(wallet): add new connection method`
+- Breaking changes should include `!` after type or have `BREAKING CHANGE:` in footer
+
 ### Testing
 - Run all tests: `pnpm run test`
 - Run a single test file: `pnpm jest src/tests/unit/helper.test.ts`
