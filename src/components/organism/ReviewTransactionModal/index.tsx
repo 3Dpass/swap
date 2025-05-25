@@ -1,8 +1,8 @@
 import { FC } from "react";
 import Modal from "../../atom/Modal";
 import Button from "../../atom/Button";
+import TokenIcon from "../../atom/TokenIcon";
 import { ButtonVariants, InputEditedType, TransactionTypes } from "../../../app/types/enum";
-import DotToken from "../../../assets/img/dot-token.svg?react";
 
 interface SwapSelectTokenModalProps {
   open: boolean;
@@ -16,6 +16,8 @@ interface SwapSelectTokenModalProps {
   tokenValueBSecond?: string;
   tokenSymbolA?: string;
   tokenSymbolB?: string;
+  inputTokenSymbolA?: string;
+  inputTokenSymbolB?: string;
   inputType?: string;
   showAll?: boolean;
   transactionType: TransactionTypes;
@@ -35,6 +37,8 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
   tokenValueBSecond,
   tokenSymbolA,
   tokenSymbolB,
+  inputTokenSymbolA,
+  inputTokenSymbolB,
   inputType,
   showAll,
   transactionType,
@@ -54,7 +58,7 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
           <span className="flex w-full items-center justify-between font-unbounded-variable text-heading-4 font-bold text-gray-400">
             <div className="flex overflow-y-auto">{inputValueA}</div>
             <div className="w-12 flex-shrink-0">
-              <DotToken />
+              <TokenIcon tokenSymbol={inputTokenSymbolA} className="h-12 w-12" />
             </div>
           </span>
         </div>
@@ -68,7 +72,7 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
           <span className="flex w-full items-center justify-between gap-6 font-unbounded-variable text-heading-4 font-bold text-gray-400">
             <div className="flex overflow-y-auto">{inputValueB}</div>
             <div className="w-12 flex-shrink-0">
-              <DotToken />
+              <TokenIcon tokenSymbol={inputTokenSymbolB} className="h-12 w-12" />
             </div>
           </span>
         </div>

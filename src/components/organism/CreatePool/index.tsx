@@ -17,13 +17,12 @@ import {
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import DotToken from "../../../assets/img/dot-token.svg?react";
-import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkCreatePoolGasFee, createPool, getAllLiquidityPoolsTokensMetadata } from "../../../services/poolServices";
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button";
+import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import AddPoolLiquidity from "../AddPoolLiquidity";
@@ -413,7 +412,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
             <TokenAmountInput
               tokenText={selectedTokenA?.nativeTokenSymbol}
               labelText={t("tokenAmountInput.youPay")}
-              tokenIcon={<DotToken />}
+              tokenIcon={<TokenIcon tokenSymbol={selectedTokenA?.nativeTokenSymbol} className="h-8 w-8" />}
               tokenBalance={selectedTokenA.tokenBalance}
               tokenId={selectedTokenA.tokenId}
               tokenDecimals={selectedTokenA.nativeTokenDecimals}
@@ -427,7 +426,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
             <TokenAmountInput
               tokenText={selectedTokenB?.tokenSymbol}
               labelText={t("tokenAmountInput.youPay")}
-              tokenIcon={<DotToken />}
+              tokenIcon={<TokenIcon tokenSymbol={selectedTokenB?.tokenSymbol} className="h-8 w-8" />}
               tokenBalance={selectedTokenB.assetTokenBalance}
               tokenId={selectedTokenB.assetTokenId}
               tokenDecimals={selectedTokenB.decimals}
@@ -506,8 +505,10 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               title="Review create pool"
               transactionType={TransactionTypes.createPool}
               inputValueA={selectedTokenNativeValue ? selectedTokenNativeValue.tokenValue : ""}
+              inputTokenSymbolA={selectedTokenA.nativeTokenSymbol}
               tokenValueA={selectedTokenA.nativeTokenSymbol}
               inputValueB={selectedTokenAssetValue ? selectedTokenAssetValue.tokenValue : ""}
+              inputTokenSymbolB={selectedTokenB.tokenSymbol}
               tokenValueB={selectedTokenB.tokenSymbol}
               onClose={() => {
                 setReviewModalOpen(false);
@@ -531,12 +532,12 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               tokenA={{
                 value: selectedTokenNativeValue?.tokenValue,
                 symbol: selectedTokenA.nativeTokenSymbol,
-                icon: <DotToken />,
+                icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
               }}
               tokenB={{
                 value: selectedTokenAssetValue?.tokenValue,
                 symbol: selectedTokenB.tokenSymbol,
-                icon: <AssetTokenIcon width={24} height={24} />,
+                icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
               }}
               actionLabel={t("modal.added")}
             />

@@ -22,13 +22,12 @@ import {
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import DotToken from "../../../assets/img/dot-token.svg?react";
-import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { assetTokenData, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkWithdrawPoolLiquidityGasFee, getPoolReserves, removeLiquidity } from "../../../services/poolServices";
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button";
+import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import AmountPercentage from "../../molecule/AmountPercentage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
@@ -333,14 +332,10 @@ const WithdrawPoolLiquidity = () => {
     if (api) {
       if (selectedTokenNativeValue?.tokenValue !== "" && selectedTokenAssetValue?.tokenValue !== "") {
         const poolSelected: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
         );
         if (poolSelected && selectedTokenNativeValue?.tokenValue && selectedTokenAssetValue?.tokenValue) {
-          const poolReserve: any = await getPoolReserves(
-            api,
-            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-          );
+          const poolReserve: any = await getPoolReserves(api, poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
           const assetTokenReserve = formatDecimalsFromToken(
             poolReserve?.[1]?.replace(/[, ]/g, ""),
@@ -454,7 +449,7 @@ const WithdrawPoolLiquidity = () => {
         <TokenAmountInput
           tokenText={selectedTokenA?.nativeTokenSymbol}
           labelText={t("poolsPage.withdrawalAmount")}
-          tokenIcon={<DotToken />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokenA?.nativeTokenSymbol} className="h-8 w-8" />}
           tokenValue={
             selectedTokenNativeValue?.tokenValue
               ? new Decimal(selectedTokenNativeValue?.tokenValue).mul(withdrawAmountPercentage).div(100).toFixed()
@@ -470,7 +465,7 @@ const WithdrawPoolLiquidity = () => {
         <TokenAmountInput
           tokenText={selectedTokenB?.tokenSymbol}
           labelText={t("poolsPage.withdrawalAmount")}
-          tokenIcon={<DotToken />}
+          tokenIcon={<TokenIcon tokenSymbol={selectedTokenB?.tokenSymbol} className="h-8 w-8" />}
           tokenValue={formattedTokenBValue()}
           onClick={() => setIsModalOpen(true)}
           onSetTokenValue={() => null}
@@ -619,6 +614,8 @@ const WithdrawPoolLiquidity = () => {
               : ""
           }
           inputValueB={formattedTokenBValue()}
+          inputTokenSymbolA={selectedTokenA.nativeTokenSymbol}
+          inputTokenSymbolB={selectedTokenB.tokenSymbol}
           tokenValueA={
             selectedTokenNativeValue?.tokenValue &&
             new Decimal(selectedTokenNativeValue?.tokenValue).times(withdrawAmountPercentage / 100).toString()
@@ -647,12 +644,12 @@ const WithdrawPoolLiquidity = () => {
           tokenA={{
             value: exactNativeTokenWithdraw,
             symbol: selectedTokenA.nativeTokenSymbol,
-            icon: <DotToken />,
+            icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
           }}
           tokenB={{
             value: exactAssetTokenWithdraw,
             symbol: selectedTokenB.tokenSymbol,
-            icon: <AssetTokenIcon width={24} height={24} />,
+            icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
           }}
         />
       </div>

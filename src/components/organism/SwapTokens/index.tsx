@@ -1631,6 +1631,8 @@ const SwapTokens = () => {
           transactionType={TransactionTypes.swap}
           inputValueA={selectedTokenAValue.tokenValue}
           inputValueB={selectedTokenBValue.tokenValue}
+          inputTokenSymbolA={selectedTokens.tokenA.tokenSymbol}
+          inputTokenSymbolB={selectedTokens.tokenB.tokenSymbol}
           tokenValueA={
             inputEdited.inputType === InputEditedType.exactIn
               ? selectedTokenBValue.tokenValue

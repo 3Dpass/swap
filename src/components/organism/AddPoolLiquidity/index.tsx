@@ -17,14 +17,13 @@ import {
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import DotToken from "../../../assets/img/dot-token.svg?react";
-import AssetTokenIcon from "../../../assets/img/test-token.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { addLiquidity, checkAddPoolLiquidityGasFee, getPoolReserves } from "../../../services/poolServices";
 import { getAssetTokenFromNativeToken, getNativeTokenFromAssetToken } from "../../../services/tokenServices";
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button";
+import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import CreatePool from "../CreatePool";
@@ -383,14 +382,10 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
     if (api) {
       if (selectedTokenNativeValue?.tokenValue !== "" && selectedTokenAssetValue?.tokenValue !== "") {
         const poolSelected: any = pools?.find(
-          (pool: any) =>
-            pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
+          (pool: any) => pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "") === selectedTokenB.assetTokenId
         );
         if (poolSelected && selectedTokenNativeValue?.tokenValue && selectedTokenAssetValue?.tokenValue) {
-          const poolReserve: any = await getPoolReserves(
-            api,
-            poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, "")
-          );
+          const poolReserve: any = await getPoolReserves(api, poolSelected?.[0]?.[1]?.Asset.replace(/[, ]/g, ""));
 
           const assetTokenReserve = formatDecimalsFromToken(
             poolReserve?.[1]?.replace(/[, ]/g, ""),
@@ -520,7 +515,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
           <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50" />
           <TokenAmountInput
             tokenText={selectedTokenA?.nativeTokenSymbol}
-            tokenIcon={<DotToken />}
+            tokenIcon={<TokenIcon tokenSymbol={selectedTokenA?.nativeTokenSymbol} className="h-8 w-8" />}
             tokenBalance={selectedTokenA.tokenBalance}
             tokenId={selectedTokenA.tokenId}
             tokenDecimals={selectedTokenA.nativeTokenDecimals}
@@ -533,7 +528,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
           />
           <TokenAmountInput
             tokenText={selectedTokenB?.tokenSymbol}
-            tokenIcon={<DotToken />}
+            tokenIcon={<TokenIcon tokenSymbol={selectedTokenB?.tokenSymbol} className="h-8 w-8" />}
             tokenBalance={selectedTokenB.assetTokenBalance}
             tokenId={selectedTokenB.assetTokenId}
             tokenDecimals={selectedTokenB.decimals}
@@ -597,11 +592,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
                 </div>
               </div>
             </div>
-            {poolExists ? (
-              <div className="flex rounded-lg bg-lime-500 px-4 py-2 text-medium font-normal text-cyan-700">
-                {t("poolsPage.poolExists")}
-              </div>
-            ) : null}
+            <WarningMessage show={poolExists} message={t("poolsPage.poolExists")} />
           </div>
           {selectedTokenNativeValue?.tokenValue && selectedTokenAssetValue?.tokenValue && (
             <>
@@ -662,6 +653,8 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
             priceImpact={priceImpact}
             inputValueA={selectedTokenNativeValue ? selectedTokenNativeValue?.tokenValue : ""}
             inputValueB={selectedTokenAssetValue ? selectedTokenAssetValue?.tokenValue : ""}
+            inputTokenSymbolA={selectedTokenA.nativeTokenSymbol}
+            inputTokenSymbolB={selectedTokenB.tokenSymbol}
             tokenValueA={
               inputEdited.inputType === InputEditedType.exactIn
                 ? selectedTokenAssetValue?.tokenValue
@@ -704,12 +697,12 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
             tokenA={{
               value: exactNativeTokenAddLiquidity,
               symbol: selectedTokenA.nativeTokenSymbol,
-              icon: <DotToken />,
+              icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
             }}
             tokenB={{
               value: exactAssetTokenAddLiquidity,
               symbol: selectedTokenB.tokenSymbol,
-              icon: <AssetTokenIcon width={24} height={24} />,
+              icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
             }}
             actionLabel={t("modal.added")}
           />
