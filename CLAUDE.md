@@ -9,9 +9,19 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 - **Build for production**: `pnpm run build`
 - **Run tests**: `pnpm run test` or `pnpm jest`
 - **Run linting**: `pnpm run lint`
+- **Run TypeScript check**: `pnpm run typecheck`
 - **Preview production build**: `pnpm run preview`
 - **Commit with conventional commits**: `pnpm run commit`
 - **Check for package updates**: `pnpm run check:packages`
+
+### Pre-commit Hooks
+The project uses Husky and lint-staged to ensure code quality before commits:
+- **Prettier**: Automatically formats code
+- **ESLint**: Fixes linting issues and checks for errors
+- **TypeScript**: Validates types with `tsc --noEmit`
+- **Commitlint**: Ensures commit messages follow conventional commits format
+
+All checks run automatically on `git commit`. If any check fails, the commit will be blocked.
 
 ### Commit Style
 - Use conventional commits
