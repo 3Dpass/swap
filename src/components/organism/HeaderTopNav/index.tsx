@@ -3,7 +3,7 @@ import { NavLink, useLocation } from "react-router-dom";
 import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
 import AccountImage from "../../../assets/img/account-image-icon.svg?react";
 import Logo from "../../../assets/img/3dpswap-logo.svg?react";
-import { ActionType, ButtonVariants, NetworkKeys, WalletConnectSteps } from "../../../app/types/enum.ts";
+import { ActionType, ButtonVariants, WalletConnectSteps } from "../../../app/types/enum.ts";
 import { reduceAddress } from "../../../app/util/helper";
 import {
   connectWalletAndFetchBalance,
@@ -13,7 +13,7 @@ import {
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button/index.tsx";
 import { t } from "i18next";
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import WalletConnectModal from "../WalletConnectModal/index.tsx";
 import LocalStorage from "../../../app/util/localStorage.ts";
 import { ModalStepProps } from "../../../app/types/index.ts";
@@ -33,8 +33,9 @@ const HeaderTopNav = () => {
   const [walletConnectOpen, setWalletConnectOpen] = useState(false);
   const [supportedWallets, setSupportedWallets] = useState<Wallet[]>([] as Wallet[]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const mobileMenuRef = useRef<HTMLDivElement>(null);
 
-  const mobileMenuRef = useClickOutside(() => setMobileMenuOpen(false));
+  useClickOutside(mobileMenuRef, () => setMobileMenuOpen(false));
   const walletConnected = LocalStorage.get("wallet-connected");
 
   const connectWallet = () => {
