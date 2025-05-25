@@ -5,6 +5,8 @@ import { useState } from "react";
 import { WalletConnectSteps } from "../../../app/types/enum";
 import { ModalStepProps } from "../../../app/types";
 import type { Wallet, WalletAccount } from "@talismn/connect-wallets";
+import { encodeAddress } from "@polkadot/util-crypto";
+import useGetNetwork from "../../../app/hooks/useGetNetwork";
 
 interface WalletConnectModalProps {
   open: boolean;
@@ -29,6 +31,7 @@ const WalletConnectModal = ({
   handleConnect,
 }: WalletConnectModalProps) => {
   const [walletAccounts, setWalletAccounts] = useState<WalletAccount[]>([]);
+  const { ss58Format } = useGetNetwork();
 
   const handleContinueClick = (accounts: WalletAccount[]) => {
     setModalStep({ step: WalletConnectSteps.stepAddresses });
@@ -76,7 +79,9 @@ const WalletConnectModal = ({
                     <RandomTokenIcon />
                     <button className="flex flex-col items-start" onClick={() => handleConnect(account)}>
                       <div className="text-base font-medium text-gray-300">{account?.name}</div>
-                      <div className="text-xs font-normal text-gray-300">{account?.address}</div>
+                      <div className="text-xs font-normal text-gray-300">
+                        {encodeAddress(account?.address, ss58Format)}
+                      </div>
                     </button>
                   </div>
                 </div>

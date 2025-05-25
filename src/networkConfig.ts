@@ -5,6 +5,7 @@ type NetworkConfig = {
   rpcUrl: string;
   parents: number;
   assethubSubscanUrl?: string;
+  ss58Format: number;
 };
 
 export const NETWORKS: Record<NetworkKeys, NetworkConfig> = {
@@ -13,5 +14,6 @@ export const NETWORKS: Record<NetworkKeys, NetworkConfig> = {
     rpcUrl: "wss://rpc.3dpass.org",
     parents: 1,
     assethubSubscanUrl: "https://explorer.3dpassmining.info/",
+    ss58Format: 71,
   },
 };

@@ -3,6 +3,7 @@ import * as Sentry from "@sentry/react";
 import { Decimal } from "decimal.js";
 import { t } from "i18next";
 import { UrlParamType } from "../types";
+import { encodeAddress } from "@polkadot/util-crypto";
 
 export const init = () => {
   // Sentry
@@ -11,10 +12,17 @@ export const init = () => {
   });
 };
 
-export const reduceAddress = (address: string | undefined, lengthLeft: number, lengthRight: number) => {
+export const reduceAddress = (
+  address: string | undefined,
+  lengthLeft: number,
+  lengthRight: number,
+  ss58Format?: number
+) => {
   if (address) {
-    const addressLeftPart = address.substring(0, lengthLeft);
-    const addressRightPart = address.substring(48 - lengthRight, 48);
+    // Format address with ss58Format if provided
+    const formattedAddress = ss58Format !== undefined ? encodeAddress(address, ss58Format) : address;
+    const addressLeftPart = formattedAddress.substring(0, lengthLeft);
+    const addressRightPart = formattedAddress.substring(formattedAddress.length - lengthRight);
     return `${addressLeftPart}...${addressRightPart}`;
   }
   return t("wallet.notConnected");
@@ -51,10 +59,7 @@ export const checkIfPoolAlreadyExists = (id: string, poolArray: AnyJson[]) => {
 
   if (id && poolArray) {
     exists = !!poolArray?.find((pool: any) => {
-      return (
-        pool?.[0]?.[1]?.Asset &&
-        pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString() === id
-      );
+      return pool?.[0]?.[1]?.Asset && pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString() === id;
     });
   }
 
