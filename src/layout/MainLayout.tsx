@@ -19,12 +19,14 @@ const MainLayout = () => {
     }
   }, []);
   return (
-    <>
+    <div className="min-h-screen flex flex-col">
       <SeoHelmet />
       <HeaderTopNav />
-      <Outlet />
+      <main className="flex-1 flex flex-col">
+        <Outlet />
+      </main>
       <Footer />
-    </>
+    </div>
   );
 };
 

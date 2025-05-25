@@ -132,10 +132,10 @@ const HeaderTopNav = () => {
 
   return (
     <>
-      <nav className="flex h-[60px] sm:h-[70px] items-center justify-between px-4 sm:px-6 lg:px-10 relative">
+      <nav className="flex h-[50px] sm:h-[60px] lg:h-[70px] items-center justify-between px-4 sm:px-6 lg:px-10 relative">
         {/* Logo - fixed size, no distortion */}
         <div className="flex-shrink-0">
-          <Logo className="w-[110px] sm:w-[130px] lg:w-[150px] h-auto" />
+          <Logo className="w-[100px] sm:w-[120px] lg:w-[150px] h-auto" />
         </div>
 
         {/* Desktop Navigation */}
