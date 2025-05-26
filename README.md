@@ -1,5 +1,8 @@
 # Web3 Front-end for the Assets Conversion decentralized module
 
+![CI](https://github.com/3Dpass/swap/workflows/CI/badge.svg)
+![Tests](https://github.com/3Dpass/swap/workflows/Run%20Tests/badge.svg)
+
 ## Table of contents
 
 <ul>

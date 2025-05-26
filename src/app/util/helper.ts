@@ -51,7 +51,10 @@ export const formatInputTokenValue = (base: Decimal.Value, decimals: string) => 
 };
 
 export const formatDecimalsFromToken = (base: Decimal.Value, decimals: string) => {
-  return new Decimal(base || 0).dividedBy(Math.pow(10, parseFloat(decimals || "0"))).toFixed();
+  // Remove commas and spaces from the base value if it's a string
+  // This fixes the Decimal.js error when parsing API responses
+  const cleanBase = typeof base === "string" ? base.replace(/[, ]/g, "") : base;
+  return new Decimal(cleanBase || 0).dividedBy(Math.pow(10, parseFloat(decimals || "0"))).toFixed();
 };
 
 export const checkIfPoolAlreadyExists = (id: string, poolArray: AnyJson[]) => {
