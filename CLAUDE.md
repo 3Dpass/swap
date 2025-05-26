@@ -138,3 +138,17 @@ The app uses a dynamic countdown system based on real blockchain data:
 - **Countdown hook**: `useCountdown` hook provides real-time countdown with stage reset
 - **Excluded stages**: Signing (user-dependent) and instant stages (preparing, finalizing)
 - **Fallback**: Defaults to 60 seconds if blockchain data unavailable
+
+### Debug Panel
+The app includes a developer debug panel for testing and debugging:
+- **Toggle**: Keyboard shortcut Ctrl/Cmd + D to show/hide
+- **Features**: Transaction simulation, block time monitoring, state inspection
+- **Location**: `src/components/organism/DebugPanel/`
+- **Purpose**: Testing transaction flows without actual blockchain transactions
+- **Block time display**: Shows real-time block time calculations and history
+
+### Recent Code Improvements
+- **Removed deprecated code**: Eliminated setSS58Format calls as it's automatically handled by the API
+- **Cleaned up debug logs**: Production-ready code with no console.log statements
+- **UI consistency**: Aligned spacing across all pages (swap, pools, liquidity)
+- **Code quality**: Regular linting and type checking through pre-commit hooks

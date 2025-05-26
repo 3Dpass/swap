@@ -29,12 +29,28 @@
 </ul>
 
 ## Description
-The app represents a non-custodial Web3 User Interface (UI) for the [AssetConversion](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion)
-decentralized module operating within The Ledger of Things blockchain. 
+This is a non-custodial Web3 decentralized exchange (DEX) interface for The Ledger of Things blockchain. Built on the [AssetConversion](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion) pallet, it supports:
+
+- **Token Swaps**: Exchange P3D native tokens with any created assets
+- **Liquidity Pools**: Create and manage liquidity pools for token pairs
+- **3DPRC-2 Support**: Trade both conventional fungible tokens and 3DPRC-2 tokenized object share-tokens
+- **Dynamic Pricing**: Automated market maker (AMM) with real-time price discovery
+- **Non-Custodial**: Users maintain full control of their assets through browser wallet extensions 
+
+## Key Features
+
+- **🔄 Token Swapping**: Instant swaps between P3D and any listed token
+- **💧 Liquidity Provision**: Add/remove liquidity to earn from trading fees
+- **🎯 Real-time Pricing**: Dynamic pricing with live countdown timers for transactions
+- **🔐 Wallet Support**: Compatible with Polkadot.js, Talisman, and SubWallet
+- **📊 Pool Analytics**: View pool statistics, TVL, and trading volumes
+- **⚡ Optimized UX**: Conservative block time estimates for reliable transaction timing
+- **🎨 Custom Token Icons**: Support for custom token branding
+- **🌐 Internationalization**: Multi-language support via i18n
 
 ## AssetConversion interaction
 The app interacts with the [AssetConversion](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion) module 
-through its RPC API directly form the web browser. The RPC API provider is set up in the `networkConfig.ts`.
+through its RPC API directly from the web browser. The RPC API provider is set up in the `networkConfig.ts`.
 Follow the [RPC API](./ASSET_CONVERSION_PALLET.md) description.
 
 ## How to install
@@ -69,6 +85,17 @@ pnpm run dev
 ```sh
 pnpm run test
 ```
+
+## Technology Stack
+
+- **Frontend**: React 18 + TypeScript + Vite
+- **Blockchain**: Polkadot.js API for substrate interaction
+- **Styling**: Tailwind CSS + SCSS modules
+- **State Management**: React Context with Redux-like pattern
+- **Wallet Integration**: @talismn/connect-wallets
+- **Testing**: Jest + React Testing Library
+- **Code Quality**: ESLint + Prettier + Husky pre-commit hooks
+- **Build**: Vite with optimized production builds
 
 ## How to manually test the app
 
@@ -121,6 +148,14 @@ To expand the functionality of your decentralized exchange, developers can creat
 ### Updating Global State:
 
 The project includes global state management logic that helps maintain shared application state. Developers can update global state properties to reflect changes in the application's data and user interactions. This global state can be accessed and modified as needed to ensure consistent and responsive user experiences.
+
+### Debug Panel:
+
+For development and testing purposes, the app includes a debug panel that can be toggled with Ctrl/Cmd + D:
+- **Transaction Simulation**: Test transaction flows without blockchain interaction
+- **Block Time Monitoring**: View real-time block time calculations and history
+- **State Inspection**: Debug application state and transaction status
+- **Located in**: `./src/components/organism/DebugPanel/`
 
 By providing these guidelines, you're offering developers a clear roadmap for customizing and extending your decentralized exchange project. This will help them make the most of your codebase and contribute to the success of the project.
 
