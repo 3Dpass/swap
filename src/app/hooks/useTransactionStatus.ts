@@ -24,7 +24,7 @@ const SIMULATION_STEP_MAPPING: Record<string, TransactionStatus> = {
   "Check Balances": TransactionStatus.checkingBalances,
   "Calculate Route": TransactionStatus.calculatingRoute,
   "Sign Transaction": TransactionStatus.signing,
-  "Submit to Blockchain": TransactionStatus.sendingToNetwork,
+  "Submit to Blockchain": TransactionStatus.waitingForNewBlock,
   "Wait for Confirmation": TransactionStatus.waitingForConfirmation,
   "Transaction in Block": TransactionStatus.waitingForFinalization,
   "Finalize Swap": TransactionStatus.finalizing,

@@ -215,7 +215,7 @@ const DebugPanel: FC = () => {
           currentTransactionStatus = TransactionStatus.signing;
           break;
         case "Submit to Blockchain":
-          currentTransactionStatus = TransactionStatus.sendingToNetwork;
+          currentTransactionStatus = TransactionStatus.waitingForNewBlock;
           break;
         case "Wait for Confirmation":
           currentTransactionStatus = TransactionStatus.waitingForConfirmation;
@@ -303,7 +303,7 @@ const DebugPanel: FC = () => {
           currentTransactionStatus = TransactionStatus.signing;
           break;
         case "Submit to Blockchain":
-          currentTransactionStatus = TransactionStatus.sendingToNetwork;
+          currentTransactionStatus = TransactionStatus.waitingForNewBlock;
           break;
         case "Wait for Confirmation":
           currentTransactionStatus = TransactionStatus.waitingForConfirmation;

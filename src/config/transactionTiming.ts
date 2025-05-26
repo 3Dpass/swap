@@ -24,7 +24,7 @@ export const getSwapStageDurations = (): Record<TransactionStatus, number> => {
     [TransactionStatus.checkingBalances]: 0,
     [TransactionStatus.calculatingRoute]: 0,
     [TransactionStatus.signing]: 0, // User interaction - no countdown
-    [TransactionStatus.sendingToNetwork]: blockTime, // ~1 block
+    [TransactionStatus.waitingForNewBlock]: blockTime, // ~1 block
     [TransactionStatus.waitingForConfirmation]: blockTime, // ~1 block
     [TransactionStatus.waitingForFinalization]: blockTime * 2, // ~2 blocks
     [TransactionStatus.finalizing]: 0, // No countdown needed

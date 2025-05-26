@@ -216,26 +216,36 @@ class BlockTimeService {
     }
 
     if (intervals.length > 0) {
-      // Use median for stable, outlier-resistant block time estimation
-      const median = this.calculateMedian(intervals);
+      // Use 75th percentile for conservative estimation (75% of blocks will be faster)
+      const percentile75 = this.calculatePercentile(intervals, 0.75);
 
-      // Only update if the new estimate is reasonable (between 1 second and 5 minutes)
-      if (median >= 1000 && median <= 300000) {
-        this.estimatedBlockTime = Math.round(median);
+      // Add 20% buffer for better UX (under-promise, over-deliver)
+      const bufferedTime = percentile75 * 1.2;
+
+      // Only update if the new estimate is reasonable (between 1 second and 8 minutes)
+      if (bufferedTime >= 1000 && bufferedTime <= 480000) {
+        this.estimatedBlockTime = Math.round(bufferedTime);
       }
     }
   }
 
-  private calculateMedian(values: number[]): number {
+  private calculatePercentile(values: number[], percentile: number): number {
     if (values.length === 0) return 0;
+    if (percentile < 0 || percentile > 1) return 0;
 
     const sorted = [...values].sort((a, b) => a - b);
-    const mid = Math.floor(sorted.length / 2);
+    const index = percentile * (sorted.length - 1);
 
-    if (sorted.length % 2 === 0) {
-      return (sorted[mid - 1] + sorted[mid]) / 2;
+    if (Number.isInteger(index)) {
+      return sorted[index];
     }
-    return sorted[mid];
+
+    // Interpolate between two values
+    const lower = Math.floor(index);
+    const upper = Math.ceil(index);
+    const weight = index - lower;
+
+    return sorted[lower] * (1 - weight) + sorted[upper] * weight;
   }
 
   getEstimatedBlockTime(): number {

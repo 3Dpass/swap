@@ -105,7 +105,7 @@ export enum TransactionStatus {
   checkingBalances = "checkingBalances",
   calculatingRoute = "calculatingRoute",
   signing = "signing",
-  sendingToNetwork = "sendingToNetwork",
+  waitingForNewBlock = "waitingForNewBlock",
   waitingForConfirmation = "waitingForConfirmation",
   waitingForFinalization = "waitingForFinalization",
   finalizing = "finalizing",

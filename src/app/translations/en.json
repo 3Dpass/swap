@@ -137,7 +137,7 @@
     "checkingBalances": "Checking balances...",
     "calculatingRoute": "Calculating best route...",
     "signing": "Signing transaction...",
-    "sendingToNetwork": "Sending to network...",
+    "waitingForNewBlock": "Waiting for new block...",
     "waitingForConfirmation": "Waiting for confirmation...",
     "waitingForFinalization": "Waiting for finalization...",
     "finalizing": "Finalizing transaction...",

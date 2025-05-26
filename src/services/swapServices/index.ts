@@ -124,7 +124,7 @@ export const swapNativeForAssetExactIn = async (
         timingTracker.endPhase("Signing");
         console.time("Network Submission");
         timingTracker.startPhase("Network Submission");
-        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
         console.timeEnd("Network Submission");
@@ -285,7 +285,7 @@ export const swapNativeForAssetExactOut = async (
         timingTracker.endPhase("Signing");
         console.time("Network Submission");
         timingTracker.startPhase("Network Submission");
-        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
         console.timeEnd("Network Submission");
@@ -446,7 +446,7 @@ export const swapAssetForAssetExactIn = async (
         timingTracker.endPhase("Signing");
         console.time("Network Submission");
         timingTracker.startPhase("Network Submission");
-        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
         console.timeEnd("Network Submission");
@@ -607,7 +607,7 @@ export const swapAssetForAssetExactOut = async (
         timingTracker.endPhase("Signing");
         console.time("Network Submission");
         timingTracker.startPhase("Network Submission");
-        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
         console.timeEnd("Network Submission");

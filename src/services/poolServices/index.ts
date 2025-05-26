@@ -219,7 +219,7 @@ export const addLiquidity = async (
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       // Update status when transaction is sent
       if (!response.status.isInBlock && !response.status.isFinalized) {
-        dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+        dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
 
       if (response.status.isInBlock) {
@@ -321,7 +321,7 @@ export const removeLiquidity = async (
       if (!response.status.isInBlock && !response.status.isFinalized) {
         dispatch({
           type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS,
-          payload: TransactionStatus.sendingToNetwork,
+          payload: TransactionStatus.waitingForNewBlock,
         });
       }
 
