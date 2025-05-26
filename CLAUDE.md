@@ -85,6 +85,7 @@ Services in `src/services/` handle blockchain interactions:
 - **poolServices**: Liquidity pool operations and pool data fetching
 - **swapServices**: Token swap execution
 - **tokenServices**: Token metadata and balance queries
+- **blockTimeService**: Dynamic block time calculation using RPC API with race condition protection
 
 ### Network Configuration
 - Network settings are in `src/networkConfig.ts`
@@ -117,19 +118,23 @@ Token icons are managed through a simple configuration:
 - Default icon used for unconfigured tokens
 
 ### Important Files
-- `src/App.tsx`: Main app component, handles wallet reconnection and pool updates
+- `src/App.tsx`: Main app component, handles wallet reconnection, pool updates, and block time tracking initialization
 - `src/main.tsx`: App entry point with providers setup
 - `src/networkConfig.ts`: Blockchain network configuration
 - `src/config/tokenIcons.ts`: Token icon configuration
-- `src/config/transactionTiming.ts`: Transaction timing configuration for estimated completion times
+- `src/config/transactionTiming.ts`: Dynamic transaction timing configuration using real-time block data
+- `src/services/blockTimeService/index.ts`: Singleton service for dynamic block time calculation with 75th percentile and 20% buffer
 - `src/app/hooks/useCountdown.ts`: Countdown timer hook for real-time second updates
 - `ASSET_CONVERSION_PALLET.md`: Detailed pallet communication documentation
 
-### Transaction Timing
-The app uses a simplified countdown system for blockchain-dependent stages:
-- **Block time constant**: `BLOCK_TIME_MS = 60000` (60 seconds per block)
-- **Stage-based countdown**: Each blockchain stage shows one block worth of countdown
-- **Display**: Status text with countdown in brackets (e.g., "Sending to Network (~45s)")
+### Transaction Timing & Block Time System
+The app uses a dynamic countdown system based on real blockchain data:
+- **Dynamic block time**: Real-time calculation using RPC API with historical block analysis
+- **Conservative estimation**: Uses 75th percentile + 20% buffer for better UX (under-promise, over-deliver)
+- **Race condition protection**: Singleton pattern with promise-based initialization
+- **Stage-based countdown**: Each blockchain stage shows estimated time with live countdown
+- **Display**: Status text with countdown in brackets (e.g., "Waiting for new block (~45s)")
 - **Stage reset**: Countdown resets when moving between stages (not cumulative)
 - **Countdown hook**: `useCountdown` hook provides real-time countdown with stage reset
 - **Excluded stages**: Signing (user-dependent) and instant stages (preparing, finalizing)
+- **Fallback**: Defaults to 60 seconds if blockchain data unavailable
