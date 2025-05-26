@@ -14,8 +14,6 @@ describe("P3D Balance Click Bug", () => {
 
     // FIXED: result should be 24795.503631344215 (max 12 decimals)
     // and NOT 0.000000024795 due to double formatting
-    console.log("Input (displayed):", displayedBalance);
-    console.log("Output (click result):", result);
 
     // This test should now PASS, showing the fix works
     expect(result).toBe("24795.503631344215");
@@ -27,14 +25,10 @@ describe("P3D Balance Click Bug", () => {
     // Scenario 1: Raw balance input (should work as before)
     const rawBalance = "24795503631344215"; // 17 digits without decimal point
     const resultFromRaw = formatBalanceForMaxClick(rawBalance, decimals);
-    console.log("Scenario 1 - Raw balance input:", rawBalance);
-    console.log("Scenario 1 - Result:", resultFromRaw);
 
     // Scenario 2: Already formatted balance input (should now work correctly)
     const formattedBalance = "24795.503631344215"; // Already has decimal point
     const resultFromFormatted = formatBalanceForMaxClick(formattedBalance, decimals);
-    console.log("Scenario 2 - Already formatted input:", formattedBalance);
-    console.log("Scenario 2 - Result:", resultFromFormatted);
 
     // Both should work correctly now
     expect(resultFromRaw).toContain("24795."); // Should work

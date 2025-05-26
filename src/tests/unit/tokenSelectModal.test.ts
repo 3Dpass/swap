@@ -23,9 +23,6 @@ describe("TokenSelectModal balance display", () => {
       tokenData.assetTokenMetadata.decimals
     );
 
-    console.log("Token balance input:", tokenData.tokenAsset.balance);
-    console.log("Displayed balance output:", displayedBalance);
-
     // PROBLEM: This will be a very small number because we're dividing an already formatted number by 10^12
     expect(parseFloat(displayedBalance)).toBeLessThan(1);
     expect(displayedBalance).toMatch(/^0\.0+/); // Starts with 0.000...
@@ -37,14 +34,10 @@ describe("TokenSelectModal balance display", () => {
     // Scenario 1: If balance was raw (old behavior)
     const rawBalance = "24795503631344215"; // Raw number as string
     const correctDisplay = formatDecimalsFromToken(Number(rawBalance), decimals);
-    console.log("Scenario 1 - Raw balance:", rawBalance);
-    console.log("Scenario 1 - Correct display:", correctDisplay);
 
     // Scenario 2: If balance is already formatted (current problem)
     const formattedBalance = 24795.5036; // Already formatted
     const wrongDisplay = formatDecimalsFromToken(formattedBalance, decimals);
-    console.log("Scenario 2 - Formatted balance:", formattedBalance);
-    console.log("Scenario 2 - Wrong display:", wrongDisplay);
 
     // Show the problem
     expect(parseFloat(correctDisplay)).toBeGreaterThan(24000); // Should be reasonable
@@ -81,9 +74,6 @@ describe("TokenSelectModal balance display", () => {
     const formattedBalance = 24795.5036;
     const result = smartBalanceDisplay(formattedBalance, decimals);
 
-    console.log("Smart display input:", formattedBalance);
-    console.log("Smart display output:", result);
-
     expect(parseFloat(result)).toBeGreaterThan(24000); // Should be reasonable
     expect(result).not.toMatch(/^0\.0+/); // Should not be tiny
     expect(result).toMatch(/^24795/); // Should start with correct number
@@ -104,8 +94,6 @@ describe("TokenSelectModal balance display", () => {
 
     // This is the NEW way (using smartBalanceDisplay)
     const fixedDisplay = smartBalanceDisplay(tokenData.tokenAsset.balance || 0, tokenData.assetTokenMetadata.decimals);
-
-    console.log("Fixed display result:", fixedDisplay);
 
     // Should now show a reasonable balance, not tiny number
     expect(parseFloat(fixedDisplay)).toBeGreaterThan(24000);
