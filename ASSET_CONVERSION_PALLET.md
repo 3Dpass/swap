@@ -19,7 +19,7 @@ We can use polkadot js library (specifically @polkadot/api) to communicate with 
 ```
   import { ApiPromise, WsProvider } from '@polkadot/api';
 
-  const wsProvider = new WsProvider('wss://westend-asset-hub-rpc.polkadot.io'); // Connect to 3rd Party RPC (OnFinality)
+  const wsProvider = new WsProvider('wss://rpc.3dpass.org'); // Connect to 3rd party RPC
   const api = await ApiPromise.create({ provider: wsProvider });
   await api.isReady;
 
@@ -214,7 +214,7 @@ Diff between quote price and actual amount received after swap between 2 differe
 565 -> 482
 814 -> 674
 1,777 -> 1580
-There is a difference of 1 Token when trying to swap for same asset [Asset1 -> DOT -> Asset1]
+There is a difference of 1 Token when trying to swap for the same asset [Asset1 -> P3D -> Asset1]
 1000 -> 999
 100 -> 99
 10 -> 9
