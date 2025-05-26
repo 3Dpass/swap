@@ -85,6 +85,7 @@
     "vite": "^5.2.9",
     "vite-plugin-environment": "^1.1.3",
     "vite-plugin-mkcert": "^1.16.0",
+    "vite-plugin-node-polyfills": "^0.23.0",
     "vite-plugin-svgr": "^4.2.0"
   },
   "jest": {
