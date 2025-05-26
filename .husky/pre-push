@@ -1,5 +1,5 @@
 echo "🧪 Running tests before push..."
-pnpm test --passWithNoTests
+pnpm jest --passWithNoTests
 
 if [ $? -ne 0 ]; then
   echo "❌ Tests failed. Push aborted."

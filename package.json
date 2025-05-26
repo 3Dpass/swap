@@ -12,7 +12,7 @@
     "knip": "knip",
     "preview": "vite preview",
     "commit": "cz",
-    "test": "pnpm jest",
+    "test": "jest",
     "check:packages": "pnpm up --latest --interactive",
     "prepare": "is-ci || husky",
     "postinstall": "is-ci || husky || true",
