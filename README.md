@@ -1,16 +1,13 @@
-
-![the_ledger_of_things_dex](https://github.com/user-attachments/assets/4267472a-6a49-4cbe-8980-8f12ce721b17)
-
-# DEX UI & Front-end for Asset Conversion pallet ([3DPRC-2](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md) standard supported)
+# Web3 Front-end for the Assets Conversion decentralized module
 
 ## Table of contents
 
 <ul>
     <li><a href='#description'>Description</a></li>
-    <li><a href='#useful-links'>Useful links</a></li>
+    <li><a href='#assetconversion-interaction'>AssetConversion interaction</a></li>
     <li><a href='#how-to-install'>How to install</a>
         <ul>
-            <li><a href='#install-all-packages'>Installation</a></li>
+            <li><a href='#quick-start'>Quick start</a></li>
             <li><a href='#run-project'>Basic usage</a></li>
         </ul>
     </li>
@@ -28,25 +25,13 @@
 </ul>
 
 ## Description
+The app represents a non-custodial Web3 User Interface (UI) for the [AssetConversion](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion)
+decentralized module operating within The Ledger of Things blockchain. 
 
-2023 This project is part of Polkadot initiative for building front-end and UI for Asset Conversion Pallet on Polkadot's AssetHub. Link to the proposal [here](https://polkadot.polkassembly.io/referenda/68). Currently, the standard inplementation of the app is deployed on Westend, Rococo and Kusama - [here](https://dotacp-demo.mvpworkshop.co/swap?network=kusama).
-
-2024 - This project is part of 3DPass initiative, which stands for global support of [3DPRC-2 tokenization standard](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md). The app is deployed on The Ledger of Things [mainnet](https://github.com/3Dpass/3DP) - [here](https://swap.3dpscan.io)
-
-The main difference between The Ledger of Things DEX and some standard `AssetConversion` Substrate pallet inteegration comes down to [3DPRC-2](https://github.com/3Dpass/whitepaper/blob/main/3DPRC-2.md) tokenization standard support. There is a [poscanAssets](https://github.com/3Dpass/3DP/tree/main/pallets/poscan-assets) pallet implemented into The Ledger of Things, which allows for dealing with both conventional Fungible tokens and 3DPRC-2 objects share-tokens. Whereas, the standard integration of the `AssetConversion` pallet leverages two instances of the `Assets` pallet supporting regular Fungible Tokens only. 
-
-### Compare: 
-- Standard `AssetConversion` Substrate pallet implementation:
-  - standard `Assets` pallet (fungible tokens only) for tokens created by users
-  - standard `Assets` pallet (fungible tokens only) for Liquidity Pools tokens
-
-- The Ledger of Things featured integration of the `AssetConversion` pallet:
-  - `poscanAssets` custom pallet (fungible tokens & 3DPRC-2 objects share-tokens) for tokens created by users
-  - standard `poscanPoolAssets` pallet (fungible tokens only) for Liquidity Pools tokens
-
-## Useful links
-
-All important information regarding the pallet communication is [here](./ASSET_CONVERSION_PALLET.md).
+## AssetConversion interaction
+The app interacts with the [AssetConversion](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion) module 
+through its RPC API directly form the web browser. The RPC API provider is set up in the `networkConfig.ts`.
+Follow the [RPC API](./ASSET_CONVERSION_PALLET.md) description.
 
 ## How to install
 
@@ -138,3 +123,7 @@ By providing these guidelines, you're offering developers a clear roadmap for cu
 ## Contributions
 
 Yes please! See the [contributing guidelines](./CONTRIBUTING.md) for details.
+
+### Responsibility disclaimer
+This is an open source free p2p software. Use it at your own risk. 
+
