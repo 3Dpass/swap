@@ -121,4 +121,15 @@ Token icons are managed through a simple configuration:
 - `src/main.tsx`: App entry point with providers setup
 - `src/networkConfig.ts`: Blockchain network configuration
 - `src/config/tokenIcons.ts`: Token icon configuration
+- `src/config/transactionTiming.ts`: Transaction timing configuration for estimated completion times
+- `src/app/hooks/useCountdown.ts`: Countdown timer hook for real-time second updates
 - `ASSET_CONVERSION_PALLET.md`: Detailed pallet communication documentation
+
+### Transaction Timing
+The app uses a simplified countdown system for blockchain-dependent stages:
+- **Block time constant**: `BLOCK_TIME_MS = 60000` (60 seconds per block)
+- **Stage-based countdown**: Each blockchain stage shows one block worth of countdown
+- **Display**: Status text with countdown in brackets (e.g., "Sending to Network (~45s)")
+- **Stage reset**: Countdown resets when moving between stages (not cumulative)
+- **Countdown hook**: `useCountdown` hook provides real-time countdown with stage reset
+- **Excluded stages**: Signing (user-dependent) and instant stages (preparing, finalizing)

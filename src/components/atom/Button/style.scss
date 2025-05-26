@@ -67,21 +67,21 @@ button {
   }
 
   &.btn-select {
-    @apply flex w-full items-center justify-center gap-3 rounded-lg px-2.5 py-1.5 sm:px-3 sm:py-2 font-inter text-medium sm:text-large font-normal;
+    @apply flex w-full items-center gap-2 rounded-lg px-3 py-2 font-inter text-medium sm:text-large font-medium;
 
     &-pink {
       @extend .btn-select;
-      @apply bg-pink text-white hover:bg-black;
+      @apply bg-pink text-white hover:bg-black transition-colors duration-200;
     }
 
     &-gray {
       @extend .btn-select;
-      @apply bg-purple-200 py-1.5 text-black hover:bg-black hover:text-white;
+      @apply bg-purple-200 text-black hover:bg-black hover:text-white transition-colors duration-200;
     }
 
     &-disabled {
       @extend .btn-select;
-      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200;
+      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200 cursor-not-allowed;
     }
   }
 }

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAppContext } from "../../state";
-import { ActionType } from "../types/enum";
+import type { ActionType } from "../types/enum";
 
 interface UseTransactionTimeoutProps {
   loading: boolean;
@@ -12,7 +12,7 @@ interface UseTransactionTimeoutProps {
     | ActionType.SET_WITHDRAW_LIQUIDITY_LOADING;
 }
 
-const DEFAULT_TIMEOUT = 180000; // 3 minutes
+const DEFAULT_TIMEOUT = 600000; // 10 minutes
 
 /**
  * Custom hook to handle transaction timeout logic

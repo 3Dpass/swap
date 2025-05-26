@@ -96,7 +96,7 @@ const TokenAmountInput = ({
             onClick={() => onClick()}
             variant={ButtonVariants.btnSelectGray}
             disabled={disabled || selectDisabled}
-            className="basis-2/5 disabled:basis-[23%]"
+            className="basis-2/5"
           >
             {tokenText}
           </Button>

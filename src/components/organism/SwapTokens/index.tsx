@@ -587,6 +587,12 @@ const SwapTokens = () => {
   };
 
   const handleSwap = async () => {
+    console.log("=== Swap Initiated ===");
+    console.log(
+      `Swapping ${selectedTokenAValue.tokenValue} ${selectedTokens.tokenA.tokenSymbol} for ${selectedTokenBValue.tokenValue} ${selectedTokens.tokenB.tokenSymbol}`
+    );
+    console.log(`Input type: ${inputEdited.inputType}`);
+
     setReviewModalOpen(false);
     setSwapSuccessfulReset(false);
     setIsMaxValueLessThenMinAmount(false);
