@@ -16,6 +16,7 @@
         <ul>
             <li><a href='#customizing-styles-with-tailwindcss'>Customizing Styles with Tailwind.css</a></li>
             <li><a href='#modifying-images-fonts-and-global-scss'>Modifying Images, Fonts, and Global SCSS</a></li>
+            <li><a href='#adding-token-icons'>Adding token icons</a></li>
             <li><a href='#multilingual-support-with-i18n'>Multilingual Support with i18n</a></li>
             <li><a href='#adding-new-routes-and-pages'>Adding New Routes and Pages</a></li>
             <li><a href='#updating-global-state'>Updating Global State</a></li>
