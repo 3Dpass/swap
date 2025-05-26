@@ -13,7 +13,7 @@ export const NETWORKS: Record<NetworkKeys, NetworkConfig> = {
     nativeTokenSymbol: "P3D",
     rpcUrl: "wss://rpc.3dpass.org",
     parents: 1,
-    assethubSubscanUrl: "https://3dpscan.xyz/",
+    assethubSubscanUrl: "https://3dpscan.xyz",
     ss58Format: 71,
   },
 };
