@@ -16,89 +16,137 @@ import { PoolAction } from "../../store/pools/interface";
 import { WalletAction } from "../../store/wallet/interface";
 import { getAllLiquidityPoolsTokensMetadata } from "../poolServices";
 
+// Singleton API instance and initialization promise
+let apiInstance: ApiPromise | null = null;
+let apiInitPromise: Promise<ApiPromise> | null = null;
+
+// Balance fetching deduplication
+const balanceFetchPromises = new Map<string, Promise<any>>();
+
 export const setupPolkadotApi = async () => {
-  const { rpcUrl, ss58Format } = useGetNetwork();
-  const wsProvider = new WsProvider(rpcUrl);
-  const api = await ApiPromise.create({ provider: wsProvider });
+  // Return existing instance if available
+  if (apiInstance && apiInstance.isConnected) {
+    return apiInstance;
+  }
 
-  // Set the correct ss58Format for address encoding
-  setSS58Format(ss58Format);
+  // If initialization is in progress, wait for it
+  if (apiInitPromise) {
+    return apiInitPromise;
+  }
 
-  const [chain, nodeName, nodeVersion] = await Promise.all([
-    api.rpc.system.chain(),
-    api.rpc.system.name(),
-    api.rpc.system.version(),
-  ]);
+  // Start new initialization
+  apiInitPromise = (async () => {
+    const { rpcUrl, ss58Format } = useGetNetwork();
+    const wsProvider = new WsProvider(rpcUrl);
+    const api = await ApiPromise.create({ provider: wsProvider });
 
-  console.log(`You are connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
+    // Set the correct ss58Format for address encoding
+    setSS58Format(ss58Format);
 
-  return api;
+    const [chain, nodeName, nodeVersion] = await Promise.all([
+      api.rpc.system.chain(),
+      api.rpc.system.name(),
+      api.rpc.system.version(),
+    ]);
+
+    console.log(`You are connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
+
+    apiInstance = api;
+    return api;
+  })();
+
+  try {
+    return await apiInitPromise;
+  } finally {
+    // Clear the promise after completion
+    apiInitPromise = null;
+  }
 };
 
 const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) => {
-  const now = await api.query.timestamp.now();
-  const { nonce, data: balance } = await api.query.system.account(walletAddress);
-  const nextNonce = await api.rpc.system.accountNextIndex(walletAddress);
-  const tokenMetadata = api.registry.getChainProperties();
-  const existentialDeposit = await api.consts.balances.existentialDeposit;
-
-  const allAssets = await api.query.poscanAssets.asset.entries();
-
-  const allChainAssets: { tokenData: AnyJson; tokenId: any }[] = [];
-
-  allAssets.forEach((item) => {
-    allChainAssets.push({ tokenData: item?.[1].toHuman(), tokenId: item?.[0].toHuman() });
-  });
-
-  const myAssetTokenData = [];
-  const assetTokensDataPromises = [];
-
-  for (const item of allChainAssets) {
-    const cleanedTokenId = item?.tokenId?.[0]?.replace(/[, ]/g, "");
-    assetTokensDataPromises.push(
-      Promise.all([
-        api.query.poscanAssets.account(cleanedTokenId, walletAddress),
-        api.query.poscanAssets.metadata(cleanedTokenId),
-      ]).then(([tokenAsset, assetTokenMetadata]) => {
-        if (tokenAsset.toHuman()) {
-          const humanTokenAsset = tokenAsset.toHuman() as any;
-          const resultObject = {
-            tokenId: cleanedTokenId,
-            assetTokenMetadata: assetTokenMetadata.toHuman(),
-            tokenAsset: {
-              ...humanTokenAsset,
-              balance: (tokenAsset.toJSON() as any)?.balance || tokenAsset.toString(),
-            },
-          };
-          return resultObject;
-        }
-        return null;
-      })
-    );
+  // Check if a balance fetch is already in progress for this wallet
+  const existingPromise = balanceFetchPromises.get(walletAddress);
+  if (existingPromise) {
+    return existingPromise;
   }
 
-  const results = await Promise.all(assetTokensDataPromises);
+  // Create new balance fetch promise
+  const fetchPromise = (async () => {
+    const now = await api.query.timestamp.now();
+    const { nonce, data: balance } = await api.query.system.account(walletAddress);
+    const nextNonce = await api.rpc.system.accountNextIndex(walletAddress);
+    const tokenMetadata = api.registry.getChainProperties();
+    const existentialDeposit = await api.consts.balances.existentialDeposit;
 
-  myAssetTokenData.push(...results.filter((result) => result !== null));
+    const allAssets = await api.query.poscanAssets.asset.entries();
 
-  const ss58Format = tokenMetadata?.ss58Format.toHuman();
-  const tokenDecimals = tokenMetadata?.tokenDecimals.toHuman();
-  const tokenSymbol = tokenMetadata?.tokenSymbol.toHuman();
+    const allChainAssets: { tokenData: AnyJson; tokenId: any }[] = [];
 
-  console.log(`${now}: balance of ${balance?.free} and a current nonce of ${nonce} and next nonce of ${nextNonce}`);
+    allAssets.forEach((item) => {
+      allChainAssets.push({ tokenData: item?.[1].toHuman(), tokenId: item?.[0].toHuman() });
+    });
 
-  const balanceFormatted = formatDecimalsFromToken(balance?.free.toString(), tokenDecimals as string);
+    const myAssetTokenData = [];
+    const assetTokensDataPromises = [];
 
-  const tokensInfo = {
-    balance: balanceFormatted,
-    ss58Format,
-    existentialDeposit: existentialDeposit.toHuman(),
-    tokenDecimals: Array.isArray(tokenDecimals) ? tokenDecimals?.[0] : "",
-    tokenSymbol: Array.isArray(tokenSymbol) ? tokenSymbol?.[0] : "",
-    assets: myAssetTokenData,
-  };
+    for (const item of allChainAssets) {
+      const cleanedTokenId = item?.tokenId?.[0]?.replace(/[, ]/g, "");
+      assetTokensDataPromises.push(
+        Promise.all([
+          api.query.poscanAssets.account(cleanedTokenId, walletAddress),
+          api.query.poscanAssets.metadata(cleanedTokenId),
+        ]).then(([tokenAsset, assetTokenMetadata]) => {
+          if (tokenAsset.toHuman()) {
+            const humanTokenAsset = tokenAsset.toHuman() as any;
+            const resultObject = {
+              tokenId: cleanedTokenId,
+              assetTokenMetadata: assetTokenMetadata.toHuman(),
+              tokenAsset: {
+                ...humanTokenAsset,
+                balance: (tokenAsset.toJSON() as any)?.balance || tokenAsset.toString(),
+              },
+            };
+            return resultObject;
+          }
+          return null;
+        })
+      );
+    }
 
-  return tokensInfo;
+    const results = await Promise.all(assetTokensDataPromises);
+
+    myAssetTokenData.push(...results.filter((result) => result !== null));
+
+    const ss58Format = tokenMetadata?.ss58Format.toHuman();
+    const tokenDecimals = tokenMetadata?.tokenDecimals.toHuman();
+    const tokenSymbol = tokenMetadata?.tokenSymbol.toHuman();
+
+    console.log(`${now}: balance of ${balance?.free} and a current nonce of ${nonce} and next nonce of ${nextNonce}`);
+
+    const balanceFormatted = formatDecimalsFromToken(balance?.free.toString(), tokenDecimals as string);
+
+    const tokensInfo = {
+      balance: balanceFormatted,
+      ss58Format,
+      existentialDeposit: existentialDeposit.toHuman(),
+      tokenDecimals: Array.isArray(tokenDecimals) ? tokenDecimals?.[0] : "",
+      tokenSymbol: Array.isArray(tokenSymbol) ? tokenSymbol?.[0] : "",
+      assets: myAssetTokenData,
+    };
+
+    return tokensInfo;
+  })();
+
+  // Store the promise for deduplication
+  balanceFetchPromises.set(walletAddress, fetchPromise);
+
+  try {
+    const result = await fetchPromise;
+    return result;
+  } finally {
+    // Remove the promise after completion
+    balanceFetchPromises.delete(walletAddress);
+  }
 };
 
 export const assetTokenData = async (id: string, api: ApiPromise) => {

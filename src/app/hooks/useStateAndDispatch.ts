@@ -29,23 +29,36 @@ const useStateAndDispatch = () => {
   };
 
   useEffect(() => {
+    let mounted = true;
+
     const callApiSetup = async () => {
       try {
         const polkaApi = await setupPolkadotApi();
+
+        // Check if component is still mounted before dispatching
+        if (!mounted) return;
+
         dispatch({ type: ActionType.SET_API, payload: polkaApi });
         const pools = await getAllPools(polkaApi);
         const poolsTokenMetadata = await getAllLiquidityPoolsTokensMetadata(polkaApi);
 
-        if (pools) {
+        if (mounted && pools) {
           dispatch({ type: ActionType.SET_POOLS, payload: pools });
           dispatch({ type: ActionType.SET_POOLS_TOKEN_METADATA, payload: poolsTokenMetadata });
         }
       } catch (error) {
-        dotAcpToast.error(`Error setting up Polkadot API: ${error}`);
+        if (mounted) {
+          dotAcpToast.error(`Error setting up Polkadot API: ${error}`);
+        }
       }
     };
 
     callApiSetup();
+
+    // Cleanup function
+    return () => {
+      mounted = false;
+    };
   }, []);
 
   return { state, dispatch };
