@@ -1,12 +1,12 @@
-# Working with asset Conversion pallet.
+# Interacting with the Asset Conversion module.
 
 We can use polkadot js library (specifically @polkadot/api) to communicate with asset conversion pallet
 
 ## Useful links
 
-Rust [docs](https://paritytech.github.io/substrate/master/pallet_asset_conversion/index.html) of the pallet
-Try it out in [UI](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Fwestend-asset-hub-rpc.polkadot.io#/extrinsics)
-Asset Conversion Pallet [repo](https://github.com/paritytech/polkadot-sdk/tree/6b27dad359793a873c91d09cd3f6267d66ff543e/substrate/frame/asset-conversion)
+- Rust [docs](https://paritytech.github.io/substrate/master/pallet_asset_conversion/index.html) of the pallet.
+- Try it out via the polkadot.js [UI](https://polkadot.js.org/apps/?rpc=wss%3A%2F%2Frpc.3dpass.org#/extrinsics).
+- The Asset Conversion Pallet [repo](https://github.com/3Dpass/3DP/tree/main/pallets/asset-conversion)
 
 ## Polkadot.js installation and initialisation
 
@@ -55,7 +55,7 @@ We can only create Native Coin -> Asset pools, not Asset1 -> Asset2
 ```
   const result = await api.tx.assetConversion.createPool(
       {"parents":0,"interior":{"here":null}}, // Native Coin MultiLocation
-      {"parents":0,"interior":{"x2":[{"palletInstance":50},{"generalIndex":420420}]}} // Asset in Assethub MultiLocation
+      {"parents":0,"interior":{"x2":[{"palletInstance":50},{"generalIndex":420420}]}} // Asset MultiLocation
   ).signAndSend(wallet);
 ```
 
@@ -132,7 +132,7 @@ We can only create Native Coin -> Asset pools, not Asset1 -> Asset2
 
 Useful when user wants to swap exact amount of input token (wants to exchange 100USD for however he gets of other token (with min defined))
 
-1. Swap Native Coin for Asset in Asset Hub
+1. Swap Native Coin for Asset
 
 ```
   const result = await api.tx.assetConversion.swapExactTokensForTokens(
@@ -147,7 +147,7 @@ Useful when user wants to swap exact amount of input token (wants to exchange 10
   ).signAndSend(wallet);
 ```
 
-2. Swap Asset(ID: 32) -> Asset(ID: 4200) from Asset Hub
+2. Swap Asset(ID: 32) -> Asset(ID: 4200)
 
 ```
   const result = await api.tx.assetConversion.swapExactTokensForTokens(
@@ -167,7 +167,7 @@ Useful when user wants to swap exact amount of input token (wants to exchange 10
 
 Useful when user wants get exact amount of output token (wants to get exactly 1 BTC for some amount of token2 (with max defined))
 
-1. Swap Native Coin for Asset in Asset Hub
+1. Swap Native Coin for Asset
 
 ```
   const result = await api.tx.assetConversion.swapTokensForExactTokens(
@@ -182,7 +182,7 @@ Useful when user wants get exact amount of output token (wants to get exactly 1 
   ).signAndSend(wallet);
 ```
 
-2. Swap Asset(ID: 32) -> Asset(ID: 4200) from Asset Hub
+2. Swap Asset(ID: 32) -> Asset(ID: 4200)
 
 ```
   const result = await api.tx.assetConversion.swapTokensForExactTokens(
