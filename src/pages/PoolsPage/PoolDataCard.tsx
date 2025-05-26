@@ -80,9 +80,9 @@ const PoolDataCard = ({
   };
 
   return (
-    <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
+    <div className="group relative rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:z-20 hover:scale-[1.02] hover:shadow-lg">
       {/* Header with token pair */}
-      <div className="flex items-center gap-3 p-4 pb-2">
+      <div className="flex items-center gap-3 rounded-t-2xl p-4 pb-2">
         <div className="relative flex flex-shrink-0 items-center">
           <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white p-0.5 shadow-md">
             <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-11 w-11" />
@@ -144,13 +144,13 @@ const PoolDataCard = ({
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-2 px-4 pb-4">
+      <div className="flex gap-2 rounded-b-2xl px-4 pb-4">
         <Button
           onClick={() => onDepositClick()}
           variant={ButtonVariants.btnPrimaryGhostSm}
           icon={<AddIconPink width={14} height={14} />}
           disabled={checkIfDepositDisabled()}
-          className="group/btn relative flex-1"
+          className="group/btn relative z-10 flex-1"
         >
           {t("button.deposit")}
           {checkIfDepositDisabled() && (
@@ -168,7 +168,7 @@ const PoolDataCard = ({
           onClick={() => onWithdrawClick()}
           variant={ButtonVariants.btnSecondaryGray}
           disabled={checkIfWithdrawDisabled()}
-          className="group/btn relative flex-1"
+          className="group/btn relative z-10 flex-1"
         >
           {t("button.withdraw")}
           {checkIfWithdrawDisabled() && (
