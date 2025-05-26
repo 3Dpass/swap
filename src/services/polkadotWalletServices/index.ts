@@ -43,13 +43,8 @@ export const setupPolkadotApi = async () => {
     // Set the correct ss58Format for address encoding
     setSS58Format(ss58Format);
 
-    const [chain, nodeName, nodeVersion] = await Promise.all([
-      api.rpc.system.chain(),
-      api.rpc.system.name(),
-      api.rpc.system.version(),
-    ]);
-
-    console.log(`You are connected to chain ${chain} using ${nodeName} v${nodeVersion}`);
+    // Get chain info for connection validation
+    await Promise.all([api.rpc.system.chain(), api.rpc.system.name(), api.rpc.system.version()]);
 
     apiInstance = api;
     return api;
@@ -72,9 +67,7 @@ const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) =>
 
   // Create new balance fetch promise
   const fetchPromise = (async () => {
-    const now = await api.query.timestamp.now();
-    const { nonce, data: balance } = await api.query.system.account(walletAddress);
-    const nextNonce = await api.rpc.system.accountNextIndex(walletAddress);
+    const { data: balance } = await api.query.system.account(walletAddress);
     const tokenMetadata = api.registry.getChainProperties();
     const existentialDeposit = await api.consts.balances.existentialDeposit;
 
@@ -120,8 +113,6 @@ const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) =>
     const ss58Format = tokenMetadata?.ss58Format.toHuman();
     const tokenDecimals = tokenMetadata?.tokenDecimals.toHuman();
     const tokenSymbol = tokenMetadata?.tokenSymbol.toHuman();
-
-    console.log(`${now}: balance of ${balance?.free} and a current nonce of ${nonce} and next nonce of ${nextNonce}`);
 
     const balanceFormatted = formatDecimalsFromToken(balance?.free.toString(), tokenDecimals as string);
 
@@ -201,7 +192,6 @@ export const setTokenBalanceUpdate = async (
 ) => {
   // Check if oldWalletBalance exists
   if (!oldWalletBalance) {
-    console.warn("setTokenBalanceUpdate: oldWalletBalance is undefined");
     return;
   }
 
@@ -263,7 +253,6 @@ export const setTokenBalanceAfterAssetsSwapUpdate = async (
 ) => {
   // Check if oldWalletBalance exists
   if (!oldWalletBalance) {
-    console.warn("setTokenBalanceAfterAssetsSwapUpdate: oldWalletBalance is undefined");
     return;
   }
 

@@ -66,7 +66,6 @@ class BlockTimeService {
       this.subscription = unsubscribe;
       this.isInitialized = true;
     } catch (error) {
-      console.error("Failed to initialize BlockTimeService:", error);
       // Even if initialization fails, mark as initialized to prevent retries
       this.isInitialized = true;
       throw error; // Re-throw to let callers know initialization failed
@@ -92,7 +91,6 @@ class BlockTimeService {
       // Default fallback
       return 60000; // 60 seconds
     } catch (error) {
-      console.error("Failed to get expected block time from chain:", error);
       return null;
     }
   }
@@ -134,15 +132,15 @@ class BlockTimeService {
               });
             }
           }
-        } catch (error) {
-          console.error(`Failed to fetch block ${blockNum}:`, error);
+        } catch {
+          // Individual block fetch failures are not critical
         }
       }
 
       // Calculate initial average if we have enough data
       this.calculateAverageBlockTime();
-    } catch (error) {
-      console.error("Failed to fetch historical blocks:", error);
+    } catch {
+      // Historical block fetch failures are not critical
     }
   }
 
@@ -188,8 +186,8 @@ class BlockTimeService {
           this.calculateAverageBlockTime();
         }
       }
-    } catch (error) {
-      console.error("Failed to process new block:", error);
+    } catch {
+      // Individual block processing failures are not critical
     }
   }
 

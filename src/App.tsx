@@ -24,8 +24,8 @@ const App: FC = () => {
   useEffect(() => {
     // Initialize block time tracking when API is ready
     if (api) {
-      initializeBlockTimeTracking().catch((error) => {
-        console.error("Failed to initialize block time tracking:", error);
+      initializeBlockTimeTracking().catch(() => {
+        // Initialization failure is not critical for app functionality
       });
     }
   }, [api]);

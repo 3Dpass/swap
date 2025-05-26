@@ -58,8 +58,8 @@ export const usePoolsWithCache = ({ api, selectedAccount, dispatch }: UsePoolsWi
 
         return { pools: allPools, poolsCards, poolsTokenMetadata };
       }
-    } catch (error) {
-      console.error("Error loading pools from API:", error);
+    } catch {
+      // Error handling is optional for background pool loading
     }
 
     return null;
@@ -72,10 +72,9 @@ export const usePoolsWithCache = ({ api, selectedAccount, dispatch }: UsePoolsWi
       const result = await loadPoolsFromApi(true);
       if (result) {
         // Silently update cache and state in background
-        console.log("Pools updated in background");
       }
-    } catch (error) {
-      console.error("Error updating pools in background:", error);
+    } catch {
+      // Error handling is optional for background pool updates
     }
   };
 
@@ -131,7 +130,6 @@ export const usePoolsWithCache = ({ api, selectedAccount, dispatch }: UsePoolsWi
     refreshPools: () => loadPoolsFromApi(true),
     clearCache: () => {
       PoolsCache.clear();
-      console.log("Pools cache cleared");
     },
     loadFromCache: loadPoolsFromCache,
   };

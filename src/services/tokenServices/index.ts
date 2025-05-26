@@ -212,8 +212,6 @@ const findOptimalTokenA = async ({
 
   while (low.lte(high)) {
     const mid = low.plus(high).div(2).floor();
-    // FIXME: calculateBForA is calling in the loop and it contacts RPC server every time
-    // we should offload this calculation on client side
     const yForMid = new Decimal(((await calculateBForA(mid)) || 0).toString().replace(/[, ]/g, ""));
 
     if (yForMid.lte(maxTokenB)) {

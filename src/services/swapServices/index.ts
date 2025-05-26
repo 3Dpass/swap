@@ -9,41 +9,6 @@ import { SwapAction } from "../../store/swap/interface";
 import { WalletAction } from "../../store/wallet/interface";
 import { createAssetTokenId, createNativeTokenId } from "../poolServices";
 
-// Helper class for tracking swap timing
-class SwapTimingTracker {
-  private timings: Record<string, number> = {};
-  private startTime: number;
-  private currentPhaseStart: number;
-
-  constructor() {
-    this.startTime = Date.now();
-    this.currentPhaseStart = this.startTime;
-  }
-
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  startPhase(_phaseName: string) {
-    this.currentPhaseStart = Date.now();
-  }
-
-  endPhase(phaseName: string) {
-    this.timings[phaseName] = Date.now() - this.currentPhaseStart;
-  }
-
-  finish() {
-    this.timings.total = Date.now() - this.startTime;
-  }
-
-  getReport() {
-    return this.timings;
-  }
-
-  logReport(status: "Success" | "Failed" | "Error") {
-    console.log(`=== Swap Timing Report (${status}) ===`);
-    console.log(JSON.stringify(this.timings, null, 2));
-    console.log("Copy the above timings to update config/transactionTiming.ts");
-  }
-}
-
 // Helper function to get block number from finalized status
 const getBlockNumberFromFinalized = async (api: ApiPromise, blockHash: any): Promise<string> => {
   const header = await api.rpc.chain.getHeader(blockHash);
@@ -88,12 +53,6 @@ export const swapNativeForAssetExactIn = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  // Start timing the entire swap operation
-  console.time("Total Swap Time");
-  console.time("Preparation");
-  const timingTracker = new SwapTimingTracker();
-  timingTracker.startPhase("Preparation");
-
   const firstArg = createNativeTokenId(api);
   const secondArg = createAssetTokenId(api, assetTokenId);
 
@@ -110,27 +69,14 @@ export const swapNativeForAssetExactIn = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
-  console.timeEnd("Preparation");
-  timingTracker.endPhase("Preparation");
-  console.time("Signing");
-  timingTracker.startPhase("Signing");
-
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
-        console.timeEnd("Signing");
-        timingTracker.endPhase("Signing");
-        console.time("Network Submission");
-        timingTracker.startPhase("Network Submission");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
-        console.timeEnd("Network Submission");
-        timingTracker.endPhase("Network Submission");
-        console.time("Finalization");
-        timingTracker.startPhase("Finalization");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
@@ -139,13 +85,6 @@ export const swapNativeForAssetExactIn = async (
         });
       } else {
         if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Failed");
-          console.error("Swap failed with error:", response.dispatchError);
-
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -164,11 +103,6 @@ export const swapNativeForAssetExactIn = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.time("Post-Processing");
-          timingTracker.startPhase("Post-Processing");
-
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
@@ -206,22 +140,10 @@ export const swapNativeForAssetExactIn = async (
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
-
-          console.timeEnd("Post-Processing");
-          timingTracker.endPhase("Post-Processing");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Success");
-          console.log("Swap completed successfully!");
         }
       }
     })
     .catch((error: any) => {
-      console.timeEnd("Total Swap Time");
-      timingTracker.finish();
-      timingTracker.logReport("Error");
-      console.error("Swap transaction failed:", error);
-
       dotAcpToast.error(`Transaction failed: ${error}`);
       dispatch({
         type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -249,12 +171,6 @@ export const swapNativeForAssetExactOut = async (
   reverse: boolean,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  // Start timing the entire swap operation
-  console.time("Total Swap Time");
-  console.time("Preparation");
-  const timingTracker = new SwapTimingTracker();
-  timingTracker.startPhase("Preparation");
-
   const firstArg = createNativeTokenId(api);
   const secondArg = createAssetTokenId(api, assetTokenId);
 
@@ -271,27 +187,14 @@ export const swapNativeForAssetExactOut = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
-  console.timeEnd("Preparation");
-  timingTracker.endPhase("Preparation");
-  console.time("Signing");
-  timingTracker.startPhase("Signing");
-
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
-        console.timeEnd("Signing");
-        timingTracker.endPhase("Signing");
-        console.time("Network Submission");
-        timingTracker.startPhase("Network Submission");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
-        console.timeEnd("Network Submission");
-        timingTracker.endPhase("Network Submission");
-        console.time("Finalization");
-        timingTracker.startPhase("Finalization");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
@@ -300,13 +203,6 @@ export const swapNativeForAssetExactOut = async (
         });
       } else {
         if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Failed");
-          console.error("Swap failed with error:", response.dispatchError);
-
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -325,11 +221,6 @@ export const swapNativeForAssetExactOut = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.time("Post-Processing");
-          timingTracker.startPhase("Post-Processing");
-
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
@@ -366,22 +257,10 @@ export const swapNativeForAssetExactOut = async (
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
-
-          console.timeEnd("Post-Processing");
-          timingTracker.endPhase("Post-Processing");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Success");
-          console.log("Swap completed successfully!");
         }
       }
     })
     .catch((error: any) => {
-      console.timeEnd("Total Swap Time");
-      timingTracker.finish();
-      timingTracker.logReport("Error");
-      console.error("Swap transaction failed:", error);
-
       dotAcpToast.error(`Transaction failed: ${error}`);
       dispatch({
         type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -409,12 +288,6 @@ export const swapAssetForAssetExactIn = async (
   tokenBDecimals: string,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  // Start timing the entire swap operation
-  console.time("Total Swap Time");
-  console.time("Preparation");
-  const timingTracker = new SwapTimingTracker();
-  timingTracker.startPhase("Preparation");
-
   const firstArg = createAssetTokenId(api, assetTokenAId);
   const secondArg = createNativeTokenId(api);
   const thirdArg = createAssetTokenId(api, assetTokenBId);
@@ -432,27 +305,14 @@ export const swapAssetForAssetExactIn = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
-  console.timeEnd("Preparation");
-  timingTracker.endPhase("Preparation");
-  console.time("Signing");
-  timingTracker.startPhase("Signing");
-
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
-        console.timeEnd("Signing");
-        timingTracker.endPhase("Signing");
-        console.time("Network Submission");
-        timingTracker.startPhase("Network Submission");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
-        console.timeEnd("Network Submission");
-        timingTracker.endPhase("Network Submission");
-        console.time("Finalization");
-        timingTracker.startPhase("Finalization");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
@@ -461,13 +321,6 @@ export const swapAssetForAssetExactIn = async (
         });
       } else {
         if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Failed");
-          console.error("Swap failed with error:", response.dispatchError);
-
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -486,11 +339,6 @@ export const swapAssetForAssetExactIn = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.time("Post-Processing");
-          timingTracker.startPhase("Post-Processing");
-
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
@@ -527,22 +375,10 @@ export const swapAssetForAssetExactIn = async (
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
-
-          console.timeEnd("Post-Processing");
-          timingTracker.endPhase("Post-Processing");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Success");
-          console.log("Swap completed successfully!");
         }
       }
     })
     .catch((error: any) => {
-      console.timeEnd("Total Swap Time");
-      timingTracker.finish();
-      timingTracker.logReport("Error");
-      console.error("Swap transaction failed:", error);
-
       dotAcpToast.error(`Transaction failed: ${error}`);
       dispatch({
         type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
@@ -570,12 +406,6 @@ export const swapAssetForAssetExactOut = async (
   tokenBDecimals: string,
   dispatch: Dispatch<SwapAction | WalletAction>
 ) => {
-  // Start timing the entire swap operation
-  console.time("Total Swap Time");
-  console.time("Preparation");
-  const timingTracker = new SwapTimingTracker();
-  timingTracker.startPhase("Preparation");
-
   const firstArg = createAssetTokenId(api, assetTokenAId);
   const secondArg = createNativeTokenId(api);
   const thirdArg = createAssetTokenId(api, assetTokenBId);
@@ -593,27 +423,14 @@ export const swapAssetForAssetExactOut = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
-  console.timeEnd("Preparation");
-  timingTracker.endPhase("Preparation");
-  console.time("Signing");
-  timingTracker.startPhase("Signing");
-
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
-        console.timeEnd("Signing");
-        timingTracker.endPhase("Signing");
-        console.time("Network Submission");
-        timingTracker.startPhase("Network Submission");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
       if (response.status.isInBlock) {
-        console.timeEnd("Network Submission");
-        timingTracker.endPhase("Network Submission");
-        console.time("Finalization");
-        timingTracker.startPhase("Finalization");
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
@@ -622,13 +439,6 @@ export const swapAssetForAssetExactOut = async (
         });
       } else {
         if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Failed");
-          console.error("Swap failed with error:", response.dispatchError);
-
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -647,11 +457,6 @@ export const swapAssetForAssetExactOut = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          console.timeEnd("Finalization");
-          timingTracker.endPhase("Finalization");
-          console.time("Post-Processing");
-          timingTracker.startPhase("Post-Processing");
-
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
@@ -688,22 +493,10 @@ export const swapAssetForAssetExactOut = async (
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
           dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
-
-          console.timeEnd("Post-Processing");
-          timingTracker.endPhase("Post-Processing");
-          console.timeEnd("Total Swap Time");
-          timingTracker.finish();
-          timingTracker.logReport("Success");
-          console.log("Swap completed successfully!");
         }
       }
     })
     .catch((error: any) => {
-      console.timeEnd("Total Swap Time");
-      timingTracker.finish();
-      timingTracker.logReport("Error");
-      console.error("Swap transaction failed:", error);
-
       dotAcpToast.error(`Transaction failed: ${error}`);
       dispatch({
         type: ActionType.SET_SWAP_GAS_FEES_MESSAGE,
