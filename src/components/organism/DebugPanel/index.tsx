@@ -1,9 +1,10 @@
 import { FC, useState, useEffect } from "react";
 import { useAppContext } from "../../../state";
-import { ActionType, ButtonVariants } from "../../../app/types/enum";
+import { ActionType, ButtonVariants, TransactionTypes, TransactionStatus } from "../../../app/types/enum";
 import dotAcpToast from "../../../app/util/toast";
 import Button from "../../atom/Button";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
+import { useTransactionStatus, getStatusFromSimulationStep } from "../../../app/hooks/useTransactionStatus";
 
 interface SimulationStep {
   name: string;
@@ -14,6 +15,9 @@ interface SimulationStep {
 const DebugPanel: FC = () => {
   const { state, dispatch } = useAppContext();
   const { nativeTokenSymbol } = useGetNetwork();
+  const swapStatus = useTransactionStatus(TransactionTypes.swap);
+  const addStatus = useTransactionStatus(TransactionTypes.add);
+  const withdrawStatus = useTransactionStatus(TransactionTypes.withdraw);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [simulationSteps, setSimulationSteps] = useState<SimulationStep[]>([]);
@@ -32,7 +36,7 @@ const DebugPanel: FC = () => {
     return () => window.removeEventListener("keydown", handleKeyPress);
   }, []);
 
-  const steps: SimulationStep[] = [
+  const swapSteps: SimulationStep[] = [
     { name: "Initialize Swap", status: "pending", duration: 500 },
     { name: "Validate Inputs", status: "pending", duration: 300 },
     { name: "Check Balances", status: "pending", duration: 400 },
@@ -46,16 +50,44 @@ const DebugPanel: FC = () => {
     { name: "Show Success", status: "pending", duration: 300 },
   ];
 
+  const addLiquiditySteps: SimulationStep[] = [
+    { name: "Initialize Add Liquidity", status: "pending", duration: 500 },
+    { name: "Validate Inputs", status: "pending", duration: 300 },
+    { name: "Check Balances", status: "pending", duration: 400 },
+    { name: "Calculate Pool Ratios", status: "pending", duration: 600 },
+    { name: "Sign Transaction", status: "pending", duration: 800 },
+    { name: "Submit to Blockchain", status: "pending", duration: 1000 },
+    { name: "Wait for Confirmation", status: "pending", duration: 2000 },
+    { name: "Transaction in Block", status: "pending", duration: 1500 },
+    { name: "Mint LP Tokens", status: "pending", duration: 700 },
+    { name: "Update Balances", status: "pending", duration: 400 },
+    { name: "Show Success", status: "pending", duration: 300 },
+  ];
+
+  const removeLiquiditySteps: SimulationStep[] = [
+    { name: "Initialize Remove Liquidity", status: "pending", duration: 500 },
+    { name: "Validate LP Token Amount", status: "pending", duration: 300 },
+    { name: "Check LP Token Balance", status: "pending", duration: 400 },
+    { name: "Calculate Token Returns", status: "pending", duration: 600 },
+    { name: "Sign Transaction", status: "pending", duration: 800 },
+    { name: "Submit to Blockchain", status: "pending", duration: 1000 },
+    { name: "Wait for Confirmation", status: "pending", duration: 2000 },
+    { name: "Transaction in Block", status: "pending", duration: 1500 },
+    { name: "Burn LP Tokens", status: "pending", duration: 700 },
+    { name: "Update Balances", status: "pending", duration: 400 },
+    { name: "Show Success", status: "pending", duration: 300 },
+  ];
+
   const simulateSwap = async () => {
     if (isSimulating) return;
 
     setIsSimulating(true);
-    setSimulationSteps(steps);
+    setSimulationSteps(swapSteps);
 
     // Start loading
-    dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
+    swapStatus.setStatus(TransactionStatus.preparing);
 
-    for (let i = 0; i < steps.length; i++) {
+    for (let i = 0; i < swapSteps.length; i++) {
       // Update current step to active
       setSimulationSteps((prev) =>
         prev.map((step, index) => ({
@@ -63,6 +95,10 @@ const DebugPanel: FC = () => {
           status: index === i ? "active" : index < i ? "completed" : "pending",
         }))
       );
+
+      // Update transaction status based on current step
+      const currentTransactionStatus = getStatusFromSimulationStep(swapSteps[i].name);
+      swapStatus.setStatus(currentTransactionStatus);
 
       // Special actions for certain steps
       if (i === 7) {
@@ -73,14 +109,14 @@ const DebugPanel: FC = () => {
       }
 
       // Wait for the duration
-      await new Promise((resolve) => setTimeout(resolve, steps[i].duration));
+      await new Promise((resolve) => setTimeout(resolve, swapSteps[i].duration));
     }
 
     // Mark all steps as completed
     setSimulationSteps((prev) => prev.map((step) => ({ ...step, status: "completed" })));
 
-    // Simulate successful swap
-    dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+    // Final success status
+    swapStatus.setStatus(TransactionStatus.success);
 
     // Set token information
     dispatch({
@@ -116,6 +152,183 @@ const DebugPanel: FC = () => {
     setTimeout(() => {
       setIsSimulating(false);
       setSimulationSteps([]);
+      swapStatus.resetStatus();
+    }, 2000);
+  };
+
+  const simulateAddLiquidity = async () => {
+    if (isSimulating) return;
+
+    setIsSimulating(true);
+    setSimulationSteps(addLiquiditySteps);
+
+    // Start loading
+    addStatus.setStatus(TransactionStatus.preparing);
+
+    for (let i = 0; i < addLiquiditySteps.length; i++) {
+      // Update current step to active
+      setSimulationSteps((prev) =>
+        prev.map((step, index) => ({
+          ...step,
+          status: index === i ? "active" : index < i ? "completed" : "pending",
+        }))
+      );
+
+      // Map step names to transaction statuses
+      let currentTransactionStatus = TransactionStatus.preparing;
+      switch (addLiquiditySteps[i].name) {
+        case "Initialize Add Liquidity":
+          currentTransactionStatus = TransactionStatus.preparing;
+          break;
+        case "Validate Inputs":
+          currentTransactionStatus = TransactionStatus.validatingInputs;
+          break;
+        case "Check Balances":
+          currentTransactionStatus = TransactionStatus.checkingBalances;
+          break;
+        case "Calculate Pool Ratios":
+          currentTransactionStatus = TransactionStatus.calculatingRoute;
+          break;
+        case "Sign Transaction":
+          currentTransactionStatus = TransactionStatus.signing;
+          break;
+        case "Submit to Blockchain":
+          currentTransactionStatus = TransactionStatus.sendingToNetwork;
+          break;
+        case "Wait for Confirmation":
+          currentTransactionStatus = TransactionStatus.waitingForConfirmation;
+          break;
+        case "Transaction in Block":
+          currentTransactionStatus = TransactionStatus.waitingForFinalization;
+          break;
+        case "Mint LP Tokens":
+          currentTransactionStatus = TransactionStatus.finalizing;
+          break;
+        case "Update Balances":
+          currentTransactionStatus = TransactionStatus.updatingBalances;
+          break;
+        case "Show Success":
+          currentTransactionStatus = TransactionStatus.success;
+          break;
+      }
+
+      addStatus.setStatus(currentTransactionStatus);
+
+      // Special actions for certain steps
+      if (i === 7) {
+        // Transaction in Block
+        dotAcpToast.success("Liquidity added at block hash #0x456...def", {
+          style: { maxWidth: "750px" },
+        });
+      }
+
+      // Wait for the duration
+      await new Promise((resolve) => setTimeout(resolve, addLiquiditySteps[i].duration));
+    }
+
+    // Mark all steps as completed
+    setSimulationSteps((prev) => prev.map((step) => ({ ...step, status: "completed" })));
+
+    // Final success status
+    addStatus.setStatus(TransactionStatus.success);
+
+    // Show final success toast
+    dotAcpToast.success(`Successfully added liquidity: 50 ${nativeTokenSymbol} + 1000 TEST`, {
+      style: { maxWidth: "500px" },
+    });
+
+    setTimeout(() => {
+      setIsSimulating(false);
+      setSimulationSteps([]);
+      addStatus.resetStatus();
+    }, 2000);
+  };
+
+  const simulateRemoveLiquidity = async () => {
+    if (isSimulating) return;
+
+    setIsSimulating(true);
+    setSimulationSteps(removeLiquiditySteps);
+
+    // Start loading
+    withdrawStatus.setStatus(TransactionStatus.preparing);
+
+    for (let i = 0; i < removeLiquiditySteps.length; i++) {
+      // Update current step to active
+      setSimulationSteps((prev) =>
+        prev.map((step, index) => ({
+          ...step,
+          status: index === i ? "active" : index < i ? "completed" : "pending",
+        }))
+      );
+
+      // Map step names to transaction statuses
+      let currentTransactionStatus = TransactionStatus.preparing;
+      switch (removeLiquiditySteps[i].name) {
+        case "Initialize Remove Liquidity":
+          currentTransactionStatus = TransactionStatus.preparing;
+          break;
+        case "Validate LP Token Amount":
+          currentTransactionStatus = TransactionStatus.validatingInputs;
+          break;
+        case "Check LP Token Balance":
+          currentTransactionStatus = TransactionStatus.checkingBalances;
+          break;
+        case "Calculate Token Returns":
+          currentTransactionStatus = TransactionStatus.calculatingRoute;
+          break;
+        case "Sign Transaction":
+          currentTransactionStatus = TransactionStatus.signing;
+          break;
+        case "Submit to Blockchain":
+          currentTransactionStatus = TransactionStatus.sendingToNetwork;
+          break;
+        case "Wait for Confirmation":
+          currentTransactionStatus = TransactionStatus.waitingForConfirmation;
+          break;
+        case "Transaction in Block":
+          currentTransactionStatus = TransactionStatus.waitingForFinalization;
+          break;
+        case "Burn LP Tokens":
+          currentTransactionStatus = TransactionStatus.finalizing;
+          break;
+        case "Update Balances":
+          currentTransactionStatus = TransactionStatus.updatingBalances;
+          break;
+        case "Show Success":
+          currentTransactionStatus = TransactionStatus.success;
+          break;
+      }
+
+      withdrawStatus.setStatus(currentTransactionStatus);
+
+      // Special actions for certain steps
+      if (i === 7) {
+        // Transaction in Block
+        dotAcpToast.success("Liquidity removed at block hash #0x789...ghi", {
+          style: { maxWidth: "750px" },
+        });
+      }
+
+      // Wait for the duration
+      await new Promise((resolve) => setTimeout(resolve, removeLiquiditySteps[i].duration));
+    }
+
+    // Mark all steps as completed
+    setSimulationSteps((prev) => prev.map((step) => ({ ...step, status: "completed" })));
+
+    // Final success status
+    withdrawStatus.setStatus(TransactionStatus.success);
+
+    // Show final success toast
+    dotAcpToast.success(`Successfully removed liquidity: received 25 ${nativeTokenSymbol} + 500 TEST`, {
+      style: { maxWidth: "500px" },
+    });
+
+    setTimeout(() => {
+      setIsSimulating(false);
+      setSimulationSteps([]);
+      withdrawStatus.resetStatus();
     }, 2000);
   };
 
@@ -147,15 +360,33 @@ const DebugPanel: FC = () => {
       {!isMinimized && (
         <div className="space-y-4 p-4">
           <div className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Swap Simulation</h4>
-            <Button
-              variant={ButtonVariants.btnPrimaryPinkSm}
-              onClick={simulateSwap}
-              disabled={isSimulating || state.swapLoading}
-              className="w-full"
-            >
-              {isSimulating ? "Simulating..." : "Simulate Swap"}
-            </Button>
+            <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Transaction Simulations</h4>
+            <div className="space-y-2">
+              <Button
+                variant={ButtonVariants.btnPrimaryPinkSm}
+                onClick={simulateSwap}
+                disabled={isSimulating || state.swapLoading}
+                className="w-full"
+              >
+                {isSimulating && swapStatus.isLoading ? "Simulating..." : "Simulate Swap"}
+              </Button>
+              <Button
+                variant={ButtonVariants.btnPrimaryPinkSm}
+                onClick={simulateAddLiquidity}
+                disabled={isSimulating || state.addLiquidityLoading}
+                className="w-full"
+              >
+                {isSimulating && addStatus.isLoading ? "Simulating..." : "Simulate Add Liquidity"}
+              </Button>
+              <Button
+                variant={ButtonVariants.btnPrimaryPinkSm}
+                onClick={simulateRemoveLiquidity}
+                disabled={isSimulating || state.withdrawLiquidityLoading}
+                className="w-full"
+              >
+                {isSimulating && withdrawStatus.isLoading ? "Simulating..." : "Simulate Remove Liquidity"}
+              </Button>
+            </div>
           </div>
 
           {simulationSteps.length > 0 && (
@@ -189,49 +420,57 @@ const DebugPanel: FC = () => {
           <div className="space-y-1 text-xs">
             <h4 className="font-semibold uppercase tracking-wider text-white">Current State</h4>
             <div className="space-y-2 rounded-lg border border-slate-700 bg-black p-3 font-mono">
-              <div className="font-semibold text-emerald-400">Swap States:</div>
+              <div className="font-semibold text-emerald-400">Swap:</div>
               <div className="pl-2 text-white">
-                swapLoading:{" "}
+                loading:{" "}
                 <span className={state.swapLoading ? "text-emerald-400" : "text-slate-500"}>
-                  {state.swapLoading ? "✓ true" : "✗ false"}
+                  {state.swapLoading ? "✓" : "✗"}
                 </span>
+                {" | status: "}
+                <span className="text-cyan-400">{swapStatus.currentStatus}</span>
               </div>
               <div className="pl-2 text-white">
-                swapFinalized:{" "}
+                finalized:{" "}
                 <span className={state.swapFinalized ? "text-emerald-400" : "text-slate-500"}>
-                  {state.swapFinalized ? "✓ true" : "✗ false"}
+                  {state.swapFinalized ? "✓" : "✗"}
                 </span>
+                {" | gasFee: "}
+                <span className="text-amber-400">{state.swapGasFee || "N/A"}</span>
+              </div>
+
+              <div className="mt-2 font-semibold text-emerald-400">Add Liquidity:</div>
+              <div className="pl-2 text-white">
+                loading:{" "}
+                <span className={state.addLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
+                  {state.addLiquidityLoading ? "✓" : "✗"}
+                </span>
+                {" | status: "}
+                <span className="text-cyan-400">{addStatus.currentStatus}</span>
               </div>
               <div className="pl-2 text-white">
-                gasFee: <span className="text-amber-400">{state.swapGasFee || "N/A"}</span>
+                gasFee: <span className="text-amber-400">{state.poolGasFee || "N/A"}</span>
               </div>
+
+              <div className="mt-2 font-semibold text-emerald-400">Remove Liquidity:</div>
               <div className="pl-2 text-white">
-                tokenWarning:{" "}
-                <span className={state.isTokenCanNotCreateWarningSwap ? "text-amber-400" : "text-slate-500"}>
-                  {state.isTokenCanNotCreateWarningSwap ? "✓ true" : "✗ false"}
+                loading:{" "}
+                <span className={state.withdrawLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
+                  {state.withdrawLiquidityLoading ? "✓" : "✗"}
                 </span>
+                {" | status: "}
+                <span className="text-cyan-400">{withdrawStatus.currentStatus}</span>
               </div>
 
               <div className="mt-2 font-semibold text-sky-400">Connection:</div>
               <div className="pl-2 text-white">
-                Connected:{" "}
+                wallet:{" "}
                 <span className={state.selectedAccount?.address ? "text-emerald-400" : "text-slate-500"}>
-                  {state.selectedAccount?.address ? "✓ Yes" : "✗ No"}
+                  {state.selectedAccount?.address ? "✓" : "✗"}
                 </span>
-              </div>
-              <div className="pl-2 text-white">
-                API Ready:{" "}
-                <span className={state.api ? "text-emerald-400" : "text-slate-500"}>
-                  {state.api ? "✓ Yes" : "✗ No"}
-                </span>
-              </div>
-              <div className="pl-2 text-white">
-                Pools: <span className="text-amber-400">{state.pools?.length || 0}</span>
-              </div>
-
-              <div className="mt-2 font-semibold text-amber-400">Last Action:</div>
-              <div className="pl-2 text-[10px] text-slate-300">
-                {state.blockHashFinalized ? `Block: ${state.blockHashFinalized.slice(0, 10)}...` : "None"}
+                {" | api: "}
+                <span className={state.api ? "text-emerald-400" : "text-slate-500"}>{state.api ? "✓" : "✗"}</span>
+                {" | pools: "}
+                <span className="text-amber-400">{state.pools?.length || 0}</span>
               </div>
             </div>
           </div>

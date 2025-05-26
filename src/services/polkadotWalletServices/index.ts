@@ -151,6 +151,12 @@ export const setTokenBalanceUpdate = async (
   assetId: string,
   oldWalletBalance: any
 ) => {
+  // Check if oldWalletBalance exists
+  if (!oldWalletBalance) {
+    console.warn("setTokenBalanceUpdate: oldWalletBalance is undefined");
+    return;
+  }
+
   const { data: balance } = await api.query.system.account(walletAddress);
   const tokenMetadata = api.registry.getChainProperties();
   const tokenSymbol = tokenMetadata?.tokenSymbol.toHuman();
@@ -164,7 +170,7 @@ export const setTokenBalanceUpdate = async (
 
   const tokenAsset = await api.query.poscanAssets.account(assetId, walletAddress);
 
-  const assetsUpdated = oldWalletBalance.poscanAssets;
+  const assetsUpdated = oldWalletBalance.poscanAssets || [];
 
   if (tokenAsset.toHuman()) {
     const assetTokenMetadata = await api.query.poscanAssets.metadata(assetId);
@@ -207,6 +213,12 @@ export const setTokenBalanceAfterAssetsSwapUpdate = async (
   assetBId: string,
   oldWalletBalance: any
 ) => {
+  // Check if oldWalletBalance exists
+  if (!oldWalletBalance) {
+    console.warn("setTokenBalanceAfterAssetsSwapUpdate: oldWalletBalance is undefined");
+    return;
+  }
+
   const { data: balance } = await api.query.system.account(walletAddress);
   const tokenMetadata = api.registry.getChainProperties();
   const tokenSymbol = tokenMetadata?.tokenSymbol.toHuman();
@@ -220,7 +232,7 @@ export const setTokenBalanceAfterAssetsSwapUpdate = async (
   const tokenAssetA = await api.query.poscanAssets.account(assetAId, walletAddress);
   const tokenAssetB = await api.query.poscanAssets.account(assetBId, walletAddress);
 
-  const assetsUpdated = oldWalletBalance.poscanAssets;
+  const assetsUpdated = oldWalletBalance.poscanAssets || [];
 
   if (tokenAssetA.toHuman() && tokenAssetB.toHuman()) {
     const assetTokenAMetadata = await api.query.poscanAssets.metadata(assetAId);

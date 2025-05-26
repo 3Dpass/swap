@@ -3,14 +3,7 @@ import { t } from "i18next";
 import { useEffect, useMemo, useState } from "react";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import { InputEditedProps, PoolCardProps, TokenDecimalsErrorProps, TokenProps } from "../../../app/types";
-import {
-  ActionType,
-  ButtonVariants,
-  InputEditedType,
-  TokenPosition,
-  TokenSelection,
-  TransactionTypes,
-} from "../../../app/types/enum";
+import { ActionType, InputEditedType, TokenPosition, TokenSelection, TransactionTypes } from "../../../app/types/enum";
 import {
   calculateSlippageAdd,
   calculateSlippageReduce,
@@ -20,7 +13,6 @@ import {
 } from "../../../app/util/helper";
 import { formatBalanceForMaxClick, safeTokenBalanceClean } from "../../../app/util/tokenBalance";
 import SwitchArrow from "../../../assets/img/switch-arrow.svg?react";
-import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceAfterAssetsSwapUpdate, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { createPoolCardsArray, getPoolReserves } from "../../../services/poolServices";
 import {
@@ -46,8 +38,8 @@ import {
   sellMax,
 } from "../../../services/tokenServices";
 import { useAppContext } from "../../../state";
-import Button from "../../atom/Button";
 import WarningMessage from "../../atom/WarningMessage";
+import TransactionButton from "../../molecule/TransactionButton";
 import TokenIcon from "../../atom/TokenIcon";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import ReviewTransactionModal from "../ReviewTransactionModal";
@@ -719,11 +711,17 @@ const SwapTokens = () => {
   };
 
   const closeSuccessModal = async () => {
+    // First close the modal
     dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: false });
-    dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: null });
-    dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: null });
-    setSwapSuccessfulReset(true);
-    if (api) {
+
+    // Then clear the data after a small delay to allow modal animation to complete
+    setTimeout(async () => {
+      dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: null });
+      dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: null });
+      setSwapSuccessfulReset(true);
+    }, 300); // Adjust this delay based on your modal animation duration
+
+    if (api && tokenBalances) {
       await createPoolCardsArray(api, dispatch, pools, selectedAccount);
 
       if (selectedTokens.tokenA.tokenSymbol === nativeTokenSymbol) {
@@ -733,7 +731,9 @@ const SwapTokens = () => {
           selectedTokens.tokenB.tokenId,
           tokenBalances
         );
-        dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        if (assets) {
+          dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        }
       }
       if (selectedTokens.tokenB.tokenSymbol === nativeTokenSymbol) {
         const assets: any = await setTokenBalanceUpdate(
@@ -742,7 +742,9 @@ const SwapTokens = () => {
           selectedTokens.tokenA.tokenId,
           tokenBalances
         );
-        dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        if (assets) {
+          dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        }
       }
       if (
         selectedTokens.tokenB.tokenSymbol !== nativeTokenSymbol &&
@@ -755,7 +757,9 @@ const SwapTokens = () => {
           selectedTokens.tokenB.tokenId,
           tokenBalances
         );
-        dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        if (assets) {
+          dispatch({ type: ActionType.SET_TOKEN_BALANCES, payload: assets });
+        }
       }
     }
   };
@@ -1272,8 +1276,8 @@ const SwapTokens = () => {
           const priceOfAssetBForOneAssetA = new Decimal(assetTokenReserve).div(nativeTokenReserve);
           setAssetBPriceOfOneAssetA(priceOfAssetBForOneAssetA.toFixed(5));
 
-          const valueA = new Decimal(selectedTokenAValue.tokenValue).add(nativeTokenReserve);
-          const valueB = new Decimal(assetTokenReserve).minus(selectedTokenBValue.tokenValue);
+          const valueA = new Decimal(selectedTokenAValue.tokenValue || "0").add(nativeTokenReserve);
+          const valueB = new Decimal(assetTokenReserve).minus(selectedTokenBValue.tokenValue || "0");
 
           const priceAfterSwap = valueA.div(valueB);
 
@@ -1308,8 +1312,8 @@ const SwapTokens = () => {
 
           setAssetBPriceOfOneAssetA(priceOfAssetBForOneAssetA.toFixed(5));
 
-          const valueA = new Decimal(assetTokenReserve).minus(selectedTokenAValue.tokenValue);
-          const valueB = new Decimal(nativeTokenReserve).add(selectedTokenBValue.tokenValue);
+          const valueA = new Decimal(assetTokenReserve).minus(selectedTokenAValue.tokenValue || "0");
+          const valueB = new Decimal(nativeTokenReserve).add(selectedTokenBValue.tokenValue || "0");
 
           const priceAfterSwap = valueB.div(valueA);
 
@@ -1353,7 +1357,7 @@ const SwapTokens = () => {
           const priceBeforeSwapA = new Decimal(assetTokenReserveA).div(nativeTokenReserveA);
 
           const valueAWithDecimals = formatInputTokenValue(
-            new Decimal(selectedTokenAValue.tokenValue).toNumber(),
+            new Decimal(selectedTokenAValue.tokenValue || "0").toNumber(),
             selectedTokens.tokenA.decimals
           );
 
@@ -1368,7 +1372,7 @@ const SwapTokens = () => {
               new Decimal(nativeTokenAmount?.toString().replace(/[, ]/g, "")).toNumber(),
               nativeTokenDecimals
             );
-            const valueA = new Decimal(assetTokenReserveA).add(selectedTokenAValue.tokenValue);
+            const valueA = new Decimal(assetTokenReserveA).add(selectedTokenAValue.tokenValue || "0");
             const valueB = new Decimal(nativeTokenReserveA).minus(nativeTokenAmountFormatted);
 
             const priceAfterSwapA = valueA.div(valueB);
@@ -1560,13 +1564,13 @@ const SwapTokens = () => {
           modalType="swap"
         />
 
-        <Button
-          onClick={() => (getSwapButtonProperties.disabled ? null : setReviewModalOpen(true))}
-          variant={ButtonVariants.btnInteractivePink}
-          disabled={getSwapButtonProperties.disabled || swapLoading}
-        >
-          {swapLoading ? <LottieMedium /> : getSwapButtonProperties.label}
-        </Button>
+        <TransactionButton
+          onClick={() => setReviewModalOpen(true)}
+          disabled={getSwapButtonProperties.disabled}
+          loading={swapLoading}
+          label={getSwapButtonProperties.label}
+          transactionType={TransactionTypes.swap}
+        />
 
         <SwapAndPoolSuccessModal
           open={swapFinalized}

@@ -8,13 +8,7 @@ import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { LpTokenAsset } from "../../../app/types";
-import {
-  ActionType,
-  ButtonVariants,
-  InputEditedType,
-  LiquidityPageType,
-  TransactionTypes,
-} from "../../../app/types/enum";
+import { ActionType, InputEditedType, LiquidityPageType, TransactionTypes } from "../../../app/types/enum";
 import {
   calculateSlippageReduce,
   formatDecimalsFromToken,
@@ -23,15 +17,14 @@ import {
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import { LottieMedium } from "../../../assets/loader";
 import { assetTokenData, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkWithdrawPoolLiquidityGasFee, getPoolReserves, removeLiquidity } from "../../../services/poolServices";
 import { useAppContext } from "../../../state";
-import Button from "../../atom/Button";
 import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import AmountPercentage from "../../molecule/AmountPercentage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
+import TransactionButton from "../../molecule/TransactionButton";
 import TokenSelectModal from "../TokenSelectModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
 import ReviewTransactionModal from "../ReviewTransactionModal";
@@ -573,13 +566,13 @@ const WithdrawPoolLiquidity = () => {
             </div>
           </>
         )}
-        <Button
-          onClick={() => (getWithdrawButtonProperties.disabled ? null : setReviewModalOpen(true))}
-          variant={ButtonVariants.btnInteractivePink}
-          disabled={getWithdrawButtonProperties.disabled || withdrawLiquidityLoading}
-        >
-          {withdrawLiquidityLoading ? <LottieMedium /> : getWithdrawButtonProperties.label}
-        </Button>
+        <TransactionButton
+          onClick={() => setReviewModalOpen(true)}
+          disabled={getWithdrawButtonProperties.disabled}
+          loading={withdrawLiquidityLoading}
+          label={getWithdrawButtonProperties.label}
+          transactionType={TransactionTypes.withdraw}
+        />
         <TokenSelectModal
           onSelect={(tokenData) => {
             if ("assetTokenId" in tokenData) {

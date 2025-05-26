@@ -8,7 +8,7 @@ import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { InputEditedProps, TokenDecimalsErrorProps } from "../../../app/types";
-import { ActionType, ButtonVariants, InputEditedType, TransactionTypes } from "../../../app/types/enum";
+import { ActionType, InputEditedType, TransactionTypes } from "../../../app/types/enum";
 import {
   calculateSlippageReduce,
   checkIfPoolAlreadyExists,
@@ -19,15 +19,14 @@ import {
 import { formatBalanceForMaxClick, safeTokenBalanceClean } from "../../../app/util/tokenBalance";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { addLiquidity, checkAddPoolLiquidityGasFee, getPoolReserves } from "../../../services/poolServices";
 import { getAssetTokenFromNativeToken, getNativeTokenFromAssetToken } from "../../../services/tokenServices";
 import { useAppContext } from "../../../state";
-import Button from "../../atom/Button";
 import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
+import TransactionButton from "../../molecule/TransactionButton";
 import CreatePool from "../CreatePool";
 import TokenSelectModal from "../TokenSelectModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
@@ -637,13 +636,13 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
               </div>
             </>
           )}
-          <Button
-            onClick={() => (getButtonProperties.disabled ? null : setReviewModalOpen(true))}
-            variant={ButtonVariants.btnInteractivePink}
-            disabled={getButtonProperties.disabled || addLiquidityLoading}
-          >
-            {addLiquidityLoading ? <LottieMedium /> : getButtonProperties.label}
-          </Button>
+          <TransactionButton
+            onClick={() => setReviewModalOpen(true)}
+            disabled={getButtonProperties.disabled}
+            loading={addLiquidityLoading}
+            label={getButtonProperties.label}
+            transactionType={TransactionTypes.add}
+          />
           <ReviewTransactionModal
             open={reviewModalOpen}
             title="Review adding liquidity"

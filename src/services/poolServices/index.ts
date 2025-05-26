@@ -6,7 +6,7 @@ import { t } from "i18next";
 import { Dispatch } from "react";
 import useGetNetwork from "../../app/hooks/useGetNetwork";
 import { LpTokenAsset, PoolCardProps } from "../../app/types";
-import { ActionType, ServiceResponseStatus } from "../../app/types/enum";
+import { ActionType, ServiceResponseStatus, TransactionStatus } from "../../app/types/enum";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { PoolAction } from "../../store/pools/interface";
@@ -182,6 +182,9 @@ export const addLiquidity = async (
   const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.preparing });
+
+  dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.validatingInputs });
 
   const result = api.tx.assetConversion.addLiquidity(
     firstArg,
@@ -193,6 +196,8 @@ export const addLiquidity = async (
     account.address
   );
 
+  dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.checkingBalances });
+
   const { partialFee } = await result.paymentInfo(account.address);
 
   dispatch({
@@ -200,11 +205,22 @@ export const addLiquidity = async (
     payload: `transaction will have a weight of ${partialFee.toHuman()} fees`,
   });
 
+  dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.signing });
+
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
+      // Update status when transaction is sent
+      if (!response.status.isInBlock && !response.status.isFinalized) {
+        dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+      }
+
       if (response.status.isInBlock) {
+        dispatch({
+          type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS,
+          payload: TransactionStatus.waitingForFinalization,
+        });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -217,12 +233,14 @@ export const addLiquidity = async (
             const { docs } = decoded;
             dotAcpToast.error(`${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_POOLS, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
@@ -231,6 +249,8 @@ export const addLiquidity = async (
           dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.finalizing });
+
           exactAddedLiquidityInPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
           dispatch({
@@ -239,6 +259,7 @@ export const addLiquidity = async (
           });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.success });
           const allPools = await getAllPools(api);
           if (allPools) {
             dispatch({ type: ActionType.SET_POOLS, payload: allPools });
@@ -251,6 +272,7 @@ export const addLiquidity = async (
       dotAcpToast.error(`Transaction failed ${error}`);
       dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
       dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
     });
 };
 
@@ -269,6 +291,9 @@ export const removeLiquidity = async (
   const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.preparing });
+
+  dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.validatingInputs });
 
   const result = api.tx.assetConversion.removeLiquidity(
     firstArg,
@@ -279,11 +304,25 @@ export const removeLiquidity = async (
     account.address
   );
 
+  dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.signing });
+
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
+      // Update status when transaction is sent
+      if (!response.status.isInBlock && !response.status.isFinalized) {
+        dispatch({
+          type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS,
+          payload: TransactionStatus.sendingToNetwork,
+        });
+      }
+
       if (response.status.isInBlock) {
+        dispatch({
+          type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS,
+          payload: TransactionStatus.waitingForFinalization,
+        });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -296,12 +335,14 @@ export const removeLiquidity = async (
             const { docs } = decoded;
             dotAcpToast.error(`${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_POOLS, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
@@ -310,6 +351,8 @@ export const removeLiquidity = async (
           dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.finalizing });
+
           exactWithdrawnLiquidityFromPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
           dispatch({
@@ -318,6 +361,7 @@ export const removeLiquidity = async (
           });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.success });
           const allPools = await getAllPools(api);
           if (allPools) {
             dispatch({ type: ActionType.SET_POOLS, payload: allPools });
@@ -330,6 +374,7 @@ export const removeLiquidity = async (
       dotAcpToast.error(`Transaction failed ${error}`);
       dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
       dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.error });
     });
 };
 

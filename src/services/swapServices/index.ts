@@ -2,7 +2,7 @@ import { ApiPromise } from "@polkadot/api";
 import { getWalletBySource, type WalletAccount } from "@talismn/connect-wallets";
 import { t } from "i18next";
 import { Dispatch } from "react";
-import { ActionType, ServiceResponseStatus } from "../../app/types/enum";
+import { ActionType, ServiceResponseStatus, TransactionStatus } from "../../app/types/enum";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { SwapAction } from "../../store/swap/interface";
@@ -51,6 +51,7 @@ export const swapNativeForAssetExactIn = async (
   const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.preparing });
 
   const result = api.tx.assetConversion.swapExactTokensForTokens(
     reverse ? [secondArg, firstArg] : [firstArg, secondArg],
@@ -62,9 +63,15 @@ export const swapNativeForAssetExactIn = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
+
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
+      if (response.status.isReady || response.status.isBroadcast) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+      }
       if (response.status.isInBlock) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -77,17 +84,20 @@ export const swapNativeForAssetExactIn = async (
             const { docs } = decoded;
             dotAcpToast.error(checkIfExactError(docs.join(" ")) ? t("swapPage.slippageError") : `${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_SWAP, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
           if (swapExecutedEvent && swapExecutedEvent.length > 0) {
@@ -122,6 +132,7 @@ export const swapNativeForAssetExactIn = async (
             payload: "",
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
         }
       }
     })
@@ -136,6 +147,7 @@ export const swapNativeForAssetExactIn = async (
         payload: "",
       });
       dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
     });
 
   return result;
@@ -156,6 +168,7 @@ export const swapNativeForAssetExactOut = async (
   const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.preparing });
 
   const result = api.tx.assetConversion.swapTokensForExactTokens(
     reverse ? [secondArg, firstArg] : [firstArg, secondArg],
@@ -167,9 +180,15 @@ export const swapNativeForAssetExactOut = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
+
   result
     .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+      if (response.status.isReady || response.status.isBroadcast) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+      }
       if (response.status.isInBlock) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -182,17 +201,20 @@ export const swapNativeForAssetExactOut = async (
             const { docs } = decoded;
             dotAcpToast.error(checkIfExactError(docs.join(" ")) ? t("swapPage.slippageError") : `${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_SWAP, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
           if (swapExecutedEvent && swapExecutedEvent.length > 0) {
@@ -226,6 +248,7 @@ export const swapNativeForAssetExactOut = async (
             payload: "",
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
         }
       }
     })
@@ -240,6 +263,7 @@ export const swapNativeForAssetExactOut = async (
         payload: "",
       });
       dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
     });
 
   return result;
@@ -261,6 +285,7 @@ export const swapAssetForAssetExactIn = async (
   const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.preparing });
 
   const result = api.tx.assetConversion.swapExactTokensForTokens(
     [firstArg, secondArg, thirdArg],
@@ -272,9 +297,15 @@ export const swapAssetForAssetExactIn = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
+
   result
     .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+      if (response.status.isReady || response.status.isBroadcast) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+      }
       if (response.status.isInBlock) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -287,17 +318,20 @@ export const swapAssetForAssetExactIn = async (
             const { docs } = decoded;
             dotAcpToast.error(checkIfExactError(docs.join(" ")) ? t("swapPage.slippageError") : `${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_SWAP, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
           if (swapExecutedEvent && swapExecutedEvent.length > 0) {
@@ -331,6 +365,7 @@ export const swapAssetForAssetExactIn = async (
             payload: "",
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
         }
       }
     })
@@ -345,6 +380,7 @@ export const swapAssetForAssetExactIn = async (
         payload: "",
       });
       dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
     });
 
   return result;
@@ -366,6 +402,7 @@ export const swapAssetForAssetExactOut = async (
   const thirdArg = createAssetTokenId(api, assetTokenBId);
 
   dispatch({ type: ActionType.SET_SWAP_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.preparing });
 
   const result = api.tx.assetConversion.swapTokensForExactTokens(
     [firstArg, secondArg, thirdArg],
@@ -377,9 +414,15 @@ export const swapAssetForAssetExactOut = async (
 
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
+  dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
+
   result
     .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+      if (response.status.isReady || response.status.isBroadcast) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
+      }
       if (response.status.isInBlock) {
+        dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.waitingForFinalization });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
@@ -392,17 +435,20 @@ export const swapAssetForAssetExactOut = async (
             const { docs } = decoded;
             dotAcpToast.error(checkIfExactError(docs.join(" ")) ? t("swapPage.slippageError") : `${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             if (response.dispatchError.toString() === t("pageError.tokenCanNotCreate")) {
               dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_SWAP, payload: true });
             }
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.finalizing });
           const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
 
           if (swapExecutedEvent && swapExecutedEvent.length > 0) {
@@ -436,6 +482,7 @@ export const swapAssetForAssetExactOut = async (
             payload: "",
           });
           dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: null });
         }
       }
     })
@@ -450,6 +497,7 @@ export const swapAssetForAssetExactOut = async (
         payload: "",
       });
       dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.error });
     });
 
   return result;

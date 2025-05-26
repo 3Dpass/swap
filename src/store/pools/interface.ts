@@ -1,6 +1,6 @@
 import type { AnyJson } from "@polkadot/types/types/codec";
 import { PoolCardProps, PoolsTokenMetadata } from "../../app/types";
-import { ActionType } from "../../app/types/enum";
+import { ActionType, TransactionStatus } from "../../app/types/enum";
 
 export interface PoolsState {
   pools: AnyJson[];
@@ -15,7 +15,11 @@ export interface PoolsState {
   poolsTokenMetadata: PoolsTokenMetadata[];
   createPoolLoading: boolean;
   addLiquidityLoading: boolean;
+  addLiquidityLoadingStatus: TransactionStatus | null;
+  addLiquidityOperationId: string | null;
   withdrawLiquidityLoading: boolean;
+  withdrawLiquidityLoadingStatus: TransactionStatus | null;
+  withdrawLiquidityOperationId: string | null;
   exactNativeTokenAddLiquidity: string;
   exactAssetTokenAddLiquidity: string;
   exactNativeTokenWithdraw: string;
@@ -39,7 +43,11 @@ export type PoolAction =
   | { type: ActionType.SET_POOLS_TOKEN_METADATA; payload: PoolsTokenMetadata[] }
   | { type: ActionType.SET_CREATE_POOL_LOADING; payload: boolean }
   | { type: ActionType.SET_ADD_LIQUIDITY_LOADING; payload: boolean }
+  | { type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS; payload: TransactionStatus | null }
+  | { type: ActionType.SET_ADD_LIQUIDITY_OPERATION_ID; payload: string | null }
   | { type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING; payload: boolean }
+  | { type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS; payload: TransactionStatus | null }
+  | { type: ActionType.SET_WITHDRAW_LIQUIDITY_OPERATION_ID; payload: string | null }
   | { type: ActionType.SET_EXACT_NATIVE_TOKEN_ADD_LIQUIDITY; payload: string }
   | { type: ActionType.SET_EXACT_ASSET_TOKEN_ADD_LIQUIDITY; payload: string }
   | { type: ActionType.SET_EXACT_NATIVE_TOKEN_WITHDRAW; payload: string }

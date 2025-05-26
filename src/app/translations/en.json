@@ -130,6 +130,21 @@
     "palletSlippageError": "Calculated amount out is less than provided minimum amount.",
     "slippageError": "The transaction could not be completed due to the set slippage."
   },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "Preparing transaction...",
+    "validatingInputs": "Validating inputs...",
+    "checkingBalances": "Checking balances...",
+    "calculatingRoute": "Calculating best route...",
+    "signing": "Signing transaction...",
+    "sendingToNetwork": "Sending to network...",
+    "waitingForConfirmation": "Waiting for confirmation...",
+    "waitingForFinalization": "Waiting for finalization...",
+    "finalizing": "Finalizing transaction...",
+    "updatingBalances": "Updating balances...",
+    "success": "Transaction successful!",
+    "error": "Transaction failed"
+  },
   "footer": {
     "poweredBy": "Powered by",
     "company": "MVP Workshop"

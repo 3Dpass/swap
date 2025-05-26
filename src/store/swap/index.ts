@@ -6,6 +6,8 @@ export const initialSwapState: SwapState = {
   swapGasFeesMessage: "",
   swapGasFee: "",
   swapLoading: false,
+  swapLoadingStatus: null,
+  swapOperationId: null,
   swapExactInTokenAmount: "0",
   swapExactOutTokenAmount: "0",
   isTokenCanNotCreateWarningSwap: false,
@@ -23,6 +25,10 @@ export const swapReducer = (state: SwapState, action: SwapAction): SwapState => 
       return { ...state, swapGasFee: action.payload };
     case ActionType.SET_SWAP_LOADING:
       return { ...state, swapLoading: action.payload };
+    case ActionType.SET_SWAP_LOADING_STATUS:
+      return { ...state, swapLoadingStatus: action.payload };
+    case ActionType.SET_SWAP_OPERATION_ID:
+      return { ...state, swapOperationId: action.payload };
     case ActionType.SET_SWAP_EXACT_IN_TOKEN_AMOUNT:
       return { ...state, swapExactInTokenAmount: action.payload };
     case ActionType.SET_SWAP_EXACT_OUT_TOKEN_AMOUNT:
