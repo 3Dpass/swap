@@ -10,6 +10,7 @@ type ButtonProps = {
   disabled?: boolean;
   className?: string;
   icon?: ReactNode;
+  hasSpinner?: boolean;
   variant?:
     | ButtonVariants.btnPrimaryPinkLg
     | ButtonVariants.btnPrimaryPinkSm
@@ -26,16 +27,23 @@ type ButtonProps = {
   onClick: () => void;
 };
 
-const Button = ({ children, disabled, className, icon, variant, onClick }: ButtonProps) => {
+const Button = ({ children, disabled, className, icon, hasSpinner, variant, onClick }: ButtonProps) => {
   const [isButtonHover, setIsButtonHover] = useState(false);
 
   const showArrowDownIcon = () => {
-    if (variant === ButtonVariants.btnSelectPink && !disabled) {
-      return <ArrowDownIcon width={16} height={16} color="white" />;
+    if (variant === ButtonVariants.btnSelectPink) {
+      return <ArrowDownIcon width={16} height={16} color="white" className={disabled ? "opacity-40" : ""} />;
     }
 
-    if (variant === ButtonVariants.btnSelectGray && !disabled) {
-      return <ArrowDownIcon width={16} height={16} color={`${isButtonHover && !disabled ? "white" : "black"}`} />;
+    if (variant === ButtonVariants.btnSelectGray) {
+      return (
+        <ArrowDownIcon
+          width={16}
+          height={16}
+          color={`${isButtonHover && !disabled ? "white" : "black"}`}
+          className={disabled ? "opacity-40" : ""}
+        />
+      );
     }
 
     return null;
@@ -68,7 +76,7 @@ const Button = ({ children, disabled, className, icon, variant, onClick }: Butto
       type="button"
     >
       {icon ? <div className="flex flex-shrink-0 items-center">{icon}</div> : null}
-      {children}
+      <span className={`flex-1 ${icon || hasSpinner ? "text-left" : "text-center"}`}>{children}</span>
       {showArrowDownIcon()}
     </button>
   );
