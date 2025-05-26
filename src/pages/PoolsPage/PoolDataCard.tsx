@@ -82,45 +82,31 @@ const PoolDataCard = ({
   return (
     <div className="group relative overflow-hidden rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:scale-[1.02] hover:shadow-lg">
       {/* Header with token pair */}
-      <div className="flex items-start justify-between p-5 pb-4">
-        <div className="flex min-w-0 flex-1 items-center gap-3">
-          <div className="relative flex flex-shrink-0 items-center">
-            <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 shadow-md">
-              <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-14 w-14" />
-            </div>
-            <div className="relative z-0 -ml-4 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 shadow-md">
-              <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-14 w-14" />
-            </div>
+      <div className="flex items-center gap-3 p-4 pb-2">
+        <div className="relative flex flex-shrink-0 items-center">
+          <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white p-0.5 shadow-md">
+            <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-11 w-11" />
           </div>
-          <div className="min-w-0 flex-1">
-            <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900">{tokenPair}</h3>
-            <p className="text-sm text-gray-500">Liquidity Pool</p>
+          <div className="relative z-0 -ml-3 flex h-12 w-12 items-center justify-center rounded-full bg-white p-0.5 shadow-md">
+            <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-11 w-11" />
           </div>
         </div>
-
-        {/* LP Balance Badge */}
-        <div className="ml-2 flex flex-shrink-0 flex-col items-end">
-          <div className="rounded-full bg-gradient-to-r from-pink-100 to-purple-100 px-3 py-1">
-            <span className="whitespace-nowrap text-sm font-semibold text-gray-800">
-              {formatCompactNumber(lpTokenAsset?.balance || "0")}
-            </span>
-          </div>
-          <p className="mt-1 whitespace-nowrap text-xs uppercase tracking-wide text-gray-400">
-            {t("poolDataCard.lpTokens")}
-          </p>
+        <div className="min-w-0 flex-1">
+          <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900">{tokenPair}</h3>
+          <p className="text-sm text-gray-500">Liquidity Pool</p>
         </div>
       </div>
 
       {/* Pool statistics */}
-      <div className="px-5 pb-4">
-        <div className="rounded-xl bg-gray-50 p-4">
-          <h4 className="mb-3 text-sm font-semibold uppercase tracking-wide text-gray-700">
+      <div className="px-4 pb-3">
+        <div className="rounded-lg bg-gray-50 p-3">
+          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-600">
             {t("poolDataCard.totalTokensLocked")}
           </h4>
-          <div className="space-y-3">
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-7 w-7" />
+          <div className="space-y-2">
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
+                <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
@@ -131,9 +117,9 @@ const PoolDataCard = ({
                 </div>
               </div>
             </div>
-            <div className="flex items-center gap-3">
-              <div className="flex h-8 w-8 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-7 w-7" />
+            <div className="flex items-center gap-2">
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
+                <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
@@ -144,12 +130,21 @@ const PoolDataCard = ({
                 </div>
               </div>
             </div>
+            {/* LP Tokens row */}
+            <div className="mt-2 border-t border-gray-200 pt-2">
+              <div className="flex items-center justify-between">
+                <p className="text-xs font-medium text-gray-600">{t("poolDataCard.lpTokens")}:</p>
+                <p className="font-mono text-sm font-semibold text-gray-900">
+                  {formatCompactNumber(lpTokenAsset?.balance || "0")}
+                </p>
+              </div>
+            </div>
           </div>
         </div>
       </div>
 
       {/* Action buttons */}
-      <div className="flex gap-3 p-5 pt-0">
+      <div className="flex gap-2 px-4 pb-4">
         <Button
           onClick={() => onDepositClick()}
           variant={ButtonVariants.btnPrimaryGhostSm}

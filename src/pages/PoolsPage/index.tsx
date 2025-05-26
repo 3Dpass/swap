@@ -35,9 +35,9 @@ const PoolsPage = () => {
           <LottieLarge />
         </div>
       ) : (
-        <div className="flex items-center justify-center px-4 pb-16 sm:px-8 lg:px-28">
+        <div className="flex items-center justify-center px-2 pb-16 sm:px-8 lg:px-28">
           <div className="flex w-full max-w-[1280px] flex-col">
-            <div className="flex flex-col items-start justify-between gap-4 px-4 py-6 sm:flex-row sm:items-center sm:px-6 sm:py-8">
+            <div className="flex flex-col items-start justify-between gap-4 px-2 py-6 sm:flex-row sm:items-center sm:px-6 sm:py-8 lg:px-10">
               <div className="flex flex-col gap-[4px] leading-[120%]">
                 <div className="font-unbounded-variable text-heading-4 font-[700] tracking-[.046px] text-gray-400 sm:text-heading-5">
                   {t("poolsPage.pools")}
@@ -59,7 +59,7 @@ const PoolsPage = () => {
               </div>
             </div>
             {pools.length > 0 && poolsCards.length > 0 ? (
-              <div className="grid grid-cols-1 gap-6 px-4 sm:px-6 md:grid-cols-2 xl:grid-cols-3">
+              <div className="grid grid-cols-1 gap-6 px-2 sm:px-6 md:grid-cols-2 lg:px-10 xl:grid-cols-3">
                 {poolsCards.map((item: PoolCardProps, index: number) => {
                   return (
                     <PoolDataCard
@@ -77,7 +77,7 @@ const PoolsPage = () => {
                 })}
               </div>
             ) : (
-              <div className="mx-4 flex h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-12 sm:mx-6">
+              <div className="mx-2 flex h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-12 sm:mx-6 lg:mx-10">
                 <div className="rounded-full bg-white p-6 shadow-lg">
                   <TokenIcon className="h-12 w-12 text-gray-400" />
                 </div>

@@ -135,7 +135,7 @@ const HeaderTopNav = () => {
 
   return (
     <>
-      <nav className="relative flex h-[50px] items-center justify-between px-4 sm:h-[60px] sm:px-6 lg:h-[70px] lg:px-10">
+      <nav className="relative flex h-[60px] items-center justify-between px-2 py-3 sm:h-[70px] sm:px-6 sm:py-4 lg:h-[80px] lg:px-10 lg:py-5">
         {/* Logo - fixed size, no distortion */}
         <div className="flex-shrink-0">
           <Logo className="h-auto w-[100px] sm:w-[120px] lg:w-[150px]" />
@@ -197,7 +197,7 @@ const HeaderTopNav = () => {
             ref={mobileMenuRef}
             className="absolute left-0 right-0 top-full z-50 border-t border-gray-50 bg-white shadow-xl md:hidden"
           >
-            <div className="flex flex-col gap-2 p-4">
+            <div className="flex flex-col gap-2 p-2">
               <NavLink
                 to={SWAP_ROUTE}
                 onClick={() => setMobileMenuOpen(false)}
