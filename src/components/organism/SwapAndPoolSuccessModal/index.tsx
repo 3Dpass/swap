@@ -23,7 +23,7 @@ interface SwapAndPoolSuccessModalProps {
 }
 
 const SwapAndPoolSuccessModal: FC<SwapAndPoolSuccessModalProps> = ({ open, contentTitle, tokenA, tokenB, onClose }) => {
-  const { assethubSubscanUrl, nativeTokenSymbol } = useGetNetwork();
+  const { assethubSubscanUrl } = useGetNetwork();
   const { state } = useAppContext();
   const { blockHashFinalized } = state;
 
@@ -53,7 +53,7 @@ const SwapAndPoolSuccessModal: FC<SwapAndPoolSuccessModalProps> = ({ open, conte
           </div>
           <div className="mt-4 flex flex-row items-center justify-center gap-2 font-unbounded-variable text-base">
             <a
-              href={`${assethubSubscanUrl}/block${nativeTokenSymbol == "WND" ? "s" : ""}/${blockHashFinalized}`}
+              href={`${assethubSubscanUrl}/#/blocks/${blockHashFinalized}`}
               target="_blank"
               rel="noreferrer"
               className="flex items-center gap-1 text-blue-500 underline hover:text-blue-600"

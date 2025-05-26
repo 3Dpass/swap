@@ -14,6 +14,12 @@ import { WalletAction } from "../../store/wallet/interface";
 
 const { nativeTokenSymbol } = useGetNetwork();
 
+// Helper function to get block number from finalized status
+const getBlockNumberFromFinalized = async (api: ApiPromise, blockHash: any): Promise<string> => {
+  const header = await api.rpc.chain.getHeader(blockHash);
+  return header.number.toNumber().toString();
+};
+
 const exactAddedLiquidityInPool = (
   itemEvents: any,
   nativeTokenDecimals: string,
@@ -117,7 +123,7 @@ export const createPool = async (
   const wallet = getWalletBySource(account.wallet?.extensionName);
 
   result
-    .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+    .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.type === ServiceResponseStatus.Finalized) {
         addLiquidity(
           api,
@@ -253,9 +259,10 @@ export const addLiquidity = async (
 
           exactAddedLiquidityInPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING, payload: false });
@@ -355,9 +362,10 @@ export const removeLiquidity = async (
 
           exactWithdrawnLiquidityFromPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
           dispatch({ type: ActionType.SET_SUCCESS_MODAL_OPEN, payload: true });
           dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });

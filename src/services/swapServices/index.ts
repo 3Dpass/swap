@@ -9,6 +9,12 @@ import { SwapAction } from "../../store/swap/interface";
 import { WalletAction } from "../../store/wallet/interface";
 import { createAssetTokenId, createNativeTokenId } from "../poolServices";
 
+// Helper function to get block number from finalized status
+const getBlockNumberFromFinalized = async (api: ApiPromise, blockHash: any): Promise<string> => {
+  const header = await api.rpc.chain.getHeader(blockHash);
+  return header.number.toNumber().toString();
+};
+
 const checkIfExactError = (errorValue: string) => {
   return errorValue === t("swapPage.palletSlippageError");
 };
@@ -117,9 +123,10 @@ export const swapNativeForAssetExactIn = async (
             });
           }
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
 
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
@@ -183,7 +190,7 @@ export const swapNativeForAssetExactOut = async (
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
-    .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+    .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
       }
@@ -234,9 +241,10 @@ export const swapNativeForAssetExactOut = async (
             });
           }
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
@@ -300,7 +308,7 @@ export const swapAssetForAssetExactIn = async (
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
-    .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+    .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
       }
@@ -351,9 +359,10 @@ export const swapAssetForAssetExactIn = async (
             });
           }
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
@@ -417,7 +426,7 @@ export const swapAssetForAssetExactOut = async (
   dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.signing });
 
   result
-    .signAndSend(account.address, { signer: wallet?.signer }, (response) => {
+    .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
       if (response.status.isReady || response.status.isBroadcast) {
         dispatch({ type: ActionType.SET_SWAP_LOADING_STATUS, payload: TransactionStatus.sendingToNetwork });
       }
@@ -468,9 +477,10 @@ export const swapAssetForAssetExactOut = async (
             });
           }
 
+          const blockNumber = await getBlockNumberFromFinalized(api, response.status.asFinalized);
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
-            payload: response.status.asFinalized.toString(),
+            payload: blockNumber,
           });
           dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
           dispatch({
