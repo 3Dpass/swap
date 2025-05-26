@@ -1,9 +1,6 @@
 import { TransactionStatus } from "../app/types/enum";
 import { getEstimatedBlockTime } from "../services/blockTimeService";
 
-// Default block time (used as fallback)
-export const DEFAULT_BLOCK_TIME_MS = 60000; // 60 seconds per block
-
 // Get current block time dynamically
 export const getBlockTimeMs = (): number => {
   return getEstimatedBlockTime();

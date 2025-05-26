@@ -2,7 +2,6 @@ import { ApiPromise, WsProvider } from "@polkadot/api";
 import "@polkadot/api-augment";
 import type { AnyJson } from "@polkadot/types/types/codec";
 import { formatBalance } from "@polkadot/util";
-import { setSS58Format } from "@polkadot/util-crypto";
 import type { Wallet, WalletAccount } from "@talismn/connect-wallets";
 import { getWalletBySource, getWallets } from "@talismn/connect-wallets";
 import { Dispatch } from "react";
@@ -36,12 +35,9 @@ export const setupPolkadotApi = async () => {
 
   // Start new initialization
   apiInitPromise = (async () => {
-    const { rpcUrl, ss58Format } = useGetNetwork();
+    const { rpcUrl } = useGetNetwork();
     const wsProvider = new WsProvider(rpcUrl);
     const api = await ApiPromise.create({ provider: wsProvider });
-
-    // Set the correct ss58Format for address encoding
-    setSS58Format(ss58Format);
 
     // Get chain info for connection validation
     await Promise.all([api.rpc.system.chain(), api.rpc.system.name(), api.rpc.system.version()]);
