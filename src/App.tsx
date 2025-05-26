@@ -6,6 +6,7 @@ import router from "./app/router";
 import LocalStorage from "./app/util/localStorage";
 import { connectWalletAndFetchBalance } from "./services/polkadotWalletServices";
 import { createPoolCardsArray } from "./services/poolServices";
+import { initializeBlockTimeTracking } from "./services/blockTimeService";
 import { AppStateProvider } from "./state";
 
 const App: FC = () => {
@@ -17,6 +18,15 @@ const App: FC = () => {
   useEffect(() => {
     if (walletConnected && api) {
       connectWalletAndFetchBalance(dispatch, api, walletConnected, false).then();
+    }
+  }, [api]);
+
+  useEffect(() => {
+    // Initialize block time tracking when API is ready
+    if (api) {
+      initializeBlockTimeTracking().catch((error) => {
+        console.error("Failed to initialize block time tracking:", error);
+      });
     }
   }, [api]);
 

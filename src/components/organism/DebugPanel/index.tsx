@@ -5,6 +5,7 @@ import dotAcpToast from "../../../app/util/toast";
 import Button from "../../atom/Button";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import { useTransactionStatus, getStatusFromSimulationStep } from "../../../app/hooks/useTransactionStatus";
+import { blockTimeService } from "../../../services/blockTimeService";
 
 interface SimulationStep {
   name: string;
@@ -22,6 +23,8 @@ const DebugPanel: FC = () => {
   const [isVisible, setIsVisible] = useState(true);
   const [simulationSteps, setSimulationSteps] = useState<SimulationStep[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
+  const [blockTimeMs, setBlockTimeMs] = useState(60000);
+  const [blockHistory, setBlockHistory] = useState<Array<{ blockNumber: number; timestamp: number }>>([]);
 
   // Add keyboard shortcut to toggle debug panel (Ctrl/Cmd + D)
   useEffect(() => {
@@ -34,6 +37,25 @@ const DebugPanel: FC = () => {
 
     window.addEventListener("keydown", handleKeyPress);
     return () => window.removeEventListener("keydown", handleKeyPress);
+  }, []);
+
+  // Update block time and history every second
+  useEffect(() => {
+    const updateBlockTime = () => {
+      const newBlockTime = blockTimeService.getEstimatedBlockTime();
+      const newHistory = blockTimeService.getBlockTimeHistory();
+
+      // Only update if we have a valid block time (never set to 0)
+      if (newBlockTime > 0) {
+        setBlockTimeMs(newBlockTime);
+      }
+      setBlockHistory(newHistory);
+    };
+
+    updateBlockTime(); // Initial update
+    const interval = setInterval(updateBlockTime, 1000);
+
+    return () => clearInterval(interval);
   }, []);
 
   const swapSteps: SimulationStep[] = [
@@ -472,8 +494,59 @@ const DebugPanel: FC = () => {
                 {" | pools: "}
                 <span className="text-amber-400">{state.pools?.length || 0}</span>
               </div>
+
+              <div className="mt-2 font-semibold text-purple-400">Block Time:</div>
+              <div className="pl-2 text-white">
+                current: <span className="text-amber-400">{(blockTimeMs / 1000).toFixed(1)}s</span>
+                {" | blocks: "}
+                <span className="text-emerald-400">
+                  {
+                    blockHistory.filter(
+                      (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
+                    ).length
+                  }
+                </span>
+              </div>
             </div>
           </div>
+
+          {blockHistory.length > 0 && (
+            <div className="space-y-2">
+              <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Block Time History</h4>
+              <div className="max-h-32 space-y-1 overflow-y-auto">
+                {(() => {
+                  // Remove duplicates and sort by block number, then take last 5
+                  const uniqueBlocks = blockHistory.filter(
+                    (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
+                  );
+                  const sortedBlocks = uniqueBlocks.sort((a, b) => a.blockNumber - b.blockNumber);
+                  const lastFiveBlocks = sortedBlocks.slice(-5).reverse();
+
+                  return lastFiveBlocks.map((block) => {
+                    // Find the previous block in the sorted array for time diff calculation
+                    const blockIndex = sortedBlocks.findIndex((b) => b.blockNumber === block.blockNumber);
+                    const prevBlock = blockIndex > 0 ? sortedBlocks[blockIndex - 1] : null;
+                    let timeDiff = "";
+                    if (prevBlock && block.blockNumber === prevBlock.blockNumber + 1) {
+                      const diff = ((block.timestamp - prevBlock.timestamp) / 1000).toFixed(1);
+                      timeDiff = ` (${diff}s)`;
+                    }
+
+                    return (
+                      <div
+                        key={`${block.blockNumber}-${block.timestamp}`}
+                        className="rounded bg-slate-800 px-2 py-1 font-mono text-xs text-slate-300"
+                      >
+                        <span className="text-cyan-400">#{block.blockNumber}</span>
+                        <span className="ml-2 text-amber-400">{new Date(block.timestamp).toLocaleTimeString()}</span>
+                        {timeDiff && <span className="float-right text-emerald-400">{timeDiff}</span>}
+                      </div>
+                    );
+                  });
+                })()}
+              </div>
+            </div>
+          )}
 
           <div className="mt-2 text-center text-[10px] text-slate-400">Press Ctrl/Cmd + D to toggle panel</div>
         </div>
