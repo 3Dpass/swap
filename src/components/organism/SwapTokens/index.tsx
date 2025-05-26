@@ -18,7 +18,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
-import { formatBalanceForMaxClick } from "../../../app/util/tokenBalance";
+import { formatBalanceForMaxClick, safeTokenBalanceClean } from "../../../app/util/tokenBalance";
 import SwitchArrow from "../../../assets/img/switch-arrow.svg?react";
 import { LottieMedium } from "../../../assets/loader";
 import { setTokenBalanceAfterAssetsSwapUpdate, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
@@ -478,7 +478,7 @@ const SwapTokens = () => {
         selectedTokens.tokenA.tokenSymbol !== nativeTokenSymbol &&
         tokenADecimal.gt(
           formatDecimalsFromToken(
-            selectedTokens.tokenA.tokenBalance.replace(/[, ]/g, ""),
+            safeTokenBalanceClean(selectedTokens.tokenA.tokenBalance),
             selectedTokens.tokenA.decimals
           )
         )
@@ -880,7 +880,7 @@ const SwapTokens = () => {
   }): TransactionValues => {
     const priceCalcType = PriceCalcType.NativeFromAsset;
 
-    const valueA = new Decimal(selectedTokens.tokenA.tokenBalance.replace(/[, ]/g, ""))
+    const valueA = new Decimal(safeTokenBalanceClean(selectedTokens.tokenA.tokenBalance))
       .minus(assetTokenMinBalance) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
     const formattedValueA = formatDecimalsFromToken(valueA, selectedTokens.tokenA.decimals);
@@ -918,7 +918,7 @@ const SwapTokens = () => {
     const priceCalcType = PriceCalcType.AssetFromNative;
 
     const valueA = new Decimal(
-      formatInputTokenValue(selectedTokens.tokenA.tokenBalance.replace(/[, ]/g, ""), selectedTokens.tokenA.decimals)
+      formatInputTokenValue(safeTokenBalanceClean(selectedTokens.tokenA.tokenBalance), selectedTokens.tokenA.decimals)
     )
       .minus(nativeTokenExistentialDeposit) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
@@ -951,7 +951,7 @@ const SwapTokens = () => {
     poolAsset: PoolCardProps;
   }): TransactionValues => {
     const priceCalcType = PriceCalcType.AssetFromAsset;
-    const valueA = new Decimal(selectedTokens.tokenA.tokenBalance.replace(/[, ]/g, ""))
+    const valueA = new Decimal(safeTokenBalanceClean(selectedTokens.tokenA.tokenBalance))
       .minus(assetTokenMinAmountA) // TODO: substract this later if it is required, eg after calculation
       .toFixed();
     const formattedValueA = formatDecimalsFromToken(valueA, selectedTokens.tokenA.decimals);

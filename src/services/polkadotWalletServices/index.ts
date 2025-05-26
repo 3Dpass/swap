@@ -61,10 +61,14 @@ const getWalletTokensBalance = async (api: ApiPromise, walletAddress: string) =>
         api.query.poscanAssets.metadata(cleanedTokenId),
       ]).then(([tokenAsset, assetTokenMetadata]) => {
         if (tokenAsset.toHuman()) {
+          const humanTokenAsset = tokenAsset.toHuman() as any;
           const resultObject = {
             tokenId: cleanedTokenId,
             assetTokenMetadata: assetTokenMetadata.toHuman(),
-            tokenAsset: tokenAsset.toHuman(),
+            tokenAsset: {
+              ...humanTokenAsset,
+              balance: (tokenAsset.toJSON() as any)?.balance || tokenAsset.toString(),
+            },
           };
           return resultObject;
         }
@@ -164,11 +168,15 @@ export const setTokenBalanceUpdate = async (
 
   if (tokenAsset.toHuman()) {
     const assetTokenMetadata = await api.query.poscanAssets.metadata(assetId);
+    const humanTokenAsset = tokenAsset.toHuman() as any;
 
     const resultObject = {
       tokenId: assetId,
       assetTokenMetadata: assetTokenMetadata.toHuman(),
-      tokenAsset: tokenAsset.toHuman(),
+      tokenAsset: {
+        ...humanTokenAsset,
+        balance: (tokenAsset.toJSON() as any)?.balance || tokenAsset.toString(),
+      },
     };
 
     const assetInPossession = assetsUpdated.findIndex((item: any) => item.tokenId === resultObject.tokenId);
@@ -217,16 +225,24 @@ export const setTokenBalanceAfterAssetsSwapUpdate = async (
   if (tokenAssetA.toHuman() && tokenAssetB.toHuman()) {
     const assetTokenAMetadata = await api.query.poscanAssets.metadata(assetAId);
     const assetTokenBMetadata = await api.query.poscanAssets.metadata(assetBId);
+    const humanTokenAssetA = tokenAssetA.toHuman() as any;
+    const humanTokenAssetB = tokenAssetB.toHuman() as any;
 
     const resultObjectA = {
       tokenId: assetAId,
       assetTokenMetadata: assetTokenAMetadata.toHuman(),
-      tokenAsset: tokenAssetA.toHuman(),
+      tokenAsset: {
+        ...humanTokenAssetA,
+        balance: (tokenAssetA.toJSON() as any)?.balance || tokenAssetA.toString(),
+      },
     };
     const resultObjectB = {
       tokenId: assetBId,
       assetTokenMetadata: assetTokenBMetadata.toHuman(),
-      tokenAsset: tokenAssetB.toHuman(),
+      tokenAsset: {
+        ...humanTokenAssetB,
+        balance: (tokenAssetB.toJSON() as any)?.balance || tokenAssetB.toString(),
+      },
     };
 
     const assetAInPossession = assetsUpdated.findIndex((item: any) => item.tokenId === resultObjectA.tokenId);

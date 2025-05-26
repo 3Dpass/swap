@@ -16,7 +16,7 @@ import {
   formatDecimalsFromToken,
   formatInputTokenValue,
 } from "../../../app/util/helper";
-import { formatBalanceForMaxClick } from "../../../app/util/tokenBalance";
+import { formatBalanceForMaxClick, safeTokenBalanceClean } from "../../../app/util/tokenBalance";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
 import { LottieMedium } from "../../../assets/loader";
@@ -345,7 +345,7 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
         };
       }
 
-      const assetTokenBalance = new Decimal(selectedTokenB.assetTokenBalance?.replace(/[, ]/g, ""));
+      const assetTokenBalance = new Decimal(safeTokenBalanceClean(selectedTokenB.assetTokenBalance));
       const assetTokenBalnceFormatted = formatDecimalsFromToken(assetTokenBalance, selectedTokenB.decimals);
       if (selectedAssetTokenNumber.gt(assetTokenBalnceFormatted)) {
         return {

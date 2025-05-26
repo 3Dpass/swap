@@ -2,7 +2,7 @@ import { FC } from "react";
 import classNames from "classnames";
 import { TokenProps } from "../../../app/types";
 import { ActionType } from "../../../app/types/enum";
-import { formatDecimalsFromToken } from "../../../app/util/helper";
+import { smartBalanceDisplay } from "../../../app/util/tokenBalance";
 import { useAppContext } from "../../../state";
 import CheckIcon from "../../../assets/img/selected-token-check.svg?react";
 import Modal from "../../atom/Modal";
@@ -94,20 +94,26 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
                   })}
                   onClick={() => handleSelectToken(item)}
                 >
-                  <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-6 w-6" />
-                  <div className="flex w-full justify-between gap-2">
-                    <div className="flex flex-col items-start">
-                      <div className="text-base font-medium">{item.assetTokenMetadata?.symbol}</div>
-                      <div className="text-small font-light text-gray-200">
-                        {formatDecimalsFromToken(item.tokenAsset?.balance || 0, item.assetTokenMetadata?.decimals)}{" "}
-                        Available
+                  <div className="flex w-full items-center justify-between">
+                    <div className="flex items-center gap-4">
+                      <div className="flex-shrink-0 drop-shadow-md">
+                        <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-16 w-16" />
+                      </div>
+                      <div className="flex flex-col items-start justify-center">
+                        <div className="font-unbounded-variable text-base font-bold text-gray-900 group-hover:text-white">
+                          {item.assetTokenMetadata?.name}
+                        </div>
+                        <div className="text-sm text-gray-500 group-hover:text-white">
+                          {item.assetTokenMetadata?.symbol}
+                        </div>
                       </div>
                     </div>
-                    {item.tokenId === getSelectedTokenId() ? (
-                      <span className="flex items-center justify-center">
-                        <CheckIcon />
-                      </span>
-                    ) : null}
+                    <div className="flex gap-1">
+                      <div className="font-mono text-sm font-medium text-gray-900 group-hover:text-white">
+                        {smartBalanceDisplay(item.tokenAsset?.balance || 0, item.assetTokenMetadata?.decimals)}
+                      </div>
+                      {item.tokenId === getSelectedTokenId() ? <CheckIcon /> : null}
+                    </div>
                   </div>
                 </button>
               </div>

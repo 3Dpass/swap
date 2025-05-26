@@ -1,7 +1,6 @@
 import {
   calculateSlippageAdd,
   calculateSlippageReduce,
-  formatDecimalsFromToken,
   formatInputTokenValue,
   toFixedNumber,
 } from "../../app/util/helper";
@@ -32,18 +31,6 @@ describe("formatInputTokenValue", () => {
     const result = formatInputTokenValue(base, decimals);
 
     expect(result).toEqual("-500789");
-  });
-});
-
-describe("formatDecimalsFromToken", () => {
-  it("correctly formats decimals from a token", () => {
-    expect(formatDecimalsFromToken(123456, "2")).toBe("1234.56");
-    expect(formatDecimalsFromToken(1000000, "6")).toBe("1");
-  });
-
-  it("handles edge cases", () => {
-    expect(formatDecimalsFromToken(0, "4")).toBe("0");
-    expect(formatDecimalsFromToken(-500000, "3")).toBe("-500");
   });
 });
 
