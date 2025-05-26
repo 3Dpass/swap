@@ -714,12 +714,10 @@ const SwapTokens = () => {
     // First close the modal
     dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: false });
 
-    // Then clear the data after a small delay to allow modal animation to complete
-    setTimeout(async () => {
-      dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: null });
-      dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: null });
-      setSwapSuccessfulReset(true);
-    }, 300); // Adjust this delay based on your modal animation duration
+    // Clear the data immediately to avoid state update issues
+    dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: null });
+    dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: null });
+    setSwapSuccessfulReset(true);
 
     if (api && tokenBalances) {
       await createPoolCardsArray(api, dispatch, pools, selectedAccount);
@@ -765,21 +763,18 @@ const SwapTokens = () => {
   };
 
   const onSwapSelectModal = (tokenData: any) => {
-    setSelectedTokens((prev) => {
-      const newTokens = {
-        ...prev,
-        [tokenSelectionModal]: tokenData,
-      };
+    // Update global state first
+    if (tokenSelectionModal === TokenSelection.TokenA) {
+      dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: tokenData });
+    } else if (tokenSelectionModal === TokenSelection.TokenB) {
+      dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: tokenData });
+    }
 
-      // Update global state
-      if (tokenSelectionModal === TokenSelection.TokenA) {
-        dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: tokenData });
-      } else if (tokenSelectionModal === TokenSelection.TokenB) {
-        dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: tokenData });
-      }
-
-      return newTokens;
-    });
+    // Then update local state
+    setSelectedTokens((prev) => ({
+      ...prev,
+      [tokenSelectionModal]: tokenData,
+    }));
   };
 
   const checkIfEnoughTokensInPool = () => {
