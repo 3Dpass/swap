@@ -1,8 +1,6 @@
-import classNames from "classnames";
 import Decimal from "decimal.js";
 import { t } from "i18next";
 import { useEffect, useMemo, useState } from "react";
-import { NumericFormat } from "react-number-format";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import { InputEditedProps, PoolCardProps, TokenDecimalsErrorProps, TokenProps } from "../../../app/types";
 import {
@@ -35,6 +33,9 @@ import {
   swapNativeForAssetExactIn,
   swapNativeForAssetExactOut,
 } from "../../../services/swapServices";
+import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
+import PriceDisplay from "../../molecule/PriceDisplay";
+import SlippageTolerance from "../../molecule/SlippageTolerance";
 import {
   PriceCalcType,
   SellMaxToken,
@@ -51,7 +52,7 @@ import TokenIcon from "../../atom/TokenIcon";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import ReviewTransactionModal from "../ReviewTransactionModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
-import SwapSelectTokenModal from "../SwapSelectTokenModal";
+import TokenSelectModal from "../TokenSelectModal";
 
 type SwapTokenProps = {
   tokenA: TokenProps;
@@ -136,9 +137,11 @@ const SwapTokens = () => {
     decimalsAllowed: 0,
   });
 
-  const [isTransactionTimeout, setIsTransactionTimeout] = useState<boolean>(false);
+  const isTransactionTimeout = useTransactionTimeout({
+    loading: swapLoading,
+    actionType: ActionType.SET_SWAP_LOADING,
+  });
   const [reviewModalOpen, setReviewModalOpen] = useState<boolean>(false);
-  const [waitingForTransaction, setWaitingForTransaction] = useState<NodeJS.Timeout>();
   const [priceImpact, setPriceImpact] = useState<string>("");
   const [assetBPriceOfOneAssetA, setAssetBPriceOfOneAssetA] = useState<string>("");
 
@@ -593,11 +596,7 @@ const SwapTokens = () => {
 
   const handleSwap = async () => {
     setReviewModalOpen(false);
-    if (waitingForTransaction) {
-      clearTimeout(waitingForTransaction);
-    }
     setSwapSuccessfulReset(false);
-    setIsTransactionTimeout(false);
     setIsMaxValueLessThenMinAmount(false);
     if (api) {
       const tokenA = formatInputTokenValue(tokenAValueForSwap.tokenValue, selectedTokens.tokenA.decimals);
@@ -721,6 +720,8 @@ const SwapTokens = () => {
 
   const closeSuccessModal = async () => {
     dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: false });
+    dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: null });
+    dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: null });
     setSwapSuccessfulReset(true);
     if (api) {
       await createPoolCardsArray(api, dispatch, pools, selectedAccount);
@@ -761,10 +762,19 @@ const SwapTokens = () => {
 
   const onSwapSelectModal = (tokenData: any) => {
     setSelectedTokens((prev) => {
-      return {
+      const newTokens = {
         ...prev,
         [tokenSelectionModal]: tokenData,
       };
+
+      // Update global state
+      if (tokenSelectionModal === TokenSelection.TokenA) {
+        dispatch({ type: ActionType.SET_SWAP_FROM_TOKEN, payload: tokenData });
+      } else if (tokenSelectionModal === TokenSelection.TokenB) {
+        dispatch({ type: ActionType.SET_SWAP_TO_TOKEN, payload: tokenData });
+      }
+
+      return newTokens;
     });
   };
 
@@ -1170,7 +1180,6 @@ const SwapTokens = () => {
   ]);
   useEffect(() => {
     setIsMaxValueLessThenMinAmount(false);
-    setIsTransactionTimeout(false);
     if (selectedTokenBValue.tokenValue === "") {
       setTokenAValueForSwap({ tokenValue: "0" });
       setTokenBValueForSwap({ tokenValue: "0" });
@@ -1200,6 +1209,8 @@ const SwapTokens = () => {
     if (swapSuccessfulReset) {
       setSelectedTokenAValue({ tokenValue: "" });
       setSelectedTokenBValue({ tokenValue: "" });
+      // Reset the flag after clearing the form
+      setSwapSuccessfulReset(false);
     }
   }, [swapSuccessfulReset]);
 
@@ -1235,22 +1246,7 @@ const SwapTokens = () => {
     });
   }, []);
 
-  useEffect(() => {
-    if (swapLoading) {
-      setWaitingForTransaction(
-        setTimeout(() => {
-          if (swapLoading) {
-            setIsTransactionTimeout(true);
-            dispatch({ type: ActionType.SET_SWAP_LOADING, payload: false });
-          }
-        }, 180000)
-      ); // 3 minutes 180000
-    } else {
-      if (waitingForTransaction) {
-        clearTimeout(waitingForTransaction);
-      }
-    }
-  }, [swapLoading]);
+  // Transaction timeout is now handled by useTransactionTimeout hook
 
   const calculatePriceImpact = async () => {
     if (api) {
@@ -1483,70 +1479,22 @@ const SwapTokens = () => {
         </button>
         <div className="mt-1 text-small">{swapGasFeesMessage}</div>
 
-        <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">
-          <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
-            <div className="flex">{t("tokenAmountInput.slippageTolerance")}</div>
-            <span>{slippageValue}%</span>
-          </div>
-          <div className="flex flex-row gap-2">
-            <div className="flex w-full basis-8/12 flex-row rounded-xl bg-white p-1 text-large font-normal text-gray-400">
-              <button
-                className={classNames("flex basis-1/2 justify-center rounded-lg px-4 py-3", {
-                  "bg-white": !slippageAuto,
-                  "bg-purple-100": slippageAuto,
-                })}
-                onClick={() => {
-                  setSlippageAuto(true);
-                  setSlippageValue(15);
-                }}
-                disabled={assetLoading || !selectedAccount.address}
-              >
-                {t("tokenAmountInput.auto")}
-              </button>
-
-              <button
-                className={classNames("flex basis-1/2 justify-center rounded-lg px-4 py-3", {
-                  "bg-white": slippageAuto,
-                  "bg-purple-100": !slippageAuto,
-                })}
-                onClick={() => setSlippageAuto(false)}
-                disabled={assetLoading || !selectedAccount.address}
-              >
-                {t("tokenAmountInput.custom")}
-              </button>
-            </div>
-            <div className="flex basis-1/3">
-              <div className="relative flex">
-                <NumericFormat
-                  value={slippageValue}
-                  isAllowed={(values) => {
-                    const { formattedValue, floatValue } = values;
-                    return formattedValue === "" || (floatValue !== undefined && floatValue <= 99);
-                  }}
-                  onValueChange={({ value }) => {
-                    setSlippageValue(parseInt(value) >= 0 ? parseInt(value) : 0);
-                  }}
-                  fixedDecimalScale={true}
-                  thousandSeparator={false}
-                  allowNegative={false}
-                  className="w-full rounded-lg bg-purple-100 p-2 text-large  text-gray-200 outline-none"
-                  disabled={slippageAuto || swapLoading || assetLoading || !selectedAccount.address}
-                />
-                <span className="absolute bottom-1/3 right-2 text-medium text-gray-100">%</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <SlippageTolerance
+          slippageAuto={slippageAuto}
+          slippageValue={slippageValue}
+          setSlippageAuto={setSlippageAuto}
+          setSlippageValue={setSlippageValue}
+          disabled={assetLoading}
+          loading={swapLoading}
+          accountConnected={!!selectedAccount.address}
+        />
         {selectedTokenAValue.tokenValue !== "" && selectedTokenBValue.tokenValue !== "" && (
           <>
-            {" "}
-            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-2 py-4">
-              <div className="flex w-full flex-row text-medium font-normal text-gray-200">
-                <span>
-                  1 {selectedTokens.tokenA.tokenSymbol} = {assetBPriceOfOneAssetA} {selectedTokens.tokenB.tokenSymbol}
-                </span>
-              </div>
-            </div>
+            <PriceDisplay
+              tokenASymbol={selectedTokens.tokenA.tokenSymbol}
+              tokenBSymbol={selectedTokens.tokenB.tokenSymbol}
+              price={assetBPriceOfOneAssetA}
+            />
             <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">
               <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
                 <div className="flex">Price impact</div>
@@ -1586,7 +1534,7 @@ const SwapTokens = () => {
           </>
         )}
 
-        <SwapSelectTokenModal
+        <TokenSelectModal
           open={tokenSelectionModal === TokenSelection.TokenA}
           title={t("modal.selectToken")}
           tokensData={availablePoolTokenA}
@@ -1596,9 +1544,10 @@ const SwapTokens = () => {
             onSwapSelectModal(tokenData);
           }}
           selected={selectedTokens.tokenA}
+          modalType="swap"
         />
 
-        <SwapSelectTokenModal
+        <TokenSelectModal
           open={tokenSelectionModal === TokenSelection.TokenB}
           title={t("modal.selectToken")}
           tokensData={availablePoolTokenB}
@@ -1608,6 +1557,7 @@ const SwapTokens = () => {
             onSwapSelectModal(tokenData);
           }}
           selected={selectedTokens.tokenB}
+          modalType="swap"
         />
 
         <Button
@@ -1623,16 +1573,25 @@ const SwapTokens = () => {
           onClose={closeSuccessModal}
           contentTitle={"Successfully swapped"}
           tokenA={{
-            symbol: selectedTokens.tokenA.tokenSymbol,
+            symbol: state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol,
             value: swapExactInTokenAmount.toString(),
-            icon: <TokenIcon tokenSymbol={selectedTokens.tokenA.tokenSymbol} className="h-8 w-8" />,
+            icon: (
+              <TokenIcon
+                tokenSymbol={state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol}
+                className="h-16 w-16"
+              />
+            ),
           }}
           tokenB={{
-            symbol: selectedTokens.tokenB.tokenSymbol,
+            symbol: state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol,
             value: swapExactOutTokenAmount.toString(),
-            icon: <TokenIcon tokenSymbol={selectedTokens.tokenB.tokenSymbol} className="h-8 w-8" />,
+            icon: (
+              <TokenIcon
+                tokenSymbol={state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol}
+                className="h-16 w-16"
+              />
+            ),
           }}
-          actionLabel="Swapped"
         />
         <ReviewTransactionModal
           open={reviewModalOpen}

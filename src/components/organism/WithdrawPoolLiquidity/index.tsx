@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
+import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { LpTokenAsset } from "../../../app/types";
 import {
@@ -31,7 +32,7 @@ import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import AmountPercentage from "../../molecule/AmountPercentage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
-import PoolSelectTokenModal from "../PoolSelectTokenModal";
+import TokenSelectModal from "../TokenSelectModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
 import ReviewTransactionModal from "../ReviewTransactionModal";
 
@@ -93,8 +94,10 @@ const WithdrawPoolLiquidity = () => {
   const [withdrawAmountPercentage, setWithdrawAmountPercentage] = useState<number>(100);
   const [maxPercentage, setMaxPercentage] = useState<number>(100);
   const [reviewModalOpen, setReviewModalOpen] = useState<boolean>(false);
-  const [isTransactionTimeout, setIsTransactionTimeout] = useState<boolean>(false);
-  const [waitingForTransaction, setWaitingForTransaction] = useState<NodeJS.Timeout>();
+  const isTransactionTimeout = useTransactionTimeout({
+    loading: withdrawLiquidityLoading,
+    actionType: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING,
+  });
   const [assetBPriceOfOneAssetA, setAssetBPriceOfOneAssetA] = useState<string>("");
   const [priceImpact, setPriceImpact] = useState<string>("");
 
@@ -127,10 +130,6 @@ const WithdrawPoolLiquidity = () => {
   const handlePool = async () => {
     setReviewModalOpen(false);
     const lpToken = Math.floor(Number(lpTokensAmountToBurn) * (withdrawAmountPercentage / 100)).toString();
-    if (waitingForTransaction) {
-      clearTimeout(waitingForTransaction);
-    }
-    setIsTransactionTimeout(false);
 
     try {
       if (api) {
@@ -417,22 +416,7 @@ const WithdrawPoolLiquidity = () => {
     getNativeAndAssetTokensFromPool();
   }, [slippageValue, selectedTokenB.assetTokenId, selectedTokenNativeValue?.tokenValue, withdrawAmountPercentage]);
 
-  useEffect(() => {
-    if (withdrawLiquidityLoading) {
-      setWaitingForTransaction(
-        setTimeout(() => {
-          if (withdrawLiquidityLoading) {
-            setIsTransactionTimeout(true);
-            dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING, payload: false });
-          }
-        }, 180000)
-      ); // 3 minutes 180000
-    } else {
-      if (waitingForTransaction) {
-        clearTimeout(waitingForTransaction);
-      }
-    }
-  }, [withdrawLiquidityLoading]);
+  // Transaction timeout is now handled by useTransactionTimeout hook
 
   return (
     <div className="flex w-full max-w-[460px] flex-col gap-4">
@@ -596,11 +580,17 @@ const WithdrawPoolLiquidity = () => {
         >
           {withdrawLiquidityLoading ? <LottieMedium /> : getWithdrawButtonProperties.label}
         </Button>
-        <PoolSelectTokenModal
-          onSelect={setSelectedTokenB}
+        <TokenSelectModal
+          onSelect={(tokenData) => {
+            if ("assetTokenId" in tokenData) {
+              setSelectedTokenB(tokenData);
+            }
+          }}
           onClose={() => setIsModalOpen(false)}
           open={isModalOpen}
           title={t("button.selectToken")}
+          selected={selectedTokenB}
+          modalType="pool"
         />
         <ReviewTransactionModal
           open={reviewModalOpen}
@@ -640,7 +630,6 @@ const WithdrawPoolLiquidity = () => {
           open={successModalOpen}
           onClose={closeSuccessModal}
           contentTitle={t("modal.removeFromPool.successfulWithdrawal")}
-          actionLabel={t("modal.removeFromPool.withdrawal")}
           tokenA={{
             value: exactNativeTokenWithdraw,
             symbol: selectedTokenA.nativeTokenSymbol,

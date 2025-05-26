@@ -1,10 +1,10 @@
 import { FC } from "react";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
-import ArrowLeft from "../../../assets/img/arrow-left.svg?react";
 import ArrowRight from "../../../assets/img/arrow-right.svg?react";
 import OpenLinkArrow from "../../../assets/img/open-link-arrow.svg?react";
 import { useAppContext } from "../../../state";
 import Modal from "../../atom/Modal";
+import { formatCompactNumber } from "../../../app/util/helper";
 
 interface SwapAndPoolSuccessModalProps {
   open: boolean;
@@ -19,57 +19,48 @@ interface SwapAndPoolSuccessModalProps {
     symbol: string;
     icon: React.ReactNode;
   };
-  actionLabel: string;
   onClose: () => void;
 }
 
-const SwapAndPoolSuccessModal: FC<SwapAndPoolSuccessModalProps> = ({
-  open,
-  contentTitle,
-  actionLabel,
-  tokenA,
-  tokenB,
-  onClose,
-}) => {
+const SwapAndPoolSuccessModal: FC<SwapAndPoolSuccessModalProps> = ({ open, contentTitle, tokenA, tokenB, onClose }) => {
   const { assethubSubscanUrl, nativeTokenSymbol } = useGetNetwork();
   const { state } = useAppContext();
   const { blockHashFinalized } = state;
+
   return (
     <div>
       <Modal isOpen={open} onClose={onClose}>
-        <div className="flex min-w-[427px] flex-col">
-          <div className="font-unbounded-variable text-heading-6">{contentTitle}</div>
-          <div className="my-8 flex flex-col items-center justify-center gap-3">
-            <div className="flex items-center justify-center gap-2 font-unbounded-variable">
-              <div className="w-12 flex-shrink-0">{tokenA.icon}</div>
-              {tokenA.symbol}
-              <ArrowLeft />
-              <ArrowRight />
-              <div className="w-12 flex-shrink-0">{tokenB.symbol}</div>
-              {tokenB.icon}
-            </div>
-            <div className="flex w-full justify-center text-gray-200">
-              <div>{actionLabel}</div>
-            </div>
-            <div className="flex items-center justify-center gap-2 font-unbounded-variable text-medium">
-              <div className="w-12 flex-shrink-0">{tokenA.icon}</div>
-              {tokenA.value}
-              <div className="w-12 flex-shrink-0">{tokenA.symbol}</div>
-              <ArrowRight />
-              <div className="w-12 flex-shrink-0">{tokenB.icon}</div>
-              {tokenB.value}
-              <div className="w-12 flex-shrink-0">{tokenB.symbol}</div>
+        <div className="flex min-w-[500px] flex-col">
+          <div className="mb-2 text-center font-unbounded-variable text-heading-5">{contentTitle}</div>
+          <div className="my-8 flex flex-col items-center justify-center gap-4">
+            <div className="flex items-center justify-center gap-4 font-unbounded-variable">
+              <div className="flex items-center gap-3">
+                <div className="h-16 w-16 flex-shrink-0">{tokenA.icon}</div>
+                <div className="flex flex-col items-start">
+                  <span className="text-3xl font-bold">{formatCompactNumber(tokenA.value || "0")}</span>
+                  <span className="text-lg text-gray-400">{tokenA.symbol}</span>
+                </div>
+              </div>
+              <ArrowRight className="mx-4 h-8 w-8" />
+              <div className="flex items-center gap-3">
+                <div className="h-16 w-16 flex-shrink-0">{tokenB.icon}</div>
+                <div className="flex flex-col items-start">
+                  <span className="text-3xl font-bold">{formatCompactNumber(tokenB.value || "0")}</span>
+                  <span className="text-lg text-gray-400">{tokenB.symbol}</span>
+                </div>
+              </div>
             </div>
           </div>
-          <div className="flex flex-row items-center justify-center gap-1 font-unbounded-variable text-medium underline">
+          <div className="mt-4 flex flex-row items-center justify-center gap-2 font-unbounded-variable text-base">
             <a
               href={`${assethubSubscanUrl}/block${nativeTokenSymbol == "WND" ? "s" : ""}/${blockHashFinalized}`}
               target="_blank"
               rel="noreferrer"
+              className="flex items-center gap-1 text-blue-500 underline hover:text-blue-600"
             >
               View in block explorer
+              <OpenLinkArrow className="h-5 w-5" />
             </a>
-            <OpenLinkArrow />
           </div>
         </div>
       </Modal>

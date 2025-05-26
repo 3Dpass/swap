@@ -5,6 +5,7 @@ import { useEffect, useMemo, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import { useNavigate } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
+import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { TokenDecimalsErrorProps } from "../../../app/types";
 import { ActionType, ButtonVariants, TransactionTypes } from "../../../app/types/enum";
@@ -27,7 +28,7 @@ import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import AddPoolLiquidity from "../AddPoolLiquidity";
-import PoolSelectTokenModal from "../PoolSelectTokenModal";
+import TokenSelectModal from "../TokenSelectModal";
 import ReviewTransactionModal from "../ReviewTransactionModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
 
@@ -102,8 +103,10 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
     decimalsAllowed: 0,
   });
 
-  const [isTransactionTimeout, setIsTransactionTimeout] = useState<boolean>(false);
-  const [waitingForTransaction, setWaitingForTransaction] = useState<NodeJS.Timeout>();
+  const isTransactionTimeout = useTransactionTimeout({
+    loading: createPoolLoading || addLiquidityLoading,
+    actionType: ActionType.SET_CREATE_POOL_LOADING,
+  });
 
   const selectedNativeTokenNumber = new Decimal(selectedTokenNativeValue?.tokenValue || 0);
   const selectedAssetTokenNumber = new Decimal(selectedTokenAssetValue?.tokenValue || 0);
@@ -113,10 +116,6 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
   };
 
   const handlePool = async () => {
-    if (waitingForTransaction) {
-      clearTimeout(waitingForTransaction);
-    }
-    setIsTransactionTimeout(false);
     if (api && selectedTokenAssetValue && selectedTokenNativeValue) {
       const nativeTokenValue = formatInputTokenValue(selectedNativeTokenNumber, selectedTokenA?.nativeTokenDecimals)
         .toLocaleString()
@@ -381,22 +380,7 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
     dispatch({ type: ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_POOLS, payload: false });
   }, [selectedTokenB.assetTokenId, selectedTokenNativeValue, selectedTokenAssetValue]);
 
-  useEffect(() => {
-    if (createPoolLoading) {
-      setWaitingForTransaction(
-        setTimeout(() => {
-          if (createPoolLoading) {
-            setIsTransactionTimeout(true);
-            dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: false });
-          }
-        }, 180000)
-      ); // 3 minutes 180000
-    } else {
-      if (waitingForTransaction) {
-        clearTimeout(waitingForTransaction);
-      }
-    }
-  }, [createPoolLoading]);
+  // Transaction timeout is now handled by useTransactionTimeout hook
 
   const onMaxClickTokenA = () => {
     const formattedBalance = formatBalanceForMaxClick(selectedTokenA.tokenBalance, selectedTokenA.nativeTokenDecimals);
@@ -530,12 +514,17 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
                 handlePool();
               }}
             />
-            <PoolSelectTokenModal
-              onSelect={setSelectedTokenB}
+            <TokenSelectModal
+              onSelect={(tokenData) => {
+                if ("assetTokenId" in tokenData) {
+                  setSelectedTokenB(tokenData);
+                }
+              }}
               onClose={() => setIsModalOpen(false)}
               open={isModalOpen}
               title={t("button.selectToken")}
               selected={selectedTokenB}
+              modalType="pool"
             />
 
             <SwapAndPoolSuccessModal
@@ -552,7 +541,6 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
                 symbol: selectedTokenB.tokenSymbol,
                 icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
               }}
-              actionLabel={t("modal.added")}
             />
           </div>
           <WarningMessage

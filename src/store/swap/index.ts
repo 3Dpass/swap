@@ -9,6 +9,8 @@ export const initialSwapState: SwapState = {
   swapExactInTokenAmount: "0",
   swapExactOutTokenAmount: "0",
   isTokenCanNotCreateWarningSwap: false,
+  swapFromToken: null,
+  swapToToken: null,
 };
 
 export const swapReducer = (state: SwapState, action: SwapAction): SwapState => {
@@ -27,6 +29,10 @@ export const swapReducer = (state: SwapState, action: SwapAction): SwapState => 
       return { ...state, swapExactOutTokenAmount: action.payload };
     case ActionType.SET_TOKEN_CAN_NOT_CREATE_WARNING_SWAP:
       return { ...state, isTokenCanNotCreateWarningSwap: action.payload };
+    case ActionType.SET_SWAP_FROM_TOKEN:
+      return { ...state, swapFromToken: action.payload };
+    case ActionType.SET_SWAP_TO_TOKEN:
+      return { ...state, swapToToken: action.payload };
     default:
       return state;
   }

@@ -6,7 +6,7 @@ import { LpTokenAsset } from "../../app/types";
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
 import { ADD_LIQUIDITY_TO_EXISTING, REMOVE_LIQUIDITY_FROM_EXISTING } from "../../app/router/routes";
-import { urlTo } from "../../app/util/helper";
+import { urlTo, formatCompactNumber } from "../../app/util/helper";
 import { useAppContext } from "../../state";
 
 type PoolDataCardProps = {
@@ -43,26 +43,6 @@ const PoolDataCard = ({
 
   // Reconstruct token pair name with correct order
   const displayTokenPair = `${firstTokenSymbol}-${secondTokenSymbol}`;
-
-  const formatCompactNumber = (value: string | number): string => {
-    const num = typeof value === "string" ? parseFloat(value.replace(/[, ]/g, "")) : value;
-
-    if (isNaN(num) || num === 0) return "0";
-
-    const absNum = Math.abs(num);
-
-    if (absNum >= 1000000000) {
-      return (num / 1000000000).toFixed(1).replace(/\.0$/, "") + "B";
-    } else if (absNum >= 1000000) {
-      return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
-    } else if (absNum >= 1000) {
-      return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
-    } else if (absNum >= 1) {
-      return num.toFixed(2).replace(/\.?0+$/, "");
-    } else {
-      return num.toFixed(4).replace(/\.?0+$/, "");
-    }
-  };
 
   const onDepositClick = () => {
     navigate(urlTo(ADD_LIQUIDITY_TO_EXISTING, { id: assetTokenId }), {

@@ -98,6 +98,26 @@ export const toFixedNumber = (number: number) => {
   return decimalX.toNumber();
 };
 
+export const formatCompactNumber = (value: string | number): string => {
+  const num = typeof value === "string" ? parseFloat(value.replace(/[, ]/g, "")) : value;
+
+  if (isNaN(num) || num === 0) return "0";
+
+  const absNum = Math.abs(num);
+
+  if (absNum >= 1000000000) {
+    return (num / 1000000000).toFixed(1).replace(/\.0$/, "") + "B";
+  } else if (absNum >= 1000000) {
+    return (num / 1000000).toFixed(1).replace(/\.0$/, "") + "M";
+  } else if (absNum >= 1000) {
+    return (num / 1000).toFixed(1).replace(/\.0$/, "") + "K";
+  } else if (absNum >= 1) {
+    return num.toFixed(2).replace(/\.?0+$/, "");
+  } else {
+    return num.toFixed(4).replace(/\.?0+$/, "");
+  }
+};
+
 /**
  * Accepts a string input and converts it to the base unit
  * @param input format like "110.4089 µKSM", "1.9200 mWND" or "0.001919 WND"

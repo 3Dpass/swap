@@ -88,7 +88,24 @@ export const swapNativeForAssetExactIn = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+          const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+
+          if (swapExecutedEvent && swapExecutedEvent.length > 0) {
+            const amountIn = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountIn.replace(/[, ]/g, "")),
+              tokenADecimals
+            );
+            const amountOut = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountOut.replace(/[, ]/g, "")),
+              tokenBDecimals
+            );
+
+            dotAcpToast.success(`Successfully swapped ${amountIn} tokens for ${amountOut} tokens`, {
+              style: {
+                maxWidth: "500px",
+              },
+            });
+          }
 
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
@@ -176,7 +193,24 @@ export const swapNativeForAssetExactOut = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+          const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+
+          if (swapExecutedEvent && swapExecutedEvent.length > 0) {
+            const amountIn = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountIn.replace(/[, ]/g, "")),
+              tokenADecimals
+            );
+            const amountOut = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountOut.replace(/[, ]/g, "")),
+              tokenBDecimals
+            );
+
+            dotAcpToast.success(`Successfully swapped ${amountIn} tokens for ${amountOut} tokens`, {
+              style: {
+                maxWidth: "500px",
+              },
+            });
+          }
 
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
@@ -264,7 +298,24 @@ export const swapAssetForAssetExactIn = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+          const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+
+          if (swapExecutedEvent && swapExecutedEvent.length > 0) {
+            const amountIn = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountIn.replace(/[, ]/g, "")),
+              tokenADecimals
+            );
+            const amountOut = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountOut.replace(/[, ]/g, "")),
+              tokenBDecimals
+            );
+
+            dotAcpToast.success(`Successfully swapped ${amountIn} tokens for ${amountOut} tokens`, {
+              style: {
+                maxWidth: "500px",
+              },
+            });
+          }
 
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,
@@ -352,7 +403,24 @@ export const swapAssetForAssetExactOut = async (
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
         if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
-          exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+          const swapExecutedEvent = exactSwapAmounts(response.toHuman(), tokenADecimals, tokenBDecimals, dispatch);
+
+          if (swapExecutedEvent && swapExecutedEvent.length > 0) {
+            const amountIn = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountIn.replace(/[, ]/g, "")),
+              tokenADecimals
+            );
+            const amountOut = formatDecimalsFromToken(
+              parseFloat(swapExecutedEvent[0].event.data.amountOut.replace(/[, ]/g, "")),
+              tokenBDecimals
+            );
+
+            dotAcpToast.success(`Successfully swapped ${amountIn} tokens for ${amountOut} tokens`, {
+              style: {
+                maxWidth: "500px",
+              },
+            });
+          }
 
           dispatch({
             type: ActionType.SET_BLOCK_HASH_FINALIZED,

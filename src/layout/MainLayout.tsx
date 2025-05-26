@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import SeoHelmet from "../components/atom/SeoHelmet";
 import Footer from "../components/organism/Footer";
 import HeaderTopNav from "../components/organism/HeaderTopNav";
+import DebugPanel from "../components/organism/DebugPanel";
 
 const MainLayout = () => {
   return (
@@ -12,6 +13,7 @@ const MainLayout = () => {
         <Outlet />
       </main>
       <Footer />
+      <DebugPanel />
     </div>
   );
 };
