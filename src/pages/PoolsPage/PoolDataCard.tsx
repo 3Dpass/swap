@@ -21,7 +21,6 @@ type PoolDataCardProps = {
 };
 
 const PoolDataCard = ({
-  tokenPair,
   asset1Tokens,
   asset1TokenSymbol,
   asset2Tokens,
@@ -33,6 +32,17 @@ const PoolDataCard = ({
   const navigate = useNavigate();
   const { state } = useAppContext();
   const { tokenBalances, selectedAccount } = state;
+
+  // Reorder tokens so native token (P3D) is always second
+  const isAsset1Native = asset1TokenSymbol === "P3D";
+
+  const firstTokenSymbol = isAsset1Native ? asset2TokenSymbol : asset1TokenSymbol;
+  const secondTokenSymbol = isAsset1Native ? asset1TokenSymbol : asset2TokenSymbol;
+  const firstTokenAmount = isAsset1Native ? asset2Tokens : asset1Tokens;
+  const secondTokenAmount = isAsset1Native ? asset1Tokens : asset2Tokens;
+
+  // Reconstruct token pair name with correct order
+  const displayTokenPair = `${firstTokenSymbol}-${secondTokenSymbol}`;
 
   const formatCompactNumber = (value: string | number): string => {
     const num = typeof value === "string" ? parseFloat(value.replace(/[, ]/g, "")) : value;
@@ -84,15 +94,15 @@ const PoolDataCard = ({
       {/* Header with token pair */}
       <div className="flex items-center gap-3 rounded-t-2xl p-4 pb-2">
         <div className="relative flex flex-shrink-0 items-center">
-          <div className="relative z-10 flex h-12 w-12 items-center justify-center rounded-full bg-white p-0.5 shadow-md">
-            <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-11 w-11" />
+          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1">
+            <TokenIcon tokenSymbol={firstTokenSymbol} className="h-14 w-14" />
           </div>
-          <div className="relative z-0 -ml-3 flex h-12 w-12 items-center justify-center rounded-full bg-white p-0.5 shadow-md">
-            <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-11 w-11" />
+          <div className="relative z-0 -ml-4 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1">
+            <TokenIcon tokenSymbol={secondTokenSymbol} className="h-14 w-14" />
           </div>
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900">{tokenPair}</h3>
+          <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900">{displayTokenPair}</h3>
           <p className="text-sm text-gray-500">Liquidity Pool</p>
         </div>
       </div>
@@ -105,28 +115,28 @@ const PoolDataCard = ({
           </h4>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset1TokenSymbol} className="h-6 w-6" />
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5">
+                <TokenIcon tokenSymbol={firstTokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
                   <p className="truncate font-mono text-sm font-medium text-gray-900">
-                    {formatCompactNumber(asset1Tokens)}
+                    {formatCompactNumber(firstTokenAmount)}
                   </p>
-                  <p className="flex-shrink-0 text-xs text-gray-500">{asset1TokenSymbol}</p>
+                  <p className="flex-shrink-0 text-xs text-gray-500">{firstTokenSymbol}</p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 shadow-sm">
-                <TokenIcon tokenSymbol={asset2TokenSymbol} className="h-6 w-6" />
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5">
+                <TokenIcon tokenSymbol={secondTokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
                   <p className="truncate font-mono text-sm font-medium text-gray-900">
-                    {formatCompactNumber(asset2Tokens)}
+                    {formatCompactNumber(secondTokenAmount)}
                   </p>
-                  <p className="flex-shrink-0 text-xs text-gray-500">{asset2TokenSymbol}</p>
+                  <p className="flex-shrink-0 text-xs text-gray-500">{secondTokenSymbol}</p>
                 </div>
               </div>
             </div>
