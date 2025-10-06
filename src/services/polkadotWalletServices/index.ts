@@ -14,6 +14,7 @@ import dotAcpToast from "../../app/util/toast";
 import { PoolAction } from "../../store/pools/interface";
 import { WalletAction } from "../../store/wallet/interface";
 import { getAllLiquidityPoolsTokensMetadata } from "../poolServices";
+import { type UnifiedWalletAccount, toStandardWalletAccount } from "../metamaskServices";
 
 // Singleton API instance and initialization promise
 let apiInstance: ApiPromise | null = null;
@@ -326,18 +327,36 @@ export const handleDisconnect = (dispatch: Dispatch<WalletAction | PoolAction>) 
 export const connectWalletAndFetchBalance = async (
   dispatch: Dispatch<WalletAction | PoolAction>,
   api: any,
-  account: WalletAccount,
+  account: UnifiedWalletAccount,
   showToast: boolean = true
 ) => {
   dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: true });
-  const wallet = getWalletBySource(account.wallet?.extensionName);
-  wallet?.enable("P3D-ACP");
-  dispatch({ type: ActionType.SET_SELECTED_ACCOUNT, payload: account });
-  LocalStorage.set("wallet-connected", account);
-  dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: false });
-  try {
-    await setTokenBalance(dispatch, api, account, showToast);
-  } catch (error) {
-    dotAcpToast.error(`Wallet connection error: ${error}`);
+
+  // Convert to standard wallet account for compatibility
+  const standardAccount = toStandardWalletAccount(account);
+
+  // Handle MetaMask accounts differently
+  if ("walletType" in account && account.walletType === "metamask") {
+    // For MetaMask, we don't need to enable a wallet extension
+    dispatch({ type: ActionType.SET_SELECTED_ACCOUNT, payload: standardAccount });
+    LocalStorage.set("wallet-connected", standardAccount);
+    dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: false });
+    try {
+      await setTokenBalance(dispatch, api, standardAccount, showToast);
+    } catch (error) {
+      dotAcpToast.error(`MetaMask connection error: ${error}`);
+    }
+  } else {
+    // Handle regular Substrate wallets
+    const wallet = getWalletBySource(standardAccount.wallet?.extensionName);
+    wallet?.enable("P3D-ACP");
+    dispatch({ type: ActionType.SET_SELECTED_ACCOUNT, payload: standardAccount });
+    LocalStorage.set("wallet-connected", standardAccount);
+    dispatch({ type: ActionType.SET_WALLET_CONNECT_LOADING, payload: false });
+    try {
+      await setTokenBalance(dispatch, api, standardAccount, showToast);
+    } catch (error) {
+      dotAcpToast.error(`Wallet connection error: ${error}`);
+    }
   }
 };

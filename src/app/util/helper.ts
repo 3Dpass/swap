@@ -18,12 +18,26 @@ export const reduceAddress = (
   lengthRight: number,
   ss58Format?: number
 ) => {
-  if (address) {
-    // Format address with ss58Format if provided
-    const formattedAddress = ss58Format !== undefined ? encodeAddress(address, ss58Format) : address;
-    const addressLeftPart = formattedAddress.substring(0, lengthLeft);
-    const addressRightPart = formattedAddress.substring(formattedAddress.length - lengthRight);
-    return `${addressLeftPart}...${addressRightPart}`;
+  if (address && address.trim()) {
+    try {
+      // Format address with ss58Format if provided
+      const formattedAddress = ss58Format !== undefined ? encodeAddress(address, ss58Format) : address;
+      const addressLeftPart = formattedAddress.substring(0, lengthLeft);
+      const addressRightPart = formattedAddress.substring(formattedAddress.length - lengthRight);
+      return `${addressLeftPart}...${addressRightPart}`;
+    } catch (error) {
+      // If encoding fails, return the original address truncated
+      console.warn("Failed to encode address:", {
+        error: error instanceof Error ? error.message : String(error),
+        address: address,
+        addressLength: address?.length,
+        addressType: typeof address,
+        ss58Format: ss58Format,
+      });
+      const addressLeftPart = address.substring(0, lengthLeft);
+      const addressRightPart = address.substring(address.length - lengthRight);
+      return `${addressLeftPart}...${addressRightPart}`;
+    }
   }
   return t("wallet.notConnected");
 };

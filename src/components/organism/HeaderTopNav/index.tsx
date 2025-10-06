@@ -10,6 +10,7 @@ import {
   getSupportedWallets,
   handleDisconnect,
 } from "../../../services/polkadotWalletServices";
+import { type UnifiedWalletAccount } from "../../../services/metamaskServices";
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button/index.tsx";
 import { t } from "i18next";
@@ -44,7 +45,7 @@ const HeaderTopNav = () => {
     setWalletConnectOpen(true);
   };
 
-  const handleConnect = async (account: WalletAccount) => {
+  const handleConnect = async (account: UnifiedWalletAccount) => {
     try {
       setWalletConnectOpen(false);
       await connectWalletAndFetchBalance(dispatch, api, account);
@@ -72,8 +73,11 @@ const HeaderTopNav = () => {
   };
 
   useEffect(() => {
-    if (walletConnected) {
+    if (walletConnected && walletConnected.address) {
       setWalletAccount(walletConnected);
+    } else if (walletConnected && !walletConnected.address) {
+      // Clear invalid wallet data from localStorage
+      LocalStorage.remove("wallet-connected");
     }
   }, [walletConnected?.address]);
 
@@ -107,7 +111,7 @@ const HeaderTopNav = () => {
       );
     }
 
-    if (walletConnected) {
+    if (walletConnected && walletAccount?.address) {
       return (
         <div className="flex items-center gap-2 sm:gap-4">
           <div className="hidden flex-col items-end text-gray-300 sm:flex">
