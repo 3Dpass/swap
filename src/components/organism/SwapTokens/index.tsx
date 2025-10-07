@@ -26,6 +26,9 @@ import {
   swapNativeForAssetExactOut,
 } from "../../../services/swapServices";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
+import { useEVMSwap } from "../../../app/hooks/useEVMSwap";
+import { isMetamaskAccount } from "../../../services/metamaskServices";
+import { createSwapParamsWithSafeDeadline } from "../../../services/evmSwapServices";
 import PriceDisplay from "../../molecule/PriceDisplay";
 import SlippageTolerance from "../../molecule/SlippageTolerance";
 import {
@@ -66,6 +69,9 @@ type TokenSelectedProps = {
 const SwapTokens = () => {
   const { state, dispatch } = useAppContext();
   const { nativeTokenSymbol, assethubSubscanUrl } = useGetNetwork();
+
+  // EVM swap hook for MetaMask transactions
+  const { executeSwap: executeEVMSwap, canPerformEVMSwap, lastSwapEvent } = useEVMSwap();
 
   const {
     tokenBalances,
@@ -138,6 +144,67 @@ const SwapTokens = () => {
   const [assetBPriceOfOneAssetA, setAssetBPriceOfOneAssetA] = useState<string>("");
 
   const [isMaxValueLessThenMinAmount, setIsMaxValueLessThenMinAmount] = useState<boolean>(false);
+
+  // Helper function to get swap amounts from EVM swap event
+  const getEVMSwapAmounts = () => {
+    if (!lastSwapEvent) {
+      return { exactInAmount: "0", exactOutAmount: "0" };
+    }
+
+    // For EVM swaps, we need to determine which amounts correspond to which tokens
+    // The swap event contains amount0In, amount1In, amount0Out, amount1Out
+    // We need to map these to our tokenA and tokenB based on the swap direction
+
+    const { amount0In, amount1In, amount0Out, amount1Out } = lastSwapEvent;
+
+    // Determine which token is which based on the swap direction
+    // For exact input swaps: we know the input amount and get the output amount
+    // For exact output swaps: we know the output amount and get the input amount
+
+    let inputAmount, outputAmount;
+
+    if (inputEdited.inputType === InputEditedType.exactIn) {
+      // Exact input: tokenA is input, tokenB is output
+      // Find the non-zero input amount (this is our tokenA amount)
+      // Find the non-zero output amount (this is our tokenB amount)
+      inputAmount = amount0In !== "0" ? amount0In : amount1In;
+      outputAmount = amount0Out !== "0" ? amount0Out : amount1Out;
+    } else {
+      // Exact output: tokenB is input, tokenA is output
+      // Find the non-zero input amount (this is our tokenB amount)
+      // Find the non-zero output amount (this is our tokenA amount)
+      inputAmount = amount0In !== "0" ? amount0In : amount1In;
+      outputAmount = amount0Out !== "0" ? amount0Out : amount1Out;
+    }
+
+    // Format the amounts using the existing helper function
+    // Pass string amounts directly to formatDecimalsFromToken (it uses Decimal.js internally)
+    const formattedInputAmount = formatDecimalsFromToken(
+      inputAmount,
+      inputEdited.inputType === InputEditedType.exactIn
+        ? selectedTokens.tokenA.decimals
+        : selectedTokens.tokenB.decimals
+    );
+
+    const formattedOutputAmount = formatDecimalsFromToken(
+      outputAmount,
+      inputEdited.inputType === InputEditedType.exactIn
+        ? selectedTokens.tokenB.decimals
+        : selectedTokens.tokenA.decimals
+    );
+
+    if (inputEdited.inputType === InputEditedType.exactIn) {
+      return {
+        exactInAmount: formattedInputAmount,
+        exactOutAmount: formattedOutputAmount,
+      };
+    } else {
+      return {
+        exactInAmount: formattedOutputAmount, // tokenA amount
+        exactOutAmount: formattedInputAmount, // tokenB amount
+      };
+    }
+  };
 
   const nativeToken = {
     tokenId: "",
@@ -586,10 +653,57 @@ const SwapTokens = () => {
     }
   };
 
+  const handleEVMSwap = async () => {
+    try {
+      const tokenA = formatInputTokenValue(tokenAValueForSwap.tokenValue, selectedTokens.tokenA.decimals);
+      const tokenB = formatInputTokenValue(tokenBValueForSwap.tokenValue, selectedTokens.tokenB.decimals);
+
+      // Determine asset IDs
+      const assetIn = selectedTokens.tokenA.tokenSymbol === nativeTokenSymbol ? "0" : selectedTokens.tokenA.tokenId;
+      const assetOut = selectedTokens.tokenB.tokenSymbol === nativeTokenSymbol ? "0" : selectedTokens.tokenB.tokenId;
+
+      if (!assetIn || !assetOut) {
+        throw new Error("Invalid asset IDs for swap");
+      }
+
+      // Prepare swap parameters
+      const swapParams = await createSwapParamsWithSafeDeadline({
+        assetIn: assetIn.toString(),
+        assetOut: assetOut.toString(),
+        amount: inputEdited.inputType === InputEditedType.exactIn ? tokenA : tokenB,
+        minReceive: inputEdited.inputType === InputEditedType.exactIn ? tokenB : tokenA,
+        recipient: isMetamaskAccount(selectedAccount) ? selectedAccount.evmAddress : selectedAccount.address,
+        isExactInput: inputEdited.inputType === InputEditedType.exactIn,
+      }); // Uses default 10 minutes deadline from blockchain time
+
+      console.log("Executing EVM swap with parameters:", swapParams);
+
+      // Execute the EVM swap
+      const success = await executeEVMSwap(swapParams);
+
+      if (success) {
+        // Update token balances after successful swap
+        // Note: Token balance update after EVM swap is handled by MetaMask
+        // No need to call setTokenBalanceAfterAssetsSwapUpdate for EVM transactions
+        dispatch({ type: ActionType.SET_SWAP_FINALIZED, payload: true });
+      }
+    } catch (error) {
+      console.error("EVM swap failed:", error);
+      // Error handling is done in the useEVMSwap hook
+    }
+  };
+
   const handleSwap = async () => {
     setReviewModalOpen(false);
     setSwapSuccessfulReset(false);
     setIsMaxValueLessThenMinAmount(false);
+
+    // Check if we should use EVM swap (MetaMask account)
+    if (selectedAccount && isMetamaskAccount(selectedAccount) && canPerformEVMSwap()) {
+      await handleEVMSwap();
+      return;
+    }
+
     if (api) {
       const tokenA = formatInputTokenValue(tokenAValueForSwap.tokenValue, selectedTokens.tokenA.decimals);
       const tokenB = formatInputTokenValue(tokenBValueForSwap.tokenValue, selectedTokens.tokenB.decimals);
@@ -1573,7 +1687,14 @@ const SwapTokens = () => {
           contentTitle={"Successfully swapped"}
           tokenA={{
             symbol: state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol,
-            value: swapExactInTokenAmount.toString(),
+            value: (() => {
+              // Use EVM swap amounts if available (MetaMask swap), otherwise use Substrate amounts
+              if (lastSwapEvent && isMetamaskAccount(selectedAccount)) {
+                const evmAmounts = getEVMSwapAmounts();
+                return evmAmounts.exactInAmount;
+              }
+              return swapExactInTokenAmount.toString();
+            })(),
             icon: (
               <TokenIcon
                 tokenSymbol={state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol}
@@ -1583,7 +1704,14 @@ const SwapTokens = () => {
           }}
           tokenB={{
             symbol: state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol,
-            value: swapExactOutTokenAmount.toString(),
+            value: (() => {
+              // Use EVM swap amounts if available (MetaMask swap), otherwise use Substrate amounts
+              if (lastSwapEvent && isMetamaskAccount(selectedAccount)) {
+                const evmAmounts = getEVMSwapAmounts();
+                return evmAmounts.exactOutAmount;
+              }
+              return swapExactOutTokenAmount.toString();
+            })(),
             icon: (
               <TokenIcon
                 tokenSymbol={state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol}

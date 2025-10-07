@@ -6,6 +6,7 @@ import Button from "../../atom/Button";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import { useTransactionStatus, getStatusFromSimulationStep } from "../../../app/hooks/useTransactionStatus";
 import { blockTimeService } from "../../../services/blockTimeService";
+import SwapTransactionDebugger from "../../molecule/SwapTransactionDebugger";
 
 interface SimulationStep {
   name: string;
@@ -21,6 +22,7 @@ const DebugPanel: FC = () => {
   const withdrawStatus = useTransactionStatus(TransactionTypes.withdraw);
   const [isMinimized, setIsMinimized] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [activeTab, setActiveTab] = useState<"simulation" | "evm-debug">("simulation");
   const [simulationSteps, setSimulationSteps] = useState<SimulationStep[]>([]);
   const [isSimulating, setIsSimulating] = useState(false);
   const [blockTimeMs, setBlockTimeMs] = useState(60000);
@@ -366,7 +368,7 @@ const DebugPanel: FC = () => {
   return (
     <div
       className={`fixed bottom-4 right-4 z-50 rounded-lg bg-slate-900 text-white shadow-2xl transition-all duration-300 ${
-        isMinimized ? "w-48" : "w-80"
+        isMinimized ? "w-48" : "w-96"
       }`}
     >
       <div className="flex items-center justify-between border-b border-slate-700 p-3">
@@ -381,174 +383,214 @@ const DebugPanel: FC = () => {
 
       {!isMinimized && (
         <div className="space-y-4 p-4">
-          <div className="space-y-2">
-            <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Transaction Simulations</h4>
-            <div className="space-y-2">
-              <Button
-                variant={ButtonVariants.btnPrimaryPinkSm}
-                onClick={simulateSwap}
-                disabled={isSimulating || state.swapLoading}
-                className="w-full"
-              >
-                {isSimulating && swapStatus.isLoading ? "Simulating..." : "Simulate Swap"}
-              </Button>
-              <Button
-                variant={ButtonVariants.btnPrimaryPinkSm}
-                onClick={simulateAddLiquidity}
-                disabled={isSimulating || state.addLiquidityLoading}
-                className="w-full"
-              >
-                {isSimulating && addStatus.isLoading ? "Simulating..." : "Simulate Add Liquidity"}
-              </Button>
-              <Button
-                variant={ButtonVariants.btnPrimaryPinkSm}
-                onClick={simulateRemoveLiquidity}
-                disabled={isSimulating || state.withdrawLiquidityLoading}
-                className="w-full"
-              >
-                {isSimulating && withdrawStatus.isLoading ? "Simulating..." : "Simulate Remove Liquidity"}
-              </Button>
-            </div>
+          {/* Tab Navigation */}
+          <div className="flex space-x-2 border-b border-slate-700">
+            <button
+              onClick={() => setActiveTab("simulation")}
+              className={`px-3 py-2 text-xs font-medium transition-colors ${
+                activeTab === "simulation"
+                  ? "border-b-2 border-blue-500 text-blue-400"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              Simulation
+            </button>
+            <button
+              onClick={() => setActiveTab("evm-debug")}
+              className={`px-3 py-2 text-xs font-medium transition-colors ${
+                activeTab === "evm-debug"
+                  ? "border-b-2 border-blue-500 text-blue-400"
+                  : "text-slate-400 hover:text-white"
+              }`}
+            >
+              EVM Debug
+            </button>
           </div>
 
-          {simulationSteps.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Simulation Steps</h4>
-              <div className="max-h-64 space-y-1 overflow-y-auto">
-                {simulationSteps.map((step, index) => (
-                  <div
-                    key={index}
-                    className={`rounded px-2 py-1 text-xs transition-all duration-300 ${
-                      step.status === "active"
-                        ? "bg-blue-500 text-white"
-                        : step.status === "completed"
-                          ? "bg-green-500 text-white"
-                          : "bg-slate-800 text-slate-300"
-                    }`}
+          {/* Simulation Tab */}
+          {activeTab === "simulation" && (
+            <div className="space-y-4">
+              <div className="space-y-2">
+                <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Transaction Simulations</h4>
+                <div className="space-y-2">
+                  <Button
+                    variant={ButtonVariants.btnPrimaryPinkSm}
+                    onClick={simulateSwap}
+                    disabled={isSimulating || state.swapLoading}
+                    className="w-full"
                   >
-                    <span className="inline-block w-4">
-                      {step.status === "active" && "▶"}
-                      {step.status === "completed" && "✓"}
-                      {step.status === "pending" && "○"}
-                    </span>
-                    {step.name}
-                    <span className="float-right text-[10px] text-white/70">{step.duration}ms</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-
-          <div className="space-y-1 text-xs">
-            <h4 className="font-semibold uppercase tracking-wider text-white">Current State</h4>
-            <div className="space-y-2 rounded-lg border border-slate-700 bg-black p-3 font-mono">
-              <div className="font-semibold text-emerald-400">Swap:</div>
-              <div className="pl-2 text-white">
-                loading:{" "}
-                <span className={state.swapLoading ? "text-emerald-400" : "text-slate-500"}>
-                  {state.swapLoading ? "✓" : "✗"}
-                </span>
-                {" | status: "}
-                <span className="text-cyan-400">{swapStatus.currentStatus}</span>
-              </div>
-              <div className="pl-2 text-white">
-                finalized:{" "}
-                <span className={state.swapFinalized ? "text-emerald-400" : "text-slate-500"}>
-                  {state.swapFinalized ? "✓" : "✗"}
-                </span>
-                {" | gasFee: "}
-                <span className="text-amber-400">{state.swapGasFee || "N/A"}</span>
+                    {isSimulating && swapStatus.isLoading ? "Simulating..." : "Simulate Swap"}
+                  </Button>
+                  <Button
+                    variant={ButtonVariants.btnPrimaryPinkSm}
+                    onClick={simulateAddLiquidity}
+                    disabled={isSimulating || state.addLiquidityLoading}
+                    className="w-full"
+                  >
+                    {isSimulating && addStatus.isLoading ? "Simulating..." : "Simulate Add Liquidity"}
+                  </Button>
+                  <Button
+                    variant={ButtonVariants.btnPrimaryPinkSm}
+                    onClick={simulateRemoveLiquidity}
+                    disabled={isSimulating || state.withdrawLiquidityLoading}
+                    className="w-full"
+                  >
+                    {isSimulating && withdrawStatus.isLoading ? "Simulating..." : "Simulate Remove Liquidity"}
+                  </Button>
+                </div>
               </div>
 
-              <div className="mt-2 font-semibold text-emerald-400">Add Liquidity:</div>
-              <div className="pl-2 text-white">
-                loading:{" "}
-                <span className={state.addLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
-                  {state.addLiquidityLoading ? "✓" : "✗"}
-                </span>
-                {" | status: "}
-                <span className="text-cyan-400">{addStatus.currentStatus}</span>
-              </div>
-              <div className="pl-2 text-white">
-                gasFee: <span className="text-amber-400">{state.poolGasFee || "N/A"}</span>
-              </div>
-
-              <div className="mt-2 font-semibold text-emerald-400">Remove Liquidity:</div>
-              <div className="pl-2 text-white">
-                loading:{" "}
-                <span className={state.withdrawLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
-                  {state.withdrawLiquidityLoading ? "✓" : "✗"}
-                </span>
-                {" | status: "}
-                <span className="text-cyan-400">{withdrawStatus.currentStatus}</span>
-              </div>
-
-              <div className="mt-2 font-semibold text-sky-400">Connection:</div>
-              <div className="pl-2 text-white">
-                wallet:{" "}
-                <span className={state.selectedAccount?.address ? "text-emerald-400" : "text-slate-500"}>
-                  {state.selectedAccount?.address ? "✓" : "✗"}
-                </span>
-                {" | api: "}
-                <span className={state.api ? "text-emerald-400" : "text-slate-500"}>{state.api ? "✓" : "✗"}</span>
-                {" | pools: "}
-                <span className="text-amber-400">{state.pools?.length || 0}</span>
-              </div>
-
-              <div className="mt-2 font-semibold text-purple-400">Block Time:</div>
-              <div className="pl-2 text-white">
-                current: <span className="text-amber-400">{(blockTimeMs / 1000).toFixed(1)}s</span>
-                {" | blocks: "}
-                <span className="text-emerald-400">
-                  {
-                    blockHistory.filter(
-                      (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
-                    ).length
-                  }
-                </span>
-              </div>
-            </div>
-          </div>
-
-          {blockHistory.length > 0 && (
-            <div className="space-y-2">
-              <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Block Time History</h4>
-              <div className="max-h-32 space-y-1 overflow-y-auto">
-                {(() => {
-                  // Remove duplicates and sort by block number, then take last 5
-                  const uniqueBlocks = blockHistory.filter(
-                    (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
-                  );
-                  const sortedBlocks = uniqueBlocks.sort((a, b) => a.blockNumber - b.blockNumber);
-                  const lastFiveBlocks = sortedBlocks.slice(-5).reverse();
-
-                  return lastFiveBlocks.map((block) => {
-                    // Find the previous block in the sorted array for time diff calculation
-                    const blockIndex = sortedBlocks.findIndex((b) => b.blockNumber === block.blockNumber);
-                    const prevBlock = blockIndex > 0 ? sortedBlocks[blockIndex - 1] : null;
-                    let timeDiff = "";
-                    if (prevBlock && block.blockNumber === prevBlock.blockNumber + 1) {
-                      const diff = ((block.timestamp - prevBlock.timestamp) / 1000).toFixed(1);
-                      timeDiff = ` (${diff}s)`;
-                    }
-
-                    return (
+              {simulationSteps.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Simulation Steps</h4>
+                  <div className="max-h-64 space-y-1 overflow-y-auto">
+                    {simulationSteps.map((step, index) => (
                       <div
-                        key={`${block.blockNumber}-${block.timestamp}`}
-                        className="rounded bg-slate-800 px-2 py-1 font-mono text-xs text-slate-300"
+                        key={index}
+                        className={`rounded px-2 py-1 text-xs transition-all duration-300 ${
+                          step.status === "active"
+                            ? "bg-blue-500 text-white"
+                            : step.status === "completed"
+                              ? "bg-green-500 text-white"
+                              : "bg-slate-800 text-slate-300"
+                        }`}
                       >
-                        <span className="text-cyan-400">#{block.blockNumber}</span>
-                        <span className="ml-2 text-amber-400">{new Date(block.timestamp).toLocaleTimeString()}</span>
-                        {timeDiff && <span className="float-right text-emerald-400">{timeDiff}</span>}
+                        <span className="inline-block w-4">
+                          {step.status === "active" && "▶"}
+                          {step.status === "completed" && "✓"}
+                          {step.status === "pending" && "○"}
+                        </span>
+                        {step.name}
+                        <span className="float-right text-[10px] text-white/70">{step.duration}ms</span>
                       </div>
-                    );
-                  });
-                })()}
+                    ))}
+                  </div>
+                </div>
+              )}
+
+              <div className="space-y-1 text-xs">
+                <h4 className="font-semibold uppercase tracking-wider text-white">Current State</h4>
+                <div className="space-y-2 rounded-lg border border-slate-700 bg-black p-3 font-mono">
+                  <div className="font-semibold text-emerald-400">Swap:</div>
+                  <div className="pl-2 text-white">
+                    loading:{" "}
+                    <span className={state.swapLoading ? "text-emerald-400" : "text-slate-500"}>
+                      {state.swapLoading ? "✓" : "✗"}
+                    </span>
+                    {" | status: "}
+                    <span className="text-cyan-400">{swapStatus.currentStatus}</span>
+                  </div>
+                  <div className="pl-2 text-white">
+                    finalized:{" "}
+                    <span className={state.swapFinalized ? "text-emerald-400" : "text-slate-500"}>
+                      {state.swapFinalized ? "✓" : "✗"}
+                    </span>
+                    {" | gasFee: "}
+                    <span className="text-amber-400">{state.swapGasFee || "N/A"}</span>
+                  </div>
+
+                  <div className="mt-2 font-semibold text-emerald-400">Add Liquidity:</div>
+                  <div className="pl-2 text-white">
+                    loading:{" "}
+                    <span className={state.addLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
+                      {state.addLiquidityLoading ? "✓" : "✗"}
+                    </span>
+                    {" | status: "}
+                    <span className="text-cyan-400">{addStatus.currentStatus}</span>
+                  </div>
+                  <div className="pl-2 text-white">
+                    gasFee: <span className="text-amber-400">{state.poolGasFee || "N/A"}</span>
+                  </div>
+
+                  <div className="mt-2 font-semibold text-emerald-400">Remove Liquidity:</div>
+                  <div className="pl-2 text-white">
+                    loading:{" "}
+                    <span className={state.withdrawLiquidityLoading ? "text-emerald-400" : "text-slate-500"}>
+                      {state.withdrawLiquidityLoading ? "✓" : "✗"}
+                    </span>
+                    {" | status: "}
+                    <span className="text-cyan-400">{withdrawStatus.currentStatus}</span>
+                  </div>
+
+                  <div className="mt-2 font-semibold text-sky-400">Connection:</div>
+                  <div className="pl-2 text-white">
+                    wallet:{" "}
+                    <span className={state.selectedAccount?.address ? "text-emerald-400" : "text-slate-500"}>
+                      {state.selectedAccount?.address ? "✓" : "✗"}
+                    </span>
+                    {" | api: "}
+                    <span className={state.api ? "text-emerald-400" : "text-slate-500"}>{state.api ? "✓" : "✗"}</span>
+                    {" | pools: "}
+                    <span className="text-amber-400">{state.pools?.length || 0}</span>
+                  </div>
+
+                  <div className="mt-2 font-semibold text-purple-400">Block Time:</div>
+                  <div className="pl-2 text-white">
+                    current: <span className="text-amber-400">{(blockTimeMs / 1000).toFixed(1)}s</span>
+                    {" | blocks: "}
+                    <span className="text-emerald-400">
+                      {
+                        blockHistory.filter(
+                          (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
+                        ).length
+                      }
+                    </span>
+                  </div>
+                </div>
               </div>
+
+              {blockHistory.length > 0 && (
+                <div className="space-y-2">
+                  <h4 className="text-xs font-semibold uppercase tracking-wider text-white">Block Time History</h4>
+                  <div className="max-h-32 space-y-1 overflow-y-auto">
+                    {(() => {
+                      // Remove duplicates and sort by block number, then take last 5
+                      const uniqueBlocks = blockHistory.filter(
+                        (block, index, array) => array.findIndex((b) => b.blockNumber === block.blockNumber) === index
+                      );
+                      const sortedBlocks = uniqueBlocks.sort((a, b) => a.blockNumber - b.blockNumber);
+                      const lastFiveBlocks = sortedBlocks.slice(-5).reverse();
+
+                      return lastFiveBlocks.map((block) => {
+                        // Find the previous block in the sorted array for time diff calculation
+                        const blockIndex = sortedBlocks.findIndex((b) => b.blockNumber === block.blockNumber);
+                        const prevBlock = blockIndex > 0 ? sortedBlocks[blockIndex - 1] : null;
+                        let timeDiff = "";
+                        if (prevBlock && block.blockNumber === prevBlock.blockNumber + 1) {
+                          const diff = ((block.timestamp - prevBlock.timestamp) / 1000).toFixed(1);
+                          timeDiff = ` (${diff}s)`;
+                        }
+
+                        return (
+                          <div
+                            key={`${block.blockNumber}-${block.timestamp}`}
+                            className="rounded bg-slate-800 px-2 py-1 font-mono text-xs text-slate-300"
+                          >
+                            <span className="text-cyan-400">#{block.blockNumber}</span>
+                            <span className="ml-2 text-amber-400">
+                              {new Date(block.timestamp).toLocaleTimeString()}
+                            </span>
+                            {timeDiff && <span className="float-right text-emerald-400">{timeDiff}</span>}
+                          </div>
+                        );
+                      });
+                    })()}
+                  </div>
+                </div>
+              )}
+
+              <div className="mt-2 text-center text-[10px] text-slate-400">Press Ctrl/Cmd + D to toggle panel</div>
             </div>
           )}
 
-          <div className="mt-2 text-center text-[10px] text-slate-400">Press Ctrl/Cmd + D to toggle panel</div>
+          {/* EVM Debug Tab */}
+          {activeTab === "evm-debug" && (
+            <div className="space-y-4">
+              <div className="max-h-96 overflow-y-auto">
+                <SwapTransactionDebugger />
+              </div>
+            </div>
+          )}
         </div>
       )}
     </div>

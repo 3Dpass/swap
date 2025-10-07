@@ -146,7 +146,7 @@ export const convertMetaMaskAccountsToWalletAccounts = async (
         address: substrateAddress, // Use substrate address as the main address for UI
         evmAddress: evmAddress, // Keep original EVM address for transactions
         substrateAddress: substrateAddress,
-        name: `MetaMask Account ${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`,
+        name: `MetaMask ${evmAddress.slice(0, 6)}...${evmAddress.slice(-4)}`,
         source: "metamask",
         wallet: {
           extensionName: "metamask",

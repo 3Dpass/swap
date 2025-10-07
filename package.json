@@ -38,6 +38,7 @@
     "babel-plugin-transform-import-meta": "^2.2.1",
     "classnames": "^2.5.1",
     "decimal.js": "^10.4.3",
+    "ethers": "5.7.2",
     "i18next": "^23.11.2",
     "lottie-react": "^2.4.0",
     "react": "^18.2.0",
