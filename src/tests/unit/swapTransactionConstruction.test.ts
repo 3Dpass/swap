@@ -46,7 +46,7 @@ describe("Swap Transaction Construction", () => {
       const evmParams = await convertSwapParamsToEVM(params);
 
       expect(evmParams.assetInAddress).toBe("0x0000000000000000000000000000000000000802");
-      expect(evmParams.assetOutAddress).toBe("0xFBFBFBFA000000000000000000000000000000DE");
+      expect(evmParams.assetOutAddress).toBe("0xfBFBfbFA000000000000000000000000000000de");
       expect(evmParams.amount).toBe("1000000000000000000");
       expect(evmParams.minReceive).toBe("980000000000000000");
       expect(evmParams.recipient).toBe("0xdF4993F7741B1295D6A9b4eced2790C2165f085c");
@@ -63,8 +63,8 @@ describe("Swap Transaction Construction", () => {
 
       const evmParams = await convertSwapParamsToEVM(params);
 
-      expect(evmParams.assetInAddress).toBe("0xFBFBFBFA00000000000000000000000000000001");
-      expect(evmParams.assetOutAddress).toBe("0xFBFBFBFA0000000000000000000000000000014D");
+      expect(evmParams.assetInAddress).toBe("0xfbfBfbFa00000000000000000000000000000001");
+      expect(evmParams.assetOutAddress).toBe("0xFbFBFBfA0000000000000000000000000000014D");
     });
   });
 

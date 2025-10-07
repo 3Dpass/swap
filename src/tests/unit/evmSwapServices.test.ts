@@ -34,7 +34,7 @@ describe("EVM Swap Services", () => {
       const result = await convertSwapParamsToEVM(params);
 
       expect(result.assetInAddress).toBe("0x0000000000000000000000000000000000000802");
-      expect(result.assetOutAddress).toBe("0xFBFBFBFA00000000000000000000000000000001");
+      expect(result.assetOutAddress).toBe("0xfbfBfbFa00000000000000000000000000000001");
       expect(result.amount).toBe("1000000000000000000");
       expect(result.minReceive).toBe("900000000000000000");
       expect(result.recipient).toBe("0x1234567890123456789012345678901234567890");
@@ -73,6 +73,15 @@ describe("EVM Swap Services", () => {
             quotePriceTokensForExactTokens: jest.fn().mockResolvedValue("1000000000000000000"),
           },
         },
+        rpc: {
+          state: {
+            call: jest.fn().mockResolvedValue("0x0000000000000000000000000000000000000000000000000de0b6b3a7640000"), // Mock response
+          },
+        },
+        createType: jest.fn().mockImplementation(() => ({
+          toU8a: jest.fn().mockReturnValue(new Uint8Array(32)), // Mock 32-byte array
+          toHuman: jest.fn().mockReturnValue("1000000000000000000"), // Mock human-readable value
+        })),
       };
 
       const quote = await getSwapQuote("0", "1", "1000000000000000000", mockApi as any);

@@ -11,8 +11,19 @@ import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { PoolAction } from "../../store/pools/interface";
 import { WalletAction } from "../../store/wallet/interface";
+import { NETWORKS } from "../../networkConfig";
+import { NetworkKeys } from "../../app/types/enum";
 
-const { nativeTokenSymbol } = useGetNetwork();
+// Get network info conditionally to avoid issues in test environments
+const getNativeTokenSymbol = () => {
+  try {
+    const { nativeTokenSymbol } = useGetNetwork();
+    return nativeTokenSymbol;
+  } catch (error) {
+    // Fallback for test environments where window is not available
+    return NETWORKS[NetworkKeys.P3D].nativeTokenSymbol;
+  }
+};
 
 // Helper function to get block number from finalized status
 const getBlockNumberFromFinalized = async (api: ApiPromise, blockHash: any): Promise<string> => {
@@ -566,10 +577,10 @@ export const createPoolCardsArray = async (
           if (poolReserves?.length > 1) {
             const [asset1Metadata, asset2Metadata] = await Promise.all([
               asset1IsNative
-                ? Promise.resolve({ symbol: nativeTokenSymbol, decimals: nativeTokenDecimals })
+                ? Promise.resolve({ symbol: getNativeTokenSymbol(), decimals: nativeTokenDecimals })
                 : apiPool.query.poscanAssets.metadata(asset1TokenId).then((m) => m.toHuman()),
               asset2IsNative
-                ? Promise.resolve({ symbol: nativeTokenSymbol, decimals: nativeTokenDecimals })
+                ? Promise.resolve({ symbol: getNativeTokenSymbol(), decimals: nativeTokenDecimals })
                 : apiPool.query.poscanAssets.metadata(asset2TokenId).then((m) => m.toHuman()),
             ]);
 
