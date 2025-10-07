@@ -10,8 +10,3 @@ export const EVM_PRECOMPILES = {
    */
   ASSET_CONVERSION: "0x0000000000000000000000000000000000000902",
 } as const;
-
-/**
- * Type for EVM precompile addresses
- */
-export type EvmPrecompileAddress = (typeof EVM_PRECOMPILES)[keyof typeof EVM_PRECOMPILES];

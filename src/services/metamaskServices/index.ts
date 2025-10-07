@@ -106,25 +106,6 @@ export const connectMetaMask = async (): Promise<string[]> => {
 };
 
 /**
- * Gets the current connected accounts from MetaMask
- */
-export const getMetaMaskAccounts = async (): Promise<string[]> => {
-  if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed.");
-  }
-
-  try {
-    const accounts = await window.ethereum!.request({
-      method: "eth_accounts",
-    });
-
-    return accounts || [];
-  } catch (error: any) {
-    throw new Error(`Failed to get MetaMask accounts: ${error.message}`);
-  }
-};
-
-/**
  * Converts MetaMask accounts to WalletAccount format with substrate addresses
  */
 export const convertMetaMaskAccountsToWalletAccounts = async (
@@ -167,90 +148,4 @@ export const convertMetaMaskAccountsToWalletAccounts = async (
   }
 
   return walletAccounts;
-};
-
-/**
- * Signs a transaction using MetaMask
- */
-export const signTransactionWithMetaMask = async (transactionData: any): Promise<string> => {
-  if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed.");
-  }
-
-  try {
-    const signature = await window.ethereum!.request({
-      method: "eth_sendTransaction",
-      params: [transactionData],
-    });
-
-    return signature;
-  } catch (error: any) {
-    if (error.code === 4001) {
-      throw new Error("User rejected the transaction.");
-    }
-    throw new Error(`Transaction failed: ${error.message}`);
-  }
-};
-
-/**
- * Signs a message using MetaMask
- */
-export const signMessageWithMetaMask = async (evmAddress: string, message: string): Promise<string> => {
-  if (!isMetaMaskInstalled()) {
-    throw new Error("MetaMask is not installed.");
-  }
-
-  try {
-    const signature = await window.ethereum!.request({
-      method: "personal_sign",
-      params: [message, evmAddress],
-    });
-
-    return signature;
-  } catch (error: any) {
-    if (error.code === 4001) {
-      throw new Error("User rejected the signature request.");
-    }
-    throw new Error(`Signature failed: ${error.message}`);
-  }
-};
-
-/**
- * Listens for account changes in MetaMask
- */
-export const onMetaMaskAccountsChanged = (callback: (accounts: string[]) => void): (() => void) => {
-  if (!isMetaMaskInstalled()) {
-    return () => {};
-  }
-
-  const handleAccountsChanged = (accounts: string[]) => {
-    callback(accounts);
-  };
-
-  window.ethereum!.on("accountsChanged", handleAccountsChanged);
-
-  // Return cleanup function
-  return () => {
-    window.ethereum!.removeListener("accountsChanged", handleAccountsChanged);
-  };
-};
-
-/**
- * Listens for network changes in MetaMask
- */
-export const onMetaMaskChainChanged = (callback: (chainId: string) => void): (() => void) => {
-  if (!isMetaMaskInstalled()) {
-    return () => {};
-  }
-
-  const handleChainChanged = (chainId: string) => {
-    callback(chainId);
-  };
-
-  window.ethereum!.on("chainChanged", handleChainChanged);
-
-  // Return cleanup function
-  return () => {
-    window.ethereum!.removeListener("chainChanged", handleChainChanged);
-  };
 };
