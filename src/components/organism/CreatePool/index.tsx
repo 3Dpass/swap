@@ -6,6 +6,8 @@ import { NumericFormat } from "react-number-format";
 import { useNavigate } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
+import { useEVMCreatePool } from "../../../app/hooks/useEVMCreatePool";
+import { isMetamaskAccount } from "../../../services/metamaskServices";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { TokenDecimalsErrorProps } from "../../../app/types";
 import { ActionType, ButtonVariants, TransactionTypes } from "../../../app/types/enum";
@@ -19,14 +21,13 @@ import {
 import { formatBalanceForMaxClick, safeTokenBalanceClean } from "../../../app/util/tokenBalance";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import { LottieMedium } from "../../../assets/loader";
-import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
+import { setTokenBalanceUpdate, getAllRegisteredAssets } from "../../../services/polkadotWalletServices";
 import { checkCreatePoolGasFee, createPool, getAllLiquidityPoolsTokensMetadata } from "../../../services/poolServices";
 import { useAppContext } from "../../../state";
-import Button from "../../atom/Button";
 import TokenIcon from "../../atom/TokenIcon";
 import WarningMessage from "../../atom/WarningMessage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
+import TransactionButton from "../../molecule/TransactionButton";
 import AddPoolLiquidity from "../AddPoolLiquidity";
 import TokenSelectModal from "../TokenSelectModal";
 import ReviewTransactionModal from "../ReviewTransactionModal";
@@ -57,6 +58,7 @@ type CreatePoolProps = {
 const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
   const { state, dispatch } = useAppContext();
   const { assethubSubscanUrl } = useGetNetwork();
+  const { executeCreatePool } = useEVMCreatePool();
 
   const navigate = useNavigate();
 
@@ -102,11 +104,28 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
     isError: false,
     decimalsAllowed: 0,
   });
+  const [allRegisteredAssets, setAllRegisteredAssets] = useState<any[]>([]);
 
   const isTransactionTimeout = useTransactionTimeout({
     loading: createPoolLoading || addLiquidityLoading,
     actionType: ActionType.SET_CREATE_POOL_LOADING,
   });
+
+  // Load all registered assets for pool creation
+  useEffect(() => {
+    const loadAllRegisteredAssets = async () => {
+      if (api && selectedAccount?.address) {
+        try {
+          const allAssets = await getAllRegisteredAssets(api, selectedAccount.address);
+          setAllRegisteredAssets(allAssets);
+        } catch (error) {
+          console.error("Failed to load all registered assets:", error);
+        }
+      }
+    };
+
+    loadAllRegisteredAssets();
+  }, [api, selectedAccount?.address]);
 
   const selectedNativeTokenNumber = new Decimal(selectedTokenNativeValue?.tokenValue || 0);
   const selectedAssetTokenNumber = new Decimal(selectedTokenAssetValue?.tokenValue || 0);
@@ -126,18 +145,32 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
         ?.replace(/[, ]/g, "");
 
       try {
-        await createPool(
-          api,
-          selectedTokenB.assetTokenId,
-          selectedAccount,
-          nativeTokenValue,
-          assetTokenValue,
-          nativeTokenWithSlippage.tokenValue,
-          assetTokenWithSlippage.tokenValue,
-          selectedTokenA.nativeTokenDecimals,
-          selectedTokenB.decimals,
-          dispatch
-        );
+        // Check if MetaMask is connected and use EVM pool creation services
+        if (isMetamaskAccount(selectedAccount)) {
+          console.log("Using EVM pool creation services for MetaMask account");
+
+          const evmParams = {
+            asset1: "0", // Native token (P3D)
+            asset2: selectedTokenB.assetTokenId,
+          };
+
+          await executeCreatePool(evmParams);
+        } else {
+          // Use Substrate pool creation services for Polkadot accounts
+          console.log("Using Substrate pool creation services for Polkadot account");
+          await createPool(
+            api,
+            selectedTokenB.assetTokenId,
+            selectedAccount,
+            nativeTokenValue,
+            assetTokenValue,
+            nativeTokenWithSlippage.tokenValue,
+            assetTokenWithSlippage.tokenValue,
+            selectedTokenA.nativeTokenDecimals,
+            selectedTokenB.decimals,
+            dispatch
+          );
+        }
       } catch (error) {
         dotAcpToast.error(`Error: ${error}`);
       }
@@ -490,13 +523,14 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               </div>
             </div>
 
-            <Button
+            <TransactionButton
               onClick={() => (getButtonProperties.disabled ? null : setReviewModalOpen(true))}
               variant={ButtonVariants.btnInteractivePink}
-              disabled={getButtonProperties.disabled || createPoolLoading || addLiquidityLoading}
-            >
-              {createPoolLoading || addLiquidityLoading ? <LottieMedium /> : getButtonProperties.label}
-            </Button>
+              disabled={getButtonProperties.disabled}
+              loading={createPoolLoading || addLiquidityLoading}
+              label={getButtonProperties.label}
+              transactionType={TransactionTypes.createPool}
+            />
             <ReviewTransactionModal
               open={reviewModalOpen}
               title="Review create pool"
@@ -524,7 +558,8 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               open={isModalOpen}
               title={t("button.selectToken")}
               selected={selectedTokenB}
-              modalType="pool"
+              modalType="pool-all-assets"
+              tokensData={allRegisteredAssets}
             />
 
             <SwapAndPoolSuccessModal

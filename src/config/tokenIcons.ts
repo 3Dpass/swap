@@ -5,7 +5,7 @@ import FOXIcon from "../assets/img/tokens/FOX.png";
 import FROGIcon from "../assets/img/tokens/FROG.png";
 import P3DIcon from "../assets/img/tokens/P3D.svg";
 import PASSIcon from "../assets/img/tokens/PASS.png";
-import TESTIcon from "../assets/img/tokens/TEST.png";
+import WUSDTIcon from "../assets/img/tokens/WUSDT.png";
 import L2X2Icon from "../assets/img/tokens/L2X2.png";
 import RINGIcon from "../assets/img/tokens/RING.png";
 import REDBIcon from "../assets/img/tokens/REDB.png";
@@ -16,7 +16,7 @@ import defaultTokenIcon from "../assets/img/tokens/default-token.svg";
 // Value - imported icon URL
 export const TOKEN_ICONS: Record<string, string> = {
   P3D: P3DIcon,
-  TEST: TESTIcon,
+  WUSDT: WUSDTIcon,
   FROG: FROGIcon,
   PASS: PASSIcon,
   FOX: FOXIcon,

@@ -13,7 +13,7 @@ describe("Asset Address Converter", () => {
   describe("convertAssetIdToEVMAddress", () => {
     it("should convert asset ID 222 to correct EVM address", () => {
       const assetId = 222;
-      const expectedAddress = "0xFBFBFBFA000000000000000000000000000000DE";
+      const expectedAddress = "0xfBFBfbFA000000000000000000000000000000de";
 
       const result = convertAssetIdToEVMAddress(assetId);
       expect(result).toBe(expectedAddress);
@@ -29,7 +29,7 @@ describe("Asset Address Converter", () => {
 
     it("should convert asset ID 1 to correct EVM address", () => {
       const assetId = 1;
-      const expectedAddress = "0xFBFBFBFA00000000000000000000000000000001";
+      const expectedAddress = "0xfbfBfbFa00000000000000000000000000000001";
 
       const result = convertAssetIdToEVMAddress(assetId);
       expect(result).toBe(expectedAddress);
@@ -37,7 +37,7 @@ describe("Asset Address Converter", () => {
 
     it("should handle string asset IDs", () => {
       const assetId = "222";
-      const expectedAddress = "0xFBFBFBFA000000000000000000000000000000DE";
+      const expectedAddress = "0xfBFBfbFA000000000000000000000000000000de";
 
       const result = convertAssetIdToEVMAddress(assetId);
       expect(result).toBe(expectedAddress);
@@ -52,7 +52,7 @@ describe("Asset Address Converter", () => {
   describe("convertAssetIdToLiquidityPoolAddress", () => {
     it("should convert asset ID 222 to correct liquidity pool address", () => {
       const assetId = 222;
-      const expectedAddress = "0xFBFBFBFB000000000000000000000000000000DE";
+      const expectedAddress = "0xfbfBFBFB000000000000000000000000000000dE";
 
       const result = convertAssetIdToLiquidityPoolAddress(assetId);
       expect(result).toBe(expectedAddress);
@@ -60,7 +60,7 @@ describe("Asset Address Converter", () => {
 
     it("should convert asset ID 0 to correct liquidity pool address", () => {
       const assetId = 0;
-      const expectedAddress = "0xFBFBFBFB00000000000000000000000000000000";
+      const expectedAddress = "0xfbfBfBfb00000000000000000000000000000000";
 
       const result = convertAssetIdToLiquidityPoolAddress(assetId);
       expect(result).toBe(expectedAddress);
@@ -195,8 +195,8 @@ describe("Asset Address Converter", () => {
       const assetIds = [0, 1, 222];
       const expected = {
         "0": "0x0000000000000000000000000000000000000802",
-        "1": "0xFBFBFBFA00000000000000000000000000000001",
-        "222": "0xFBFBFBFA000000000000000000000000000000DE",
+        "1": "0xfbfBfbFa00000000000000000000000000000001",
+        "222": "0xfBFBfbFA000000000000000000000000000000de",
       };
 
       const result = batchConvertAssetIds(assetIds, "asset");
@@ -206,9 +206,9 @@ describe("Asset Address Converter", () => {
     it("should convert multiple asset IDs to liquidity pool addresses", () => {
       const assetIds = [0, 1, 222];
       const expected = {
-        "0": "0xFBFBFBFB00000000000000000000000000000000",
-        "1": "0xFBFBFBFB00000000000000000000000000000001",
-        "222": "0xFBFBFBFB000000000000000000000000000000DE",
+        "0": "0xfbfBfBfb00000000000000000000000000000000",
+        "1": "0xFBFBFBfB00000000000000000000000000000001",
+        "222": "0xfbfBFBFB000000000000000000000000000000dE",
       };
 
       const result = batchConvertAssetIds(assetIds, "liquidity-pool");

@@ -6,7 +6,7 @@ import { t } from "i18next";
 import { Dispatch } from "react";
 import useGetNetwork from "../../app/hooks/useGetNetwork";
 import { LpTokenAsset, PoolCardProps } from "../../app/types";
-import { ActionType, ServiceResponseStatus, TransactionStatus } from "../../app/types/enum";
+import { ActionType, TransactionStatus } from "../../app/types/enum";
 import { formatDecimalsFromToken } from "../../app/util/helper";
 import dotAcpToast from "../../app/util/toast";
 import { PoolAction } from "../../store/pools/interface";
@@ -117,6 +117,7 @@ export const createPool = async (
   const secondArg = createAssetTokenId(api, assetTokenId);
 
   dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: true });
+  dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: TransactionStatus.preparing });
 
   const result = api.tx.assetConversion.createPool(firstArg, secondArg);
 
@@ -124,44 +125,69 @@ export const createPool = async (
 
   result
     .signAndSend(account.address, { signer: wallet?.signer }, async (response) => {
-      if (response.status.type === ServiceResponseStatus.Finalized) {
-        addLiquidity(
-          api,
-          assetTokenId,
-          account,
-          nativeTokenValue,
-          assetTokenValue,
-          minNativeTokenValue,
-          minAssetTokenValue,
-          nativeTokenDecimals,
-          assetTokenDecimals,
-          dispatch
-        );
+      // Update status when transaction is sent
+      if (!response.status.isInBlock && !response.status.isFinalized) {
+        dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: TransactionStatus.waitingForNewBlock });
       }
 
       if (response.status.isInBlock) {
+        dispatch({
+          type: ActionType.SET_CREATE_POOL_LOADING_STATUS,
+          payload: TransactionStatus.waitingForConfirmation,
+        });
         dotAcpToast.success(`Completed at block hash #${response.status.asInBlock.toString()}`, {
           style: {
             maxWidth: "750px",
           },
         });
+      }
+
+      if (response.status.isFinalized) {
+        dispatch({
+          type: ActionType.SET_CREATE_POOL_LOADING_STATUS,
+          payload: TransactionStatus.waitingForFinalization,
+        });
+
+        // Wait a bit for finalization, then proceed to add liquidity
+        setTimeout(() => {
+          dispatch({
+            type: ActionType.SET_CREATE_POOL_LOADING_STATUS,
+            payload: TransactionStatus.finalizing,
+          });
+
+          addLiquidity(
+            api,
+            assetTokenId,
+            account,
+            nativeTokenValue,
+            assetTokenValue,
+            minNativeTokenValue,
+            minAssetTokenValue,
+            nativeTokenDecimals,
+            assetTokenDecimals,
+            dispatch
+          );
+        }, 2000); // Wait 2 seconds for finalization
       } else {
-        if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
+        if (response.status.isFinalized && response.dispatchError) {
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
             dotAcpToast.error(`${docs.join(" ")}`);
             dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: TransactionStatus.error });
           } else {
             dotAcpToast.error(response.dispatchError.toString());
             dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: false });
+            dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: TransactionStatus.error });
           }
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
-        if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+        if (response.status.isFinalized && !response.dispatchError) {
           dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
           dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: false });
+          dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: null });
         }
       }
     })
@@ -169,6 +195,7 @@ export const createPool = async (
       dotAcpToast.error(`Transaction failed ${error}`);
       dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
       dispatch({ type: ActionType.SET_CREATE_POOL_LOADING, payload: false });
+      dispatch({ type: ActionType.SET_CREATE_POOL_LOADING_STATUS, payload: TransactionStatus.error });
     });
 };
 
@@ -233,7 +260,7 @@ export const addLiquidity = async (
           },
         });
       } else {
-        if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
+        if (response.status.type === "Finalized" && response.dispatchError) {
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -251,10 +278,10 @@ export const addLiquidity = async (
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
-        if (response.status.type === ServiceResponseStatus.Finalized) {
+        if (response.status.type === "Finalized") {
           dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
         }
-        if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+        if (response.status.isFinalized && !response.dispatchError) {
           dispatch({ type: ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.finalizing });
 
           exactAddedLiquidityInPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);
@@ -336,7 +363,7 @@ export const removeLiquidity = async (
           },
         });
       } else {
-        if (response.status.type === ServiceResponseStatus.Finalized && response.dispatchError) {
+        if (response.status.type === "Finalized" && response.dispatchError) {
           if (response.dispatchError.isModule) {
             const decoded = api.registry.findMetaError(response.dispatchError.asModule);
             const { docs } = decoded;
@@ -354,10 +381,10 @@ export const removeLiquidity = async (
         } else {
           dotAcpToast.success(`Current status: ${response.status.type}`);
         }
-        if (response.status.type === ServiceResponseStatus.Finalized) {
+        if (response.status.type === "Finalized") {
           dispatch({ type: ActionType.SET_TRANSFER_GAS_FEES_MESSAGE, payload: "" });
         }
-        if (response.status.type === ServiceResponseStatus.Finalized && !response.dispatchError) {
+        if (response.status.isFinalized && !response.dispatchError) {
           dispatch({ type: ActionType.SET_WITHDRAW_LIQUIDITY_LOADING_STATUS, payload: TransactionStatus.finalizing });
 
           exactWithdrawnLiquidityFromPool(response.toHuman(), nativeTokenDecimals, assetTokenDecimals, dispatch);

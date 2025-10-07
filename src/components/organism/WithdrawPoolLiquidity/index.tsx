@@ -6,11 +6,14 @@ import { NumericFormat } from "react-number-format";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
+import { useEVMLiquidity } from "../../../app/hooks/useEVMLiquidity";
+import { isMetamaskAccount } from "../../../services/metamaskServices";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { LpTokenAsset } from "../../../app/types";
 import { ActionType, InputEditedType, LiquidityPageType, TransactionTypes } from "../../../app/types/enum";
 import {
   calculateSlippageReduce,
+  convertToBaseUnit,
   formatDecimalsFromToken,
   formatInputTokenValue,
   truncateDecimalNumber,
@@ -46,6 +49,7 @@ type TokenValueProps = {
 const WithdrawPoolLiquidity = () => {
   const { state, dispatch } = useAppContext();
   const { assethubSubscanUrl } = useGetNetwork();
+  const { executeRemoveLiquidity } = useEVMLiquidity();
 
   const navigate = useNavigate();
   const location = useLocation();
@@ -126,17 +130,41 @@ const WithdrawPoolLiquidity = () => {
 
     try {
       if (api) {
-        await removeLiquidity(
-          api,
-          selectedTokenB.assetTokenId,
-          selectedAccount,
-          lpToken,
-          nativeTokenWithSlippage.tokenValue.toString(),
-          assetTokenWithSlippage.tokenValue.toString(),
-          selectedTokenA.nativeTokenDecimals,
-          selectedTokenB.decimals,
-          dispatch
-        );
+        // Check if MetaMask is connected and use EVM liquidity services
+        if (isMetamaskAccount(selectedAccount)) {
+          console.log("Using EVM liquidity services for MetaMask account");
+
+          // Convert amounts to minimum units for EVM
+          const lpTokenBurn = convertToBaseUnit(lpToken); // LP tokens typically have 18 decimals
+          const amount1MinReceive = convertToBaseUnit(nativeTokenWithSlippage.tokenValue.toString());
+          const amount2MinReceive = convertToBaseUnit(assetTokenWithSlippage.tokenValue.toString());
+
+          const evmParams = {
+            asset1: "0", // Native token (P3D)
+            asset2: selectedTokenB.assetTokenId,
+            lpTokenId: selectedTokenB.assetTokenId, // Use the same asset ID as the LP token
+            lpTokenBurn: lpTokenBurn.toString(),
+            amount1MinReceive: amount1MinReceive.toString(),
+            amount2MinReceive: amount2MinReceive.toString(),
+            withdrawTo: selectedAccount.evmAddress,
+          };
+
+          await executeRemoveLiquidity(evmParams);
+        } else {
+          // Use Substrate liquidity services for Polkadot accounts
+          console.log("Using Substrate liquidity services for Polkadot account");
+          await removeLiquidity(
+            api,
+            selectedTokenB.assetTokenId,
+            selectedAccount,
+            lpToken,
+            nativeTokenWithSlippage.tokenValue.toString(),
+            assetTokenWithSlippage.tokenValue.toString(),
+            selectedTokenA.nativeTokenDecimals,
+            selectedTokenB.decimals,
+            dispatch
+          );
+        }
       }
     } catch (error) {
       dotAcpToast.error(`Error: ${error}`);

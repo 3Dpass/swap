@@ -6,6 +6,8 @@ import { NumericFormat } from "react-number-format";
 import { useNavigate, useParams } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
+import { useEVMLiquidity } from "../../../app/hooks/useEVMLiquidity";
+import { isMetamaskAccount } from "../../../services/metamaskServices";
 import { POOLS_PAGE } from "../../../app/router/routes";
 import { InputEditedProps, TokenDecimalsErrorProps } from "../../../app/types";
 import { ActionType, InputEditedType, TransactionTypes } from "../../../app/types/enum";
@@ -55,6 +57,7 @@ type AddPoolLiquidityProps = {
 const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
   const { state, dispatch } = useAppContext();
   const { assethubSubscanUrl } = useGetNetwork();
+  const { executeAddLiquidity } = useEVMLiquidity();
 
   const navigate = useNavigate();
   const params = tokenBId ? tokenBId : useParams();
@@ -152,18 +155,43 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
         ?.replace(/[, ]/g, "");
 
       try {
-        await addLiquidity(
-          api,
-          selectedTokenB.assetTokenId,
-          selectedAccount,
-          nativeTokenValue,
-          assetTokenValue,
-          nativeTokenWithSlippage.tokenValue.toString(),
-          assetTokenWithSlippage.tokenValue.toString(),
-          selectedTokenA.nativeTokenDecimals,
-          selectedTokenB.decimals,
-          dispatch
-        );
+        // Check if MetaMask is connected and use EVM liquidity services
+        if (isMetamaskAccount(selectedAccount)) {
+          console.log("Using EVM liquidity services for MetaMask account");
+
+          // Convert amounts to minimum units for EVM
+          const amount1Desired = convertToBaseUnit(nativeTokenValue);
+          const amount2Desired = convertToBaseUnit(assetTokenValue);
+          const amount1Min = convertToBaseUnit(nativeTokenWithSlippage.tokenValue.toString());
+          const amount2Min = convertToBaseUnit(assetTokenWithSlippage.tokenValue.toString());
+
+          const evmParams = {
+            asset1: "0", // Native token (P3D)
+            asset2: selectedTokenB.assetTokenId,
+            amount1Desired: amount1Desired.toString(),
+            amount2Desired: amount2Desired.toString(),
+            amount1Min: amount1Min.toString(),
+            amount2Min: amount2Min.toString(),
+            mintTo: selectedAccount.evmAddress,
+          };
+
+          await executeAddLiquidity(evmParams);
+        } else {
+          // Use Substrate liquidity services for Polkadot accounts
+          console.log("Using Substrate liquidity services for Polkadot account");
+          await addLiquidity(
+            api,
+            selectedTokenB.assetTokenId,
+            selectedAccount,
+            nativeTokenValue,
+            assetTokenValue,
+            nativeTokenWithSlippage.tokenValue.toString(),
+            assetTokenWithSlippage.tokenValue.toString(),
+            selectedTokenA.nativeTokenDecimals,
+            selectedTokenB.decimals,
+            dispatch
+          );
+        }
       } catch (error) {
         dotAcpToast.error(`Error: ${error}`);
       }

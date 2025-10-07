@@ -13,6 +13,7 @@ export const initialPoolsState: PoolsState = {
   poolCardSelected: null,
   poolsTokenMetadata: [],
   createPoolLoading: false,
+  createPoolLoadingStatus: null,
   addLiquidityLoading: false,
   addLiquidityLoadingStatus: null,
   addLiquidityOperationId: null,
@@ -50,6 +51,8 @@ export const poolsReducer = (state: PoolsState, action: PoolAction): PoolsState 
       return { ...state, poolsTokenMetadata: action.payload };
     case ActionType.SET_CREATE_POOL_LOADING:
       return { ...state, createPoolLoading: action.payload };
+    case ActionType.SET_CREATE_POOL_LOADING_STATUS:
+      return { ...state, createPoolLoadingStatus: action.payload };
     case ActionType.SET_ADD_LIQUIDITY_LOADING:
       return { ...state, addLiquidityLoading: action.payload };
     case ActionType.SET_ADD_LIQUIDITY_LOADING_STATUS:

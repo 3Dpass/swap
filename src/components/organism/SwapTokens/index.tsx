@@ -151,59 +151,69 @@ const SwapTokens = () => {
       return { exactInAmount: "0", exactOutAmount: "0" };
     }
 
-    // For EVM swaps, we need to determine which amounts correspond to which tokens
-    // The swap event contains amount0In, amount1In, amount0Out, amount1Out
-    // We need to map these to our tokenA and tokenB based on the swap direction
+    console.log("=== EVM SWAP AMOUNTS DEBUG ===");
+    console.log("lastSwapEvent:", lastSwapEvent);
+    console.log("inputEdited.inputType:", inputEdited.inputType);
+    console.log("selectedTokens:", selectedTokens);
 
     const { amount0In, amount1In, amount0Out, amount1Out } = lastSwapEvent;
 
-    // Determine which token is which based on the swap direction
+    console.log("Raw amounts from event:");
+    console.log("amount0In:", amount0In);
+    console.log("amount1In:", amount1In);
+    console.log("amount0Out:", amount0Out);
+    console.log("amount1Out:", amount1Out);
+
+    // Convert string amounts to numbers for comparison
+    const amount0InNum = parseInt(amount0In, 10);
+    const amount1InNum = parseInt(amount1In, 10);
+    const amount0OutNum = parseInt(amount0Out, 10);
+    const amount1OutNum = parseInt(amount1Out, 10);
+
+    console.log("Parsed amounts:");
+    console.log("amount0InNum:", amount0InNum);
+    console.log("amount1InNum:", amount1InNum);
+    console.log("amount0OutNum:", amount0OutNum);
+    console.log("amount1OutNum:", amount1OutNum);
+
+    // Determine which amounts correspond to which tokens
     // For exact input swaps: we know the input amount and get the output amount
     // For exact output swaps: we know the output amount and get the input amount
 
-    let inputAmount, outputAmount;
+    let tokenAAmount, tokenBAmount;
 
     if (inputEdited.inputType === InputEditedType.exactIn) {
       // Exact input: tokenA is input, tokenB is output
       // Find the non-zero input amount (this is our tokenA amount)
       // Find the non-zero output amount (this is our tokenB amount)
-      inputAmount = amount0In !== "0" ? amount0In : amount1In;
-      outputAmount = amount0Out !== "0" ? amount0Out : amount1Out;
+      tokenAAmount = amount0InNum > 0 ? amount0In : amount1In;
+      tokenBAmount = amount0OutNum > 0 ? amount0Out : amount1Out;
     } else {
       // Exact output: tokenB is input, tokenA is output
       // Find the non-zero input amount (this is our tokenB amount)
       // Find the non-zero output amount (this is our tokenA amount)
-      inputAmount = amount0In !== "0" ? amount0In : amount1In;
-      outputAmount = amount0Out !== "0" ? amount0Out : amount1Out;
+      tokenBAmount = amount0InNum > 0 ? amount0In : amount1In;
+      tokenAAmount = amount0OutNum > 0 ? amount0Out : amount1Out;
     }
+
+    console.log("Mapped amounts:");
+    console.log("tokenAAmount:", tokenAAmount);
+    console.log("tokenBAmount:", tokenBAmount);
 
     // Format the amounts using the existing helper function
-    // Pass string amounts directly to formatDecimalsFromToken (it uses Decimal.js internally)
-    const formattedInputAmount = formatDecimalsFromToken(
-      inputAmount,
-      inputEdited.inputType === InputEditedType.exactIn
-        ? selectedTokens.tokenA.decimals
-        : selectedTokens.tokenB.decimals
-    );
+    const formattedTokenAAmount = formatDecimalsFromToken(tokenAAmount, selectedTokens.tokenA.decimals);
 
-    const formattedOutputAmount = formatDecimalsFromToken(
-      outputAmount,
-      inputEdited.inputType === InputEditedType.exactIn
-        ? selectedTokens.tokenB.decimals
-        : selectedTokens.tokenA.decimals
-    );
+    const formattedTokenBAmount = formatDecimalsFromToken(tokenBAmount, selectedTokens.tokenB.decimals);
 
-    if (inputEdited.inputType === InputEditedType.exactIn) {
-      return {
-        exactInAmount: formattedInputAmount,
-        exactOutAmount: formattedOutputAmount,
-      };
-    } else {
-      return {
-        exactInAmount: formattedOutputAmount, // tokenA amount
-        exactOutAmount: formattedInputAmount, // tokenB amount
-      };
-    }
+    console.log("Formatted amounts:");
+    console.log("formattedTokenAAmount:", formattedTokenAAmount);
+    console.log("formattedTokenBAmount:", formattedTokenBAmount);
+    console.log("=============================");
+
+    return {
+      exactInAmount: formattedTokenAAmount,
+      exactOutAmount: formattedTokenBAmount,
+    };
   };
 
   const nativeToken = {

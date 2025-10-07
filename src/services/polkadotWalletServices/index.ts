@@ -147,6 +147,46 @@ export const assetTokenData = async (id: string, api: ApiPromise) => {
   return resultObject;
 };
 
+/**
+ * Gets all registered assets from the blockchain with actual user balances
+ * This is used for pool creation where users should be able to create pools
+ * for any registered asset, but we still need to show their actual balances
+ */
+export const getAllRegisteredAssets = async (api: ApiPromise, walletAddress: string) => {
+  const allAssets = await api.query.poscanAssets.asset.entries();
+  const allChainAssets = [];
+
+  for (const item of allAssets) {
+    const tokenId = item?.[0].toHuman();
+    const cleanedTokenId =
+      Array.isArray(tokenId) && typeof tokenId[0] === "string" ? tokenId[0].replace(/[, ]/g, "") : null;
+    if (cleanedTokenId) {
+      try {
+        const [assetTokenMetadata, tokenAsset] = await Promise.all([
+          api.query.poscanAssets.metadata(cleanedTokenId),
+          api.query.poscanAssets.account(cleanedTokenId, walletAddress),
+        ]);
+
+        // Get the actual user balance, or "0" if they don't have any
+        const userBalance = tokenAsset.toHuman() ? (tokenAsset.toJSON() as any)?.balance || tokenAsset.toString() : "0";
+
+        allChainAssets.push({
+          tokenId: cleanedTokenId,
+          assetTokenMetadata: assetTokenMetadata.toHuman(),
+          tokenAsset: {
+            balance: userBalance, // Actual user balance
+          },
+        });
+      } catch (error) {
+        console.warn(`Failed to load metadata for asset ${cleanedTokenId}:`, error);
+        // Continue with other assets even if one fails
+      }
+    }
+  }
+
+  return allChainAssets;
+};
+
 export const getSupportedWallets = () => {
   const supportedWallets: Wallet[] = getWallets();
 

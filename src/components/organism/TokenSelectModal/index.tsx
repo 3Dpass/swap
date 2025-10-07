@@ -23,7 +23,7 @@ interface TokenSelectModalProps {
   selected: TokenProps | AssetTokenProps;
   onClose: () => void;
   onSelect: (tokenData: TokenProps | AssetTokenProps) => void;
-  modalType?: "swap" | "pool";
+  modalType?: "swap" | "pool" | "pool-all-assets";
 }
 
 const TokenSelectModal: FC<TokenSelectModalProps> = ({
@@ -39,7 +39,9 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
   const { tokenBalances } = state;
 
   // Use provided tokensData for swap, or tokenBalances.assets for pool
-  const tokens = modalType === "swap" ? tokensData : tokenBalances?.assets;
+  // For pool-all-assets mode, we'll use the provided tokensData (all registered assets)
+  const tokens =
+    modalType === "swap" ? tokensData : modalType === "pool-all-assets" ? tokensData : tokenBalances?.assets;
 
   const handleSelectToken = (item: any) => {
     if (modalType === "swap") {
@@ -51,7 +53,7 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
       };
       onSelect(tokenData);
     } else {
-      // Pool modal format - use AssetTokenProps
+      // Pool modal format - use AssetTokenProps (both "pool" and "pool-all-assets")
       const assetTokenData: AssetTokenProps = {
         tokenSymbol: item.assetTokenMetadata?.symbol,
         assetTokenId: item.tokenId,
