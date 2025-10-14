@@ -566,16 +566,6 @@ const CreatePool = ({ tokenBSelected }: CreatePoolProps) => {
               open={successModalOpen}
               onClose={closeSuccessModal}
               contentTitle={t("modal.createPool.poolSuccessfullyCreated")}
-              tokenA={{
-                value: selectedTokenNativeValue?.tokenValue,
-                symbol: selectedTokenA.nativeTokenSymbol,
-                icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
-              }}
-              tokenB={{
-                value: selectedTokenAssetValue?.tokenValue,
-                symbol: selectedTokenB.tokenSymbol,
-                icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
-              }}
             />
           </div>
           <WarningMessage

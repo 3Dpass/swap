@@ -23,7 +23,16 @@ const Footer = () => {
               target="_blank"
               className="font-medium text-gray-600 transition-colors hover:text-pink"
             >
-              RPC API
+              Substrate RPC API
+            </a>
+            <span className="mx-3 hidden text-gray-300 sm:inline-block">|</span>
+            <a
+              href="https://github.com/3Dpass/3DP/tree/main/precompiles/assets-conversion"
+              rel="noopener noreferrer"
+              target="_blank"
+              className="font-medium text-gray-600 transition-colors hover:text-pink"
+            >
+              EVM Solidity interface
             </a>
             <span className="mx-3 hidden text-gray-300 sm:inline-block">|</span>
           </div>

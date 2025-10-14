@@ -71,8 +71,6 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
     poolGasFee,
     successModalOpen,
     addLiquidityLoading,
-    exactNativeTokenAddLiquidity,
-    exactAssetTokenAddLiquidity,
     assetLoading,
     isTokenCanNotCreateWarningPools,
   } = state;
@@ -160,10 +158,11 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
           console.log("Using EVM liquidity services for MetaMask account");
 
           // Convert amounts to minimum units for EVM
-          const amount1Desired = convertToBaseUnit(nativeTokenValue);
-          const amount2Desired = convertToBaseUnit(assetTokenValue);
-          const amount1Min = convertToBaseUnit(nativeTokenWithSlippage.tokenValue.toString());
-          const amount2Min = convertToBaseUnit(assetTokenWithSlippage.tokenValue.toString());
+          // formatInputTokenValue already converts to minimum units, so we just need to use the values directly
+          const amount1Desired = nativeTokenValue;
+          const amount2Desired = assetTokenValue;
+          const amount1Min = nativeTokenWithSlippage.tokenValue.toString();
+          const amount2Min = assetTokenWithSlippage.tokenValue.toString();
 
           const evmParams = {
             asset1: "0", // Native token (P3D)
@@ -724,16 +723,6 @@ const AddPoolLiquidity = ({ tokenBId }: AddPoolLiquidityProps) => {
             open={successModalOpen}
             onClose={closeSuccessModal}
             contentTitle={t("modal.addTooExistingPool.successfullyAddedLiquidity")}
-            tokenA={{
-              value: exactNativeTokenAddLiquidity,
-              symbol: selectedTokenA.nativeTokenSymbol,
-              icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
-            }}
-            tokenB={{
-              value: exactAssetTokenAddLiquidity,
-              symbol: selectedTokenB.tokenSymbol,
-              icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
-            }}
           />
         </div>
       )}

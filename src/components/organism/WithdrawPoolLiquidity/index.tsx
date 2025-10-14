@@ -13,14 +13,13 @@ import { LpTokenAsset } from "../../../app/types";
 import { ActionType, InputEditedType, LiquidityPageType, TransactionTypes } from "../../../app/types/enum";
 import {
   calculateSlippageReduce,
-  convertToBaseUnit,
   formatDecimalsFromToken,
   formatInputTokenValue,
   truncateDecimalNumber,
 } from "../../../app/util/helper";
 import dotAcpToast from "../../../app/util/toast";
 import BackArrow from "../../../assets/img/back-arrow.svg?react";
-import { assetTokenData, setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
+import { setTokenBalanceUpdate } from "../../../services/polkadotWalletServices";
 import { checkWithdrawPoolLiquidityGasFee, getPoolReserves, removeLiquidity } from "../../../services/poolServices";
 import { useAppContext } from "../../../state";
 import TokenIcon from "../../atom/TokenIcon";
@@ -39,8 +38,10 @@ type AssetTokenProps = {
   assetTokenBalance: string;
 };
 type NativeTokenProps = {
-  nativeTokenSymbol: any; //to do
-  nativeTokenDecimals: any; //to do
+  nativeTokenSymbol: string;
+  nativeTokenDecimals: string;
+  tokenId: string;
+  tokenBalance: string;
 };
 type TokenValueProps = {
   tokenValue: string;
@@ -63,8 +64,6 @@ const WithdrawPoolLiquidity = () => {
     transferGasFeesMessage,
     successModalOpen,
     withdrawLiquidityLoading,
-    exactNativeTokenWithdraw,
-    exactAssetTokenWithdraw,
     assetLoading,
     isTokenCanNotCreateWarningPools,
   } = state;
@@ -73,6 +72,8 @@ const WithdrawPoolLiquidity = () => {
   const [selectedTokenA, setSelectedTokenA] = useState<NativeTokenProps>({
     nativeTokenSymbol: "",
     nativeTokenDecimals: "",
+    tokenId: "",
+    tokenBalance: "",
   });
   const [selectedTokenB, setSelectedTokenB] = useState<AssetTokenProps>({
     tokenSymbol: "",
@@ -103,20 +104,22 @@ const WithdrawPoolLiquidity = () => {
   };
 
   const populateAssetToken = () => {
-    pools?.forEach(async (pool: any) => {
+    pools?.forEach((pool: any) => {
       if (pool?.[0]?.[1]?.Asset) {
         if (pool?.[0]?.[1]?.Asset.replace(/[, ]/g, "").toString() === params?.id) {
           if (params?.id) {
-            if (api) {
-              const tokenAlreadySelected: any = await assetTokenData(params?.id, api);
-              if (tokenAlreadySelected) {
-                setSelectedTokenB({
-                  tokenSymbol: tokenAlreadySelected?.assetTokenMetadata?.symbol,
-                  assetTokenId: params?.id,
-                  decimals: tokenAlreadySelected?.assetTokenMetadata?.decimals,
-                  assetTokenBalance: "0",
-                });
+            const tokenAlreadySelected = tokenBalances?.assets?.find((token: any) => {
+              if (params?.id) {
+                return token.tokenId === params?.id.toString();
               }
+            });
+            if (tokenAlreadySelected) {
+              setSelectedTokenB({
+                tokenSymbol: tokenAlreadySelected?.assetTokenMetadata?.symbol,
+                assetTokenId: params?.id,
+                decimals: tokenAlreadySelected?.assetTokenMetadata?.decimals,
+                assetTokenBalance: tokenAlreadySelected?.tokenAsset?.balance,
+              });
             }
           }
         }
@@ -135,9 +138,10 @@ const WithdrawPoolLiquidity = () => {
           console.log("Using EVM liquidity services for MetaMask account");
 
           // Convert amounts to minimum units for EVM
-          const lpTokenBurn = convertToBaseUnit(lpToken); // LP tokens typically have 18 decimals
-          const amount1MinReceive = convertToBaseUnit(nativeTokenWithSlippage.tokenValue.toString());
-          const amount2MinReceive = convertToBaseUnit(assetTokenWithSlippage.tokenValue.toString());
+          // formatInputTokenValue already converts to minimum units, so we just need to use the values directly
+          const lpTokenBurn = lpToken; // LP token amount is already in minimum units
+          const amount1MinReceive = nativeTokenWithSlippage.tokenValue.toString();
+          const amount2MinReceive = assetTokenWithSlippage.tokenValue.toString();
 
           const evmParams = {
             asset1: "0", // Native token (P3D)
@@ -400,6 +404,8 @@ const WithdrawPoolLiquidity = () => {
       setSelectedTokenA({
         nativeTokenSymbol: tokenBalances?.tokenSymbol,
         nativeTokenDecimals: tokenBalances?.tokenDecimals,
+        tokenId: "",
+        tokenBalance: tokenBalances.balance.toString(),
       });
     }
   }, [tokenBalances]);
@@ -455,6 +461,9 @@ const WithdrawPoolLiquidity = () => {
           tokenText={selectedTokenA?.nativeTokenSymbol}
           labelText={t("poolsPage.withdrawalAmount")}
           tokenIcon={<TokenIcon tokenSymbol={selectedTokenA?.nativeTokenSymbol} className="h-8 w-8" />}
+          tokenBalance={selectedTokenA.tokenBalance}
+          tokenId={selectedTokenA.tokenId}
+          tokenDecimals={selectedTokenA.nativeTokenDecimals}
           tokenValue={
             selectedTokenNativeValue?.tokenValue
               ? new Decimal(selectedTokenNativeValue?.tokenValue).mul(withdrawAmountPercentage).div(100).toFixed()
@@ -471,6 +480,9 @@ const WithdrawPoolLiquidity = () => {
           tokenText={selectedTokenB?.tokenSymbol}
           labelText={t("poolsPage.withdrawalAmount")}
           tokenIcon={<TokenIcon tokenSymbol={selectedTokenB?.tokenSymbol} className="h-8 w-8" />}
+          tokenBalance={selectedTokenB.assetTokenBalance}
+          tokenId={selectedTokenB.assetTokenId}
+          tokenDecimals={selectedTokenB.decimals}
           tokenValue={formattedTokenBValue()}
           onClick={() => setIsModalOpen(true)}
           onSetTokenValue={() => null}
@@ -651,16 +663,6 @@ const WithdrawPoolLiquidity = () => {
           open={successModalOpen}
           onClose={closeSuccessModal}
           contentTitle={t("modal.removeFromPool.successfulWithdrawal")}
-          tokenA={{
-            value: exactNativeTokenWithdraw,
-            symbol: selectedTokenA.nativeTokenSymbol,
-            icon: <TokenIcon tokenSymbol={selectedTokenA.nativeTokenSymbol} className="h-6 w-6" />,
-          }}
-          tokenB={{
-            value: exactAssetTokenWithdraw,
-            symbol: selectedTokenB.tokenSymbol,
-            icon: <TokenIcon tokenSymbol={selectedTokenB.tokenSymbol} className="h-6 w-6" />,
-          }}
         />
       </div>
       <WarningMessage show={minimumTokenAmountExceeded} message={t("poolsPage.minimumAmountExceeded")} />

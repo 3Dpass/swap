@@ -71,7 +71,7 @@ const SwapTokens = () => {
   const { nativeTokenSymbol, assethubSubscanUrl } = useGetNetwork();
 
   // EVM swap hook for MetaMask transactions
-  const { executeSwap: executeEVMSwap, canPerformEVMSwap, lastSwapEvent } = useEVMSwap();
+  const { executeSwap: executeEVMSwap, canPerformEVMSwap } = useEVMSwap();
 
   const {
     tokenBalances,
@@ -84,8 +84,6 @@ const SwapTokens = () => {
     swapGasFee,
     swapLoading,
     poolsCards,
-    swapExactInTokenAmount,
-    swapExactOutTokenAmount,
     assetLoading,
     isTokenCanNotCreateWarningSwap,
   } = state;
@@ -144,77 +142,6 @@ const SwapTokens = () => {
   const [assetBPriceOfOneAssetA, setAssetBPriceOfOneAssetA] = useState<string>("");
 
   const [isMaxValueLessThenMinAmount, setIsMaxValueLessThenMinAmount] = useState<boolean>(false);
-
-  // Helper function to get swap amounts from EVM swap event
-  const getEVMSwapAmounts = () => {
-    if (!lastSwapEvent) {
-      return { exactInAmount: "0", exactOutAmount: "0" };
-    }
-
-    console.log("=== EVM SWAP AMOUNTS DEBUG ===");
-    console.log("lastSwapEvent:", lastSwapEvent);
-    console.log("inputEdited.inputType:", inputEdited.inputType);
-    console.log("selectedTokens:", selectedTokens);
-
-    const { amount0In, amount1In, amount0Out, amount1Out } = lastSwapEvent;
-
-    console.log("Raw amounts from event:");
-    console.log("amount0In:", amount0In);
-    console.log("amount1In:", amount1In);
-    console.log("amount0Out:", amount0Out);
-    console.log("amount1Out:", amount1Out);
-
-    // Convert string amounts to numbers for comparison
-    const amount0InNum = parseInt(amount0In, 10);
-    const amount1InNum = parseInt(amount1In, 10);
-    const amount0OutNum = parseInt(amount0Out, 10);
-    const amount1OutNum = parseInt(amount1Out, 10);
-
-    console.log("Parsed amounts:");
-    console.log("amount0InNum:", amount0InNum);
-    console.log("amount1InNum:", amount1InNum);
-    console.log("amount0OutNum:", amount0OutNum);
-    console.log("amount1OutNum:", amount1OutNum);
-
-    // Determine which amounts correspond to which tokens
-    // For exact input swaps: we know the input amount and get the output amount
-    // For exact output swaps: we know the output amount and get the input amount
-
-    let tokenAAmount, tokenBAmount;
-
-    if (inputEdited.inputType === InputEditedType.exactIn) {
-      // Exact input: tokenA is input, tokenB is output
-      // Find the non-zero input amount (this is our tokenA amount)
-      // Find the non-zero output amount (this is our tokenB amount)
-      tokenAAmount = amount0InNum > 0 ? amount0In : amount1In;
-      tokenBAmount = amount0OutNum > 0 ? amount0Out : amount1Out;
-    } else {
-      // Exact output: tokenB is input, tokenA is output
-      // Find the non-zero input amount (this is our tokenB amount)
-      // Find the non-zero output amount (this is our tokenA amount)
-      tokenBAmount = amount0InNum > 0 ? amount0In : amount1In;
-      tokenAAmount = amount0OutNum > 0 ? amount0Out : amount1Out;
-    }
-
-    console.log("Mapped amounts:");
-    console.log("tokenAAmount:", tokenAAmount);
-    console.log("tokenBAmount:", tokenBAmount);
-
-    // Format the amounts using the existing helper function
-    const formattedTokenAAmount = formatDecimalsFromToken(tokenAAmount, selectedTokens.tokenA.decimals);
-
-    const formattedTokenBAmount = formatDecimalsFromToken(tokenBAmount, selectedTokens.tokenB.decimals);
-
-    console.log("Formatted amounts:");
-    console.log("formattedTokenAAmount:", formattedTokenAAmount);
-    console.log("formattedTokenBAmount:", formattedTokenBAmount);
-    console.log("=============================");
-
-    return {
-      exactInAmount: formattedTokenAAmount,
-      exactOutAmount: formattedTokenBAmount,
-    };
-  };
 
   const nativeToken = {
     tokenId: "",
@@ -676,12 +603,22 @@ const SwapTokens = () => {
         throw new Error("Invalid asset IDs for swap");
       }
 
+      // Calculate minReceive with slippage applied (same logic as Substrate flow)
+      let minReceive: string;
+      if (inputEdited.inputType === InputEditedType.exactIn) {
+        // For exact input: minReceive should be the slippage-adjusted output amount
+        minReceive = tokenB; // tokenB is already slippage-adjusted in tokenBValueForSwap
+      } else {
+        // For exact output: minReceive should be the slippage-adjusted input amount
+        minReceive = tokenA; // tokenA is already slippage-adjusted in tokenAValueForSwap
+      }
+
       // Prepare swap parameters
       const swapParams = await createSwapParamsWithSafeDeadline({
         assetIn: assetIn.toString(),
         assetOut: assetOut.toString(),
         amount: inputEdited.inputType === InputEditedType.exactIn ? tokenA : tokenB,
-        minReceive: inputEdited.inputType === InputEditedType.exactIn ? tokenB : tokenA,
+        minReceive: minReceive,
         recipient: isMetamaskAccount(selectedAccount) ? selectedAccount.evmAddress : selectedAccount.address,
         isExactInput: inputEdited.inputType === InputEditedType.exactIn,
       }); // Uses default 10 minutes deadline from blockchain time
@@ -1695,40 +1632,6 @@ const SwapTokens = () => {
           open={swapFinalized}
           onClose={closeSuccessModal}
           contentTitle={"Successfully swapped"}
-          tokenA={{
-            symbol: state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol,
-            value: (() => {
-              // Use EVM swap amounts if available (MetaMask swap), otherwise use Substrate amounts
-              if (lastSwapEvent && isMetamaskAccount(selectedAccount)) {
-                const evmAmounts = getEVMSwapAmounts();
-                return evmAmounts.exactInAmount;
-              }
-              return swapExactInTokenAmount.toString();
-            })(),
-            icon: (
-              <TokenIcon
-                tokenSymbol={state.swapFromToken?.tokenSymbol || selectedTokens.tokenA.tokenSymbol}
-                className="h-16 w-16"
-              />
-            ),
-          }}
-          tokenB={{
-            symbol: state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol,
-            value: (() => {
-              // Use EVM swap amounts if available (MetaMask swap), otherwise use Substrate amounts
-              if (lastSwapEvent && isMetamaskAccount(selectedAccount)) {
-                const evmAmounts = getEVMSwapAmounts();
-                return evmAmounts.exactOutAmount;
-              }
-              return swapExactOutTokenAmount.toString();
-            })(),
-            icon: (
-              <TokenIcon
-                tokenSymbol={state.swapToToken?.tokenSymbol || selectedTokens.tokenB.tokenSymbol}
-                className="h-16 w-16"
-              />
-            ),
-          }}
         />
         <ReviewTransactionModal
           open={reviewModalOpen}
