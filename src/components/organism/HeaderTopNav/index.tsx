@@ -169,6 +169,14 @@ const HeaderTopNav = () => {
           >
             {t("button.pool")}
           </NavLink>
+          <a
+            href="https://bridge.3dpswap.online"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 lg:text-lg"
+          >
+            {t("headerTopNav.bridge")}
+          </a>
         </div>
 
         {/* Desktop Wallet Button */}
@@ -222,6 +230,15 @@ const HeaderTopNav = () => {
               >
                 {t("button.pool")}
               </NavLink>
+              <a
+                href="https://bridge.3dpswap.online"
+                target="_blank"
+                rel="noopener noreferrer"
+                onClick={() => setMobileMenuOpen(false)}
+                className="rounded-lg px-4 py-3 font-unbounded-variable text-base text-black transition-colors hover:bg-gray-50"
+              >
+                {t("headerTopNav.bridge")}
+              </a>
             </div>
           </div>
         )}

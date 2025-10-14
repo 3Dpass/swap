@@ -89,7 +89,8 @@
   },
   "headerTopNav": {
     "swap": "Swap",
-    "pool": "Pool"
+    "pool": "Pool",
+    "bridge": "Bridge"
   },
   "pageError": {
     "error": "Error:",
