@@ -70,61 +70,71 @@ const PoolDataCard = ({
   };
 
   return (
-    <div className="group relative rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:z-20 hover:scale-[1.02] hover:shadow-lg">
+    <div className="group relative rounded-2xl border border-gray-100 bg-white shadow-sm transition-all duration-300 hover:z-20 hover:scale-[1.02] hover:shadow-lg dark:border-dark-border-primary dark:bg-dark-bg-secondary dark:bg-dark-bg-tertiary">
       {/* Header with token pair */}
       <div className="flex items-center gap-3 rounded-t-2xl p-4 pb-2">
         <div className="relative flex flex-shrink-0 items-center">
-          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1">
+          <div className="relative z-10 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 dark:bg-dark-bg-tertiary dark:bg-dark-bg-tertiary">
             <TokenIcon tokenSymbol={firstTokenSymbol} className="h-14 w-14" />
           </div>
-          <div className="relative z-0 -ml-4 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1">
+          <div className="relative z-0 -ml-4 flex h-16 w-16 items-center justify-center rounded-full bg-white p-1 dark:bg-dark-bg-tertiary dark:bg-dark-bg-tertiary">
             <TokenIcon tokenSymbol={secondTokenSymbol} className="h-14 w-14" />
           </div>
         </div>
         <div className="min-w-0 flex-1">
-          <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900">{displayTokenPair}</h3>
-          <p className="text-sm text-gray-500">Liquidity Pool</p>
+          <h3 className="truncate font-unbounded-variable text-base font-bold text-gray-900 dark:text-dark-text-primary dark:text-dark-text-primary">
+            {displayTokenPair}
+          </h3>
+          <p className="text-sm text-gray-500 dark:text-dark-text-secondary dark:text-dark-text-secondary">
+            Liquidity Pool
+          </p>
         </div>
       </div>
 
       {/* Pool statistics */}
       <div className="px-4 pb-3">
-        <div className="rounded-lg bg-gray-50 p-3">
-          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-600">
+        <div className="rounded-lg bg-gray-50 p-3 dark:bg-dark-bg-card">
+          <h4 className="mb-2 text-xs font-semibold uppercase tracking-wide text-gray-600 dark:text-dark-text-secondary">
             {t("poolDataCard.totalTokensLocked")}
           </h4>
           <div className="space-y-2">
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5">
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 dark:bg-dark-bg-tertiary">
                 <TokenIcon tokenSymbol={firstTokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
-                  <p className="truncate font-mono text-sm font-medium text-gray-900">
+                  <p className="truncate font-mono text-sm font-medium text-gray-900 dark:text-dark-text-primary">
                     {formatCompactNumber(firstTokenAmount)}
                   </p>
-                  <p className="flex-shrink-0 text-xs text-gray-500">{firstTokenSymbol}</p>
+                  <p className="flex-shrink-0 text-xs text-gray-500 dark:text-dark-text-secondary">
+                    {firstTokenSymbol}
+                  </p>
                 </div>
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5">
+              <div className="flex h-7 w-7 flex-shrink-0 items-center justify-center rounded-full bg-white p-0.5 dark:bg-dark-bg-tertiary">
                 <TokenIcon tokenSymbol={secondTokenSymbol} className="h-6 w-6" />
               </div>
               <div className="min-w-0 flex-1">
                 <div className="flex items-baseline gap-1 overflow-hidden">
-                  <p className="truncate font-mono text-sm font-medium text-gray-900">
+                  <p className="truncate font-mono text-sm font-medium text-gray-900 dark:text-dark-text-primary">
                     {formatCompactNumber(secondTokenAmount)}
                   </p>
-                  <p className="flex-shrink-0 text-xs text-gray-500">{secondTokenSymbol}</p>
+                  <p className="flex-shrink-0 text-xs text-gray-500 dark:text-dark-text-secondary">
+                    {secondTokenSymbol}
+                  </p>
                 </div>
               </div>
             </div>
             {/* LP Tokens row */}
-            <div className="mt-2 border-t border-gray-200 pt-2">
+            <div className="mt-2 border-t border-gray-200 pt-2 dark:border-dark-border-primary">
               <div className="flex items-center justify-between">
-                <p className="text-xs font-medium text-gray-600">{t("poolDataCard.lpTokens")}:</p>
-                <p className="font-mono text-sm font-semibold text-gray-900">
+                <p className="text-xs font-medium text-gray-600 dark:text-dark-text-secondary">
+                  {t("poolDataCard.lpTokens")}:
+                </p>
+                <p className="font-mono text-sm font-semibold text-gray-900 dark:text-dark-text-primary">
                   {formatCompactNumber(lpTokenAsset?.balance || "0")}
                 </p>
               </div>

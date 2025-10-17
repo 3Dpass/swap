@@ -19,7 +19,17 @@ ReactDOM.createRoot(document.getElementById("root")!).render(
         <HelmetProvider>
           <App />
         </HelmetProvider>
-        <Toaster position="bottom-right" />
+        <Toaster
+          position="bottom-right"
+          toastOptions={{
+            className: "dark:bg-dark-bg-modal dark:text-dark-text-primary dark:border-dark-border-primary",
+            style: {
+              background: "var(--toast-bg)",
+              color: "var(--toast-color)",
+              border: "1px solid var(--toast-border)",
+            },
+          }}
+        />
       </ErrorBoundary>
     </I18nextProvider>
   </React.StrictMode>

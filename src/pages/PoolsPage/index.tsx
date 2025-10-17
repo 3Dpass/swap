@@ -39,10 +39,10 @@ const PoolsPage = () => {
           <div className="flex w-full max-w-[1280px] flex-col">
             <div className="flex flex-col items-start justify-between gap-4 px-2 py-6 sm:flex-row sm:items-center sm:px-6 sm:py-8 lg:px-10">
               <div className="flex flex-col gap-[4px] leading-[120%]">
-                <div className="font-unbounded-variable text-heading-4 font-[700] tracking-[.046px] text-gray-400 sm:text-heading-5">
+                <div className="font-unbounded-variable text-heading-4 font-[700] tracking-[.046px] text-gray-400 dark:text-dark-text-primary sm:text-heading-5">
                   {t("poolsPage.pools")}
                 </div>
-                <div className="text-sm tracking-[.2px] text-gray-300 sm:text-base">
+                <div className="text-sm tracking-[.2px] text-gray-300 dark:text-dark-text-secondary sm:text-base">
                   {t("poolsPage.earnFeesByProvidingLiquidity")}
                 </div>
               </div>
@@ -77,15 +77,15 @@ const PoolsPage = () => {
                 })}
               </div>
             ) : (
-              <div className="mx-2 flex h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-12 sm:mx-6 lg:mx-10">
-                <div className="rounded-full bg-white p-6 shadow-lg">
-                  <TokenIcon className="h-12 w-12 text-gray-400" />
+              <div className="mx-2 flex h-[400px] flex-col items-center justify-center gap-6 rounded-2xl border border-gray-200 bg-gradient-to-br from-gray-50 to-gray-100 p-12 dark:border-dark-border-primary dark:from-dark-bg-card dark:to-dark-bg-secondary sm:mx-6 lg:mx-10">
+                <div className="rounded-full bg-white p-6 shadow-lg dark:bg-dark-bg-secondary">
+                  <TokenIcon className="h-12 w-12 text-gray-400 dark:text-dark-text-tertiary" />
                 </div>
                 <div className="text-center">
-                  <h3 className="mb-2 text-xl font-semibold text-gray-900">
+                  <h3 className="mb-2 text-xl font-semibold text-gray-900 dark:text-dark-text-primary">
                     {selectedAccount ? t("poolsPage.noActiveLiquidityPositions") : "Connect Your Wallet"}
                   </h3>
-                  <p className="max-w-md text-gray-500">
+                  <p className="max-w-md text-gray-500 dark:text-dark-text-secondary">
                     {selectedAccount
                       ? "Start providing liquidity to earn fees from trades"
                       : t("poolsPage.connectWalletToView")}

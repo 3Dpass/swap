@@ -9,8 +9,8 @@ interface PriceDisplayProps {
 
 const PriceDisplay: React.FC<PriceDisplayProps> = ({ tokenASymbol, tokenBSymbol, price, className = "" }) => {
   return (
-    <div className={`flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-2 py-4 ${className}`}>
-      <div className="flex w-full flex-row text-medium font-normal text-gray-200">
+    <div className={`flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-2 py-4 dark:bg-dark-bg-card ${className}`}>
+      <div className="flex w-full flex-row text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
         <span>
           1 {tokenASymbol} = {price} {tokenBSymbol}
         </span>

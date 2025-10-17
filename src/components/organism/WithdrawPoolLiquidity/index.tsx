@@ -1,8 +1,6 @@
-import classNames from "classnames";
 import Decimal from "decimal.js";
 import { t } from "i18next";
 import { useEffect, useMemo, useState } from "react";
-import { NumericFormat } from "react-number-format";
 import { useLocation, useNavigate, useParams } from "react-router-dom";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import useTransactionTimeout from "../../../app/hooks/useTransactionTimeout";
@@ -27,6 +25,7 @@ import WarningMessage from "../../atom/WarningMessage";
 import AmountPercentage from "../../molecule/AmountPercentage";
 import TokenAmountInput from "../../molecule/TokenAmountInput";
 import TransactionButton from "../../molecule/TransactionButton";
+import SlippageTolerance from "../../molecule/SlippageTolerance";
 import TokenSelectModal from "../TokenSelectModal";
 import SwapAndPoolSuccessModal from "../SwapAndPoolSuccessModal";
 import ReviewTransactionModal from "../ReviewTransactionModal";
@@ -447,16 +446,16 @@ const WithdrawPoolLiquidity = () => {
 
   return (
     <div className="flex w-full max-w-[460px] flex-col gap-4">
-      <div className="relative flex w-full flex-col items-center gap-1.5 rounded-2xl bg-white p-5">
+      <div className="relative flex w-full flex-col items-center gap-1.5 rounded-2xl bg-white p-5 dark:bg-dark-bg-secondary">
         <button className="absolute left-[18px] top-[18px]" onClick={navigateToPools}>
           <BackArrow width={24} height={24} />
         </button>
-        <h3 className="heading-6 font-unbounded-variable font-normal">
+        <h3 className="heading-6 font-unbounded-variable font-normal text-black dark:text-dark-text-primary">
           {location?.state?.pageType === LiquidityPageType.removeLiquidity
             ? t("poolsPage.removeLiquidity")
             : t("poolsPage.addLiquidity")}
         </h3>
-        <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50" />
+        <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50 dark:border-dark-border-primary" />
         <TokenAmountInput
           tokenText={selectedTokenA?.nativeTokenSymbol}
           labelText={t("poolsPage.withdrawalAmount")}
@@ -498,77 +497,33 @@ const WithdrawPoolLiquidity = () => {
           disabled={withdrawLiquidityLoading}
         />
 
-        <div className="mt-1 text-small">{transferGasFeesMessage}</div>
-        <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">
-          <div className="flex w-full justify-between text-medium font-normal text-gray-200">
-            <div className="flex">{t("tokenAmountInput.slippageTolerance")}</div>
-            <span>{slippageValue}%</span>
-          </div>
-          <div className="flex w-full gap-2">
-            <div className="flex w-full basis-8/12 rounded-xl bg-white p-1 text-large font-normal text-gray-400">
-              <button
-                className={classNames("flex basis-1/2 justify-center rounded-lg px-4 py-3", {
-                  "bg-white": !slippageAuto,
-                  "bg-purple-100": slippageAuto,
-                })}
-                onClick={() => {
-                  setSlippageAuto(true);
-                  setSlippageValue(15);
-                }}
-                disabled={assetLoading || !selectedAccount.address}
-              >
-                {t("tokenAmountInput.auto")}
-              </button>
-              <button
-                className={classNames("flex basis-1/2 justify-center rounded-lg px-4 py-3", {
-                  "bg-white": slippageAuto,
-                  "bg-purple-100": !slippageAuto,
-                })}
-                onClick={() => setSlippageAuto(false)}
-                disabled={assetLoading || !selectedAccount.address}
-              >
-                {t("tokenAmountInput.custom")}
-              </button>
-            </div>
-            <div className="flex basis-1/3">
-              <div className="relative flex">
-                <NumericFormat
-                  value={slippageValue}
-                  isAllowed={(values) => {
-                    const { formattedValue, floatValue } = values;
-                    return formattedValue === "" || (floatValue !== undefined && floatValue <= 99);
-                  }}
-                  onValueChange={({ value }) => {
-                    setSlippageValue(parseInt(value) >= 0 ? parseInt(value) : 0);
-                  }}
-                  fixedDecimalScale={true}
-                  thousandSeparator={false}
-                  allowNegative={false}
-                  className="w-full rounded-lg bg-purple-100 p-2 text-large  text-gray-200 outline-none"
-                  disabled={slippageAuto || withdrawLiquidityLoading || assetLoading || !selectedAccount.address}
-                />
-                <span className="absolute bottom-1/3 right-2 text-medium text-gray-100">%</span>
-              </div>
-            </div>
-          </div>
-        </div>
+        <div className="mt-1 text-small text-gray-200 dark:text-dark-text-secondary">{transferGasFeesMessage}</div>
+        <SlippageTolerance
+          slippageAuto={slippageAuto}
+          slippageValue={slippageValue}
+          setSlippageAuto={setSlippageAuto}
+          setSlippageValue={setSlippageValue}
+          disabled={withdrawLiquidityLoading}
+          loading={assetLoading}
+          accountConnected={!!selectedAccount.address}
+        />
         {selectedTokenNativeValue?.tokenValue !== "" && selectedTokenAssetValue?.tokenValue !== "" && (
           <>
             {" "}
-            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-2 py-4">
-              <div className="flex w-full flex-row text-medium font-normal text-gray-200">
+            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-2 py-4 dark:bg-dark-bg-card">
+              <div className="flex w-full flex-row text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <span>
                   1 {selectedTokenA.nativeTokenSymbol} = {assetBPriceOfOneAssetA} {selectedTokenB.tokenSymbol}
                 </span>
               </div>
             </div>
-            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6 dark:bg-dark-bg-card">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Price impact</div>
                 <span>~ {priceImpact}%</span>
               </div>
 
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Expected output</div>
                 <span>
                   {selectedTokenNativeValue?.tokenValue &&
@@ -577,7 +532,7 @@ const WithdrawPoolLiquidity = () => {
                       selectedTokenA.nativeTokenSymbol}
                 </span>
               </div>
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Minimum output</div>
                 <span>
                   {formatDecimalsFromToken(nativeTokenWithSlippage?.tokenValue, selectedTokenA.nativeTokenDecimals) +
@@ -585,7 +540,7 @@ const WithdrawPoolLiquidity = () => {
                     selectedTokenA.nativeTokenSymbol}
                 </span>
               </div>
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Expected output</div>
                 <span>
                   {selectedTokenAssetValue?.tokenValue &&
@@ -594,7 +549,7 @@ const WithdrawPoolLiquidity = () => {
                       selectedTokenB.tokenSymbol}
                 </span>
               </div>
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Minimum output</div>
 
                 <span>

@@ -1,7 +1,6 @@
 import Button from "../../atom/Button";
 import Modal from "../../atom/Modal";
-import RandomTokenIcon from "../../../assets/img/random-token-icon.svg?react";
-import MetaMaskLogo from "../../../assets/img/MetaMask-icon-fox.svg?react";
+import AccountIdenticon from "../../atom/AccountIdenticon";
 import { useState } from "react";
 import { WalletConnectSteps } from "../../../app/types/enum";
 import { ModalStepProps } from "../../../app/types";
@@ -52,7 +51,7 @@ const WalletConnectModal = ({
 
   return (
     <Modal isOpen={open} onClose={onClose} title={title} onBack={onBack}>
-      <div className="flex min-w-[450px] flex-col gap-5 p-4">
+      <div className="flex min-w-[450px] flex-col gap-5 p-4 text-black dark:text-dark-text-primary">
         {modalStep?.step === WalletConnectSteps.stepExtensions ? (
           <>
             {/* MetaMask Wallet */}
@@ -61,7 +60,10 @@ const WalletConnectModal = ({
             {/* Substrate Wallets */}
             {supportedWallets?.map((wallet: Wallet) => {
               return (
-                <div key={wallet?.extensionName} className="flex cursor-pointer items-center gap-5">
+                <div
+                  key={wallet?.extensionName}
+                  className="flex cursor-pointer items-center gap-5 text-black dark:text-dark-text-primary"
+                >
                   <div className="flex basis-16">
                     <img src={wallet?.logo?.src} alt={wallet?.logo?.alt} width={36} height={36} />
                   </div>
@@ -79,7 +81,7 @@ const WalletConnectModal = ({
                         Continue
                       </Button>
                     ) : (
-                      <a href={wallet?.installUrl} target="blank">
+                      <a href={wallet?.installUrl} target="blank" className="text-pink hover:underline dark:text-pink">
                         Install
                       </a>
                     )}
@@ -95,12 +97,17 @@ const WalletConnectModal = ({
               const isMetaMask = isMetamaskAccount(account);
 
               return (
-                <div key={index} className="flex cursor-pointer flex-col rounded-lg bg-purple-100 px-4 py-3">
+                <div
+                  key={index}
+                  className="flex cursor-pointer flex-col rounded-lg bg-purple-100 px-4 py-3 dark:bg-dark-bg-card"
+                >
                   <div className="flex items-center gap-2">
-                    {isMetaMask ? <MetaMaskLogo width={32} height={32} /> : <RandomTokenIcon />}
+                    <AccountIdenticon address={account?.address || ""} isEVM={isMetaMask} size={32} />
                     <button className="flex flex-col items-start" onClick={() => handleConnect(account)}>
-                      <div className="text-base font-medium text-gray-300">{account?.name}</div>
-                      <div className="text-xs font-normal text-gray-300">
+                      <div className="text-base font-medium text-gray-300 dark:text-dark-text-primary">
+                        {account?.name}
+                      </div>
+                      <div className="text-xs font-normal text-gray-300 dark:text-dark-text-secondary">
                         {account?.address
                           ? (() => {
                               try {
@@ -119,7 +126,9 @@ const WalletConnectModal = ({
                           : "No address"}
                       </div>
                       {isMetaMask && (
-                        <div className="mt-1 text-xs font-normal text-gray-400">EVM: {account.evmAddress}</div>
+                        <div className="mt-1 text-xs font-normal text-gray-400 dark:text-dark-text-tertiary">
+                          EVM: {account.evmAddress}
+                        </div>
                       )}
                     </button>
                   </div>

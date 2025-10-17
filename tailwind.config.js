@@ -1,6 +1,7 @@
 /** @type {import("tailwindcss").Config} */
 export default {
   content: ["./index.html", "./src/**/*.{ts,tsx}"],
+  darkMode: 'class',
   theme: {
     extend: {
       fontFamily: {
@@ -56,6 +57,27 @@ export default {
           400: "#000000E5",
         },
         warning: "#FFF9E9",
+        // Dark theme colors
+        dark: {
+          bg: {
+            primary: "#0F0F0F",
+            secondary: "#1A1A1A",
+            tertiary: "#2A2A2A",
+            card: "#1E1E1E",
+            modal: "#252525",
+          },
+          text: {
+            primary: "#FFFFFF",
+            secondary: "#B3B3B3",
+            tertiary: "#808080",
+            muted: "#666666",
+          },
+          border: {
+            primary: "#333333",
+            secondary: "#404040",
+            accent: "#555555",
+          },
+        },
         
       },
       backgroundImage: {

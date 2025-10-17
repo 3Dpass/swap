@@ -1497,9 +1497,11 @@ const SwapTokens = () => {
 
   return (
     <div className="flex max-w-[460px] flex-col gap-4">
-      <div className="relative flex w-full flex-col items-center gap-1.5 rounded-2xl bg-white p-5">
-        <h3 className="heading-6 font-unbounded-variable font-normal">{t("swapPage.swap")}</h3>
-        <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50" />
+      <div className="relative flex w-full flex-col items-center gap-1.5 rounded-2xl border border-gray-200 bg-white p-5 transition-colors duration-300 dark:border-dark-border-primary dark:bg-dark-bg-secondary">
+        <h3 className="heading-6 font-unbounded-variable font-normal text-black dark:text-dark-text-primary">
+          {t("swapPage.swap")}
+        </h3>
+        <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50 dark:border-dark-border-primary" />
         <TokenAmountInput
           tokenText={selectedTokens.tokenA?.tokenSymbol}
           tokenBalance={selectedTokens.tokenA?.tokenBalance}
@@ -1537,7 +1539,7 @@ const SwapTokens = () => {
         >
           <SwitchArrow />
         </button>
-        <div className="mt-1 text-small">{swapGasFeesMessage}</div>
+        <div className="mt-1 text-small text-gray-200 dark:text-dark-text-secondary">{swapGasFeesMessage}</div>
 
         <SlippageTolerance
           slippageAuto={slippageAuto}
@@ -1555,12 +1557,12 @@ const SwapTokens = () => {
               tokenBSymbol={selectedTokens.tokenB.tokenSymbol}
               price={assetBPriceOfOneAssetA}
             />
-            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6">
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+            <div className="flex w-full flex-col gap-2 rounded-lg bg-purple-50 px-4 py-6 dark:bg-dark-bg-card">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">Price impact</div>
                 <span>~ {priceImpact}%</span>
               </div>
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">
                   {inputEdited.inputType === InputEditedType.exactIn ? "Expected output" : "Expected input"}
                 </div>
@@ -1570,7 +1572,7 @@ const SwapTokens = () => {
                     : selectedTokenAValue.tokenValue + " " + selectedTokens.tokenA.tokenSymbol}
                 </span>
               </div>
-              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200">
+              <div className="flex w-full flex-row justify-between text-medium font-normal text-gray-200 dark:text-dark-text-secondary">
                 <div className="flex">
                   {inputEdited.inputType === InputEditedType.exactIn ? "Minimum output" : "Maximum input"}
                 </div>

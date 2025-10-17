@@ -47,15 +47,15 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
 }) => {
   return (
     <Modal isOpen={open} onClose={onClose} title={title}>
-      <div className="flex w-[360px] flex-col gap-5">
+      <div className="flex w-[360px] flex-col gap-5 text-black dark:text-dark-text-primary">
         <div className="flex flex-col items-start">
-          <span className="font-inter text-small text-gray-200">
+          <span className="font-inter text-small text-gray-200 dark:text-dark-text-secondary">
             {transactionType === TransactionTypes.add && ""}
             {transactionType === TransactionTypes.swap && "You pay"}
             {transactionType === TransactionTypes.withdraw && "Withdrawal amount"}
             {transactionType === TransactionTypes.createPool && "You pay"}
           </span>
-          <span className="flex w-full items-center justify-between font-unbounded-variable text-heading-4 font-bold text-gray-400">
+          <span className="flex w-full items-center justify-between font-unbounded-variable text-heading-4 font-bold text-gray-400 dark:text-dark-text-primary dark:text-dark-text-primary">
             <div className="flex overflow-y-auto">{inputValueA}</div>
             <div className="w-12 flex-shrink-0">
               <TokenIcon tokenSymbol={inputTokenSymbolA} className="h-12 w-12" />
@@ -63,13 +63,13 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
           </span>
         </div>
         <div className="flex flex-col items-start">
-          <span className="font-inter text-small text-gray-200">
+          <span className="font-inter text-small text-gray-200 dark:text-dark-text-secondary">
             {transactionType === TransactionTypes.add && ""}
             {transactionType === TransactionTypes.swap && "You receive"}
             {transactionType === TransactionTypes.withdraw && "Withdrawal amount"}
             {transactionType === TransactionTypes.createPool && "You pay"}
           </span>
-          <span className="flex w-full items-center justify-between gap-6 font-unbounded-variable text-heading-4 font-bold text-gray-400">
+          <span className="flex w-full items-center justify-between gap-6 font-unbounded-variable text-heading-4 font-bold text-gray-400 dark:text-dark-text-primary dark:text-dark-text-primary">
             <div className="flex overflow-y-auto">{inputValueB}</div>
             <div className="w-12 flex-shrink-0">
               <TokenIcon tokenSymbol={inputTokenSymbolB} className="h-12 w-12" />
@@ -78,35 +78,47 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
         </div>
         {transactionType !== TransactionTypes.createPool && (
           <>
-            <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50" />
+            <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50 dark:border-dark-border-primary" />
             <div className="flex flex-col">
               <div className="flex justify-between">
-                <span className="font-inter text-medium text-gray-300">Price impact</span>
-                <span className="font-inter text-medium text-gray-400">{priceImpact}%</span>
+                <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary dark:text-dark-text-secondary">
+                  Price impact
+                </span>
+                <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary dark:text-dark-text-primary">
+                  {priceImpact}%
+                </span>
               </div>
               {showAll ? (
                 <>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">Expected output</span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
+                      Expected output
+                    </span>
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueA} {tokenSymbolA}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">Minimum output</span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
+                      Minimum output
+                    </span>
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueB} {tokenSymbolA}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">Expected output</span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
+                      Expected output
+                    </span>
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueASecond} {tokenSymbolB}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">Minimum output</span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
+                      Minimum output
+                    </span>
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueBSecond} {tokenSymbolB}
                     </span>
                   </div>
@@ -114,18 +126,18 @@ const ReviewTransactionModal: FC<SwapSelectTokenModalProps> = ({
               ) : (
                 <>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
                       {inputType == InputEditedType.exactIn ? "Expected output" : "Expected input"}
                     </span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueA} {tokenSymbolA}
                     </span>
                   </div>
                   <div className="flex justify-between">
-                    <span className="font-inter text-medium text-gray-300">
+                    <span className="font-inter text-medium text-gray-300 dark:text-dark-text-secondary">
                       {inputType === InputEditedType.exactIn ? "Minimum output" : "Maximum input"}
                     </span>
-                    <span className="font-inter text-medium text-gray-400">
+                    <span className="font-inter text-medium text-gray-400 dark:text-dark-text-primary">
                       {tokenValueB} {tokenSymbolB}
                     </span>
                   </div>

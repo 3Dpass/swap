@@ -1,10 +1,10 @@
 button {
   &.btn-primary {
-    @apply flex w-full items-center justify-center gap-2 rounded-lg sm:rounded-xl font-unbounded-variable font-normal;
+    @apply flex w-full items-center justify-center gap-2 rounded-lg sm:rounded-xl font-unbounded-variable font-normal transition-colors duration-300;
 
     &-pink {
       @extend .btn-primary;
-      @apply border border-pink bg-pink text-white hover:border-black hover:bg-black;
+      @apply border border-pink bg-pink text-white hover:border-pink hover:bg-pink hover:opacity-80 dark:border-pink dark:bg-pink dark:text-white dark:hover:border-pink dark:hover:bg-pink dark:hover:opacity-80;
 
       &-lg {
         @extend .btn-primary-pink;
@@ -19,7 +19,7 @@ button {
 
     &-ghost {
       @extend .btn-primary;
-      @apply border-ghost-200 bg-ghost-200 bg-clip-padding text-pink hover:border-ghost-100 hover:bg-ghost-100;
+      @apply border-ghost-200 bg-ghost-200 bg-clip-padding text-pink hover:border-ghost-100 hover:bg-ghost-100 dark:border-dark-border-secondary dark:bg-dark-bg-secondary dark:text-pink dark:hover:border-dark-border-accent dark:hover:bg-dark-bg-tertiary;
 
       &-lg {
         @extend .btn-primary-ghost;
@@ -34,54 +34,54 @@ button {
   }
 
   &.btn-secondary {
-    @apply box-border flex w-full items-center justify-center rounded-lg sm:rounded-xl px-4 py-3 font-unbounded-variable text-small font-normal;
+    @apply box-border flex w-full items-center justify-center rounded-lg sm:rounded-xl px-4 py-3 font-unbounded-variable text-small font-normal transition-colors duration-300;
 
     &-white {
       @extend .btn-secondary;
-      @apply border border-black bg-white text-black hover:border-transparent hover:bg-pink hover:text-white;
+      @apply border border-black bg-white text-black hover:border-transparent hover:bg-pink hover:text-white dark:border-dark-text-primary dark:bg-dark-bg-secondary dark:text-dark-text-primary dark:hover:border-transparent dark:hover:bg-pink dark:hover:text-white;
     }
 
     &-gray {
       @extend .btn-secondary;
-      @apply border border-purple-100 bg-purple-100 text-black hover:border-purple-200 hover:bg-purple-200;
+      @apply border border-purple-100 bg-purple-100 text-black hover:border-purple-200 hover:bg-purple-200 dark:border-dark-border-secondary dark:bg-dark-bg-tertiary dark:text-dark-text-primary dark:hover:border-dark-border-accent dark:hover:bg-dark-bg-card;
     }
   }
 
   &.btn-interactive {
-    @apply flex w-full items-center justify-center gap-2 rounded-lg p-4 font-inter font-normal;
+    @apply flex w-full items-center justify-center gap-2 rounded-lg p-4 font-inter font-normal transition-colors duration-300;
 
     &-pink {
       @extend .btn-interactive;
-      @apply border border-pink bg-pink text-white hover:border-black hover:bg-black;
+      @apply border border-pink bg-pink text-white hover:border-pink hover:bg-pink hover:opacity-80 dark:border-pink dark:bg-pink dark:text-white dark:hover:border-pink dark:hover:bg-pink dark:hover:opacity-80;
     }
 
     &-ghost {
       @extend .btn-interactive;
-      @apply border-ghost-200 bg-ghost-200 bg-clip-padding text-pink hover:border-ghost-100 hover:bg-ghost-100;
+      @apply border-ghost-200 bg-ghost-200 bg-clip-padding text-pink hover:border-ghost-100 hover:bg-ghost-100 dark:border-dark-border-secondary dark:bg-dark-bg-secondary dark:text-pink dark:hover:border-dark-border-accent dark:hover:bg-dark-bg-tertiary;
     }
 
     &-disabled {
       @extend .btn-interactive;
-      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200;
+      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200 dark:bg-dark-bg-tertiary dark:text-dark-text-muted dark:hover:bg-dark-bg-tertiary dark:hover:text-dark-text-muted;
     }
   }
 
   &.btn-select {
-    @apply flex w-full items-center gap-2 rounded-lg px-3 py-2 font-inter text-medium sm:text-large font-medium;
+    @apply flex w-full items-center gap-2 rounded-lg px-3 py-2 font-inter text-medium sm:text-large font-medium transition-colors duration-300;
 
     &-pink {
       @extend .btn-select;
-      @apply bg-pink text-white hover:bg-black transition-colors duration-200;
+      @apply bg-pink text-white hover:bg-black transition-colors duration-200 dark:bg-pink dark:text-white dark:hover:bg-dark-text-primary;
     }
 
     &-gray {
       @extend .btn-select;
-      @apply bg-purple-200 text-black hover:bg-black hover:text-white transition-colors duration-200;
+      @apply bg-purple-200 text-black hover:bg-black hover:text-white transition-colors duration-200 dark:bg-dark-bg-tertiary dark:text-dark-text-primary dark:hover:bg-dark-text-primary dark:hover:text-white;
     }
 
     &-disabled {
       @extend .btn-select;
-      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200 cursor-not-allowed;
+      @apply bg-gray-100 text-gray-200 hover:bg-gray-100 hover:text-gray-200 cursor-not-allowed dark:bg-dark-bg-tertiary dark:text-dark-text-muted dark:hover:bg-dark-bg-tertiary dark:hover:text-dark-text-muted;
     }
   }
 }

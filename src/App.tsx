@@ -8,6 +8,7 @@ import { connectWalletAndFetchBalance } from "./services/polkadotWalletServices"
 import { createPoolCardsArray } from "./services/poolServices";
 import { initializeBlockTimeTracking } from "./services/blockTimeService";
 import { AppStateProvider } from "./state";
+import { ThemeProvider } from "./app/contexts/ThemeContext";
 
 const App: FC = () => {
   const { dispatch, state } = useStateAndDispatch();
@@ -39,9 +40,11 @@ const App: FC = () => {
   }, [pools, selectedAccount]);
 
   return (
-    <AppStateProvider state={state} dispatch={dispatch}>
-      <RouterProvider router={router} />
-    </AppStateProvider>
+    <ThemeProvider>
+      <AppStateProvider state={state} dispatch={dispatch}>
+        <RouterProvider router={router} />
+      </AppStateProvider>
+    </ThemeProvider>
   );
 };
 

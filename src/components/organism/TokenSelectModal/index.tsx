@@ -89,10 +89,14 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
         {tokens && tokens.length > 0 ? (
           <>
             {tokens.map((item: any, index: number) => (
-              <div key={index} className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-pink">
+              <div
+                key={index}
+                className="group flex min-w-[498px] flex-col hover:rounded-md hover:bg-pink dark:hover:bg-pink"
+              >
                 <button
                   className={classNames("flex items-center gap-3 px-4 py-3", {
-                    "rounded-md bg-purple-200 hover:bg-pink": item.tokenId === getSelectedTokenId(),
+                    "rounded-md bg-purple-200 hover:bg-pink dark:bg-dark-bg-card dark:hover:bg-pink":
+                      item.tokenId === getSelectedTokenId(),
                   })}
                   onClick={() => handleSelectToken(item)}
                 >
@@ -102,16 +106,16 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
                         <TokenIcon tokenSymbol={item.assetTokenMetadata?.symbol} className="h-16 w-16" />
                       </div>
                       <div className="flex flex-col items-start justify-center">
-                        <div className="font-unbounded-variable text-base font-bold text-gray-900 group-hover:text-white">
+                        <div className="font-unbounded-variable text-base font-bold text-gray-900 group-hover:text-white dark:text-dark-text-primary">
                           {item.assetTokenMetadata?.name}
                         </div>
-                        <div className="text-sm text-gray-500 group-hover:text-white">
+                        <div className="text-sm text-gray-500 group-hover:text-white dark:text-dark-text-secondary">
                           {item.assetTokenMetadata?.symbol}
                         </div>
                       </div>
                     </div>
                     <div className="flex gap-1">
-                      <div className="font-mono text-sm font-medium text-gray-900 group-hover:text-white">
+                      <div className="font-mono text-sm font-medium text-gray-900 group-hover:text-white dark:text-dark-text-primary">
                         {smartBalanceDisplay(item.tokenAsset?.balance || 0, item.assetTokenMetadata?.decimals)}
                       </div>
                       {item.tokenId === getSelectedTokenId() ? <CheckIcon /> : null}
@@ -123,7 +127,9 @@ const TokenSelectModal: FC<TokenSelectModalProps> = ({
           </>
         ) : (
           <div className="mt-4 flex flex-col items-center justify-center">
-            <span className="font-light text-gray-100">Please wait, Loading available tokens</span>
+            <span className="font-light text-gray-100 dark:text-dark-text-secondary">
+              Please wait, Loading available tokens
+            </span>
           </div>
         )}
       </div>

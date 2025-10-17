@@ -40,8 +40,8 @@ const Button = ({ children, disabled, className, icon, hasSpinner, variant, onCl
         <ArrowDownIcon
           width={16}
           height={16}
-          color={`${isButtonHover && !disabled ? "white" : "black"}`}
-          className={disabled ? "opacity-40" : ""}
+          color={`${isButtonHover && !disabled ? "white" : "currentColor"}`}
+          className={`${disabled ? "opacity-40" : ""} text-black dark:text-dark-text-primary`}
         />
       );
     }

@@ -55,15 +55,18 @@ const TokenAmountInput = ({
     <div
       ref={wrapperRef}
       className={classNames(
-        "relative flex flex-col items-center justify-start gap-2 rounded-lg border bg-purple-100 px-4 py-6",
+        "relative flex flex-col items-center justify-start gap-2 rounded-lg border bg-purple-100 px-4 py-6 transition-colors duration-300 dark:bg-dark-bg-card",
         {
-          "border-pink": isFocused,
+          "border-pink dark:border-pink": isFocused,
           "border-transparent": !isFocused,
         }
       )}
     >
       <div className="flex">
-        <label htmlFor="token-amount" className="absolute top-4 text-small font-normal text-gray-200">
+        <label
+          htmlFor="token-amount"
+          className="absolute top-4 text-small font-normal text-gray-200 dark:text-dark-text-secondary"
+        >
           {labelText}
         </label>
         <NumericFormat
@@ -74,7 +77,7 @@ const TokenAmountInput = ({
           displayType={"input"}
           disabled={disabled}
           placeholder={"0"}
-          className="w-full basis-auto bg-transparent font-unbounded-variable text-heading-4 font-bold text-gray-300 outline-none placeholder:text-gray-200"
+          className="w-full basis-auto bg-transparent font-unbounded-variable text-heading-4 font-bold text-gray-300 outline-none placeholder:text-gray-200 dark:text-dark-text-primary dark:placeholder:text-dark-text-tertiary"
           onFocus={() => setIsFocused(true)}
           value={tokenValue}
           isAllowed={({ floatValue }) => {
@@ -114,12 +117,14 @@ const TokenAmountInput = ({
       </div>
       <div className="flex w-full justify-between">
         {withdrawAmountPercentage ? (
-          <span className="text-[13px] tracking-[0.2px] text-black text-opacity-50">({withdrawAmountPercentage}%)</span>
+          <span className="text-[13px] tracking-[0.2px] text-black text-opacity-50 dark:text-dark-text-tertiary">
+            ({withdrawAmountPercentage}%)
+          </span>
         ) : null}
-        <div className="flex w-full justify-end pr-1 text-medium text-gray-200">
+        <div className="flex w-full justify-end pr-1 text-medium text-gray-200 dark:text-dark-text-secondary">
           <span>Balance: </span>
           <button
-            className={`ml-1 transition-colors ${onMaxClick && !disabled ? "cursor-pointer hover:text-pink" : "cursor-default"}`}
+            className={`ml-1 text-gray-200 transition-colors dark:text-dark-text-secondary ${onMaxClick && !disabled ? "cursor-pointer hover:text-pink dark:hover:text-pink" : "cursor-default"}`}
             onClick={() => onMaxClick && !disabled && onMaxClick()}
             disabled={disabled || !onMaxClick}
             type="button"
@@ -133,7 +138,7 @@ const TokenAmountInput = ({
             process.env.VITE_ENABLE_EXPERIMENTAL_MAX_TOKENS_SWAP &&
             process.env.VITE_ENABLE_EXPERIMENTAL_MAX_TOKENS_SWAP == "true" && (
               <button
-                className="ml-2 inline-flex h-5 w-11 flex-col items-start justify-start gap-2 px-1.5 text-pink"
+                className="ml-2 inline-flex h-5 w-11 flex-col items-start justify-start gap-2 px-1.5 text-pink dark:text-pink"
                 onClick={onMaxClick}
                 type="button"
               >

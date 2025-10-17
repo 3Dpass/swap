@@ -1,8 +1,8 @@
 import classNames from "classnames";
 import { NavLink, useLocation } from "react-router-dom";
 import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
-import AccountImage from "../../../assets/img/account-image-icon.svg?react";
 import Logo from "../../../assets/img/3dpswap-logo.svg?react";
+import AccountIdenticon from "../../atom/AccountIdenticon";
 import { ActionType, ButtonVariants, WalletConnectSteps } from "../../../app/types/enum.ts";
 import { reduceAddress } from "../../../app/util/helper";
 import {
@@ -10,7 +10,7 @@ import {
   getSupportedWallets,
   handleDisconnect,
 } from "../../../services/polkadotWalletServices";
-import { type UnifiedWalletAccount } from "../../../services/metamaskServices";
+import { type UnifiedWalletAccount, isMetamaskAccount } from "../../../services/metamaskServices";
 import { useAppContext } from "../../../state";
 import Button from "../../atom/Button/index.tsx";
 import { t } from "i18next";
@@ -24,6 +24,7 @@ import dotAcpToast from "../../../app/util/toast.ts";
 import { LottieSmall } from "../../../assets/loader/index.tsx";
 import useClickOutside from "../../../app/hooks/useClickOutside.ts";
 import useGetNetwork from "../../../app/hooks/useGetNetwork.ts";
+import ThemeToggle from "../../atom/ThemeToggle/index.tsx";
 
 const HeaderTopNav = () => {
   const { state, dispatch } = useAppContext();
@@ -114,12 +115,17 @@ const HeaderTopNav = () => {
     if (walletConnected && walletAccount?.address) {
       return (
         <div className="flex items-center gap-2 sm:gap-4">
-          <div className="hidden flex-col items-end text-gray-300 sm:flex">
+          <div className="hidden flex-col items-end text-gray-300 dark:text-dark-text-secondary sm:flex">
             <div className="text-sm font-[500] sm:text-base">{walletAccount?.name || "Account"}</div>
             <div className="text-[10px] sm:text-small">{reduceAddress(walletAccount?.address, 6, 6, ss58Format)}</div>
           </div>
           <button onClick={() => disconnectWallet()} className="p-1 transition-opacity hover:opacity-80">
-            <AccountImage className="h-8 w-8 sm:h-9 sm:w-9" />
+            <AccountIdenticon
+              address={walletAccount?.address || ""}
+              isEVM={isMetamaskAccount(walletAccount)}
+              size={36}
+              className="h-8 w-8 sm:h-9 sm:w-9"
+            />
           </button>
         </div>
       );
@@ -139,20 +145,20 @@ const HeaderTopNav = () => {
 
   return (
     <>
-      <nav className="relative flex h-[60px] items-center justify-between px-2 py-3 sm:h-[70px] sm:px-6 sm:py-4 lg:h-[80px] lg:px-10 lg:py-5">
+      <nav className="relative flex h-[60px] items-center justify-between bg-white px-2 py-3 transition-colors duration-300 dark:bg-dark-bg-primary sm:h-[70px] sm:px-6 sm:py-4 lg:h-[80px] lg:px-10 lg:py-5">
         {/* Logo - fixed size, no distortion */}
         <div className="flex-shrink-0">
           <Logo className="h-auto w-[100px] sm:w-[120px] lg:w-[150px]" />
         </div>
 
         {/* Desktop Navigation */}
-        <div className="hidden gap-6 text-gray-200 md:flex lg:gap-12 xl:gap-16">
+        <div className="hidden gap-6 text-gray-200 dark:text-dark-text-secondary md:flex lg:gap-12 xl:gap-16">
           <NavLink
             to={SWAP_ROUTE}
             className={classNames(
-              "font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 lg:text-lg",
+              "font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 dark:hover:text-dark-text-primary lg:text-lg",
               {
-                "text-gray-400": location.pathname.includes(SWAP_ROUTE),
+                "text-gray-400 dark:text-dark-text-primary": location.pathname.includes(SWAP_ROUTE),
               }
             )}
           >
@@ -161,9 +167,9 @@ const HeaderTopNav = () => {
           <NavLink
             to={POOLS_ROUTE}
             className={classNames(
-              "font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 lg:text-lg",
+              "font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 dark:hover:text-dark-text-primary lg:text-lg",
               {
-                "text-gray-400": location.pathname.includes(POOLS_ROUTE),
+                "text-gray-400 dark:text-dark-text-primary": location.pathname.includes(POOLS_ROUTE),
               }
             )}
           >
@@ -173,23 +179,25 @@ const HeaderTopNav = () => {
             href="https://bridge.3dpswap.online"
             target="_blank"
             rel="noopener noreferrer"
-            className="font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 lg:text-lg"
+            className="font-unbounded-variable text-base tracking-[.96px] transition-colors hover:text-gray-400 dark:hover:text-dark-text-primary lg:text-lg"
           >
             {t("headerTopNav.bridge")}
           </a>
         </div>
 
-        {/* Desktop Wallet Button */}
-        <div className="hidden items-center md:flex">
+        {/* Desktop Wallet Button and Theme Toggle */}
+        <div className="hidden items-center gap-3 md:flex">
+          <ThemeToggle />
           <WalletButton />
         </div>
 
         {/* Mobile Menu Button and Wallet */}
         <div className="flex items-center gap-2 md:hidden">
+          <ThemeToggle />
           <WalletButton />
           <button
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            className="p-2 text-gray-200 transition-colors hover:text-gray-400"
+            className="p-2 text-gray-200 transition-colors hover:text-gray-400 dark:text-dark-text-secondary dark:hover:text-dark-text-primary"
             aria-label="Toggle menu"
           >
             <svg className="h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -207,7 +215,7 @@ const HeaderTopNav = () => {
         {mobileMenuOpen && (
           <div
             ref={mobileMenuRef}
-            className="absolute left-0 right-0 top-full z-50 border-t border-gray-50 bg-white shadow-xl md:hidden"
+            className="absolute left-0 right-0 top-full z-50 border-t border-gray-50 bg-white shadow-xl dark:border-dark-border-primary dark:bg-dark-bg-secondary md:hidden"
           >
             <div className="flex flex-col gap-2 p-2">
               <NavLink
@@ -215,7 +223,8 @@ const HeaderTopNav = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className={classNames("rounded-lg px-4 py-3 font-unbounded-variable text-base transition-colors", {
                   "bg-pink text-white": location.pathname.includes(SWAP_ROUTE),
-                  "text-black hover:bg-gray-50": !location.pathname.includes(SWAP_ROUTE),
+                  "text-black hover:bg-gray-50 dark:text-dark-text-primary dark:hover:bg-dark-bg-tertiary":
+                    !location.pathname.includes(SWAP_ROUTE),
                 })}
               >
                 {t("button.swap")}
@@ -225,7 +234,8 @@ const HeaderTopNav = () => {
                 onClick={() => setMobileMenuOpen(false)}
                 className={classNames("rounded-lg px-4 py-3 font-unbounded-variable text-base transition-colors", {
                   "bg-pink text-white": location.pathname.includes(POOLS_ROUTE),
-                  "text-black hover:bg-gray-50": !location.pathname.includes(POOLS_ROUTE),
+                  "text-black hover:bg-gray-50 dark:text-dark-text-primary dark:hover:bg-dark-bg-tertiary":
+                    !location.pathname.includes(POOLS_ROUTE),
                 })}
               >
                 {t("button.pool")}
@@ -235,7 +245,7 @@ const HeaderTopNav = () => {
                 target="_blank"
                 rel="noopener noreferrer"
                 onClick={() => setMobileMenuOpen(false)}
-                className="rounded-lg px-4 py-3 font-unbounded-variable text-base text-black transition-colors hover:bg-gray-50"
+                className="rounded-lg px-4 py-3 font-unbounded-variable text-base text-black transition-colors hover:bg-gray-50 dark:text-dark-text-primary dark:hover:bg-dark-bg-tertiary"
               >
                 {t("headerTopNav.bridge")}
               </a>

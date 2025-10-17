@@ -1,3 +1,20 @@
 body {
-  @apply h-screen bg-purple-100 font-inter text-large;
+  @apply h-screen bg-purple-100 font-inter text-large transition-colors duration-300;
+}
+
+.dark body {
+  @apply bg-dark-bg-primary text-dark-text-primary;
+}
+
+/* Toast notification styling */
+:root {
+  --toast-bg: #ffffff;
+  --toast-color: #000000;
+  --toast-border: #e5e7eb;
+}
+
+.dark {
+  --toast-bg: #252525;
+  --toast-color: #ffffff;
+  --toast-border: #333333;
 }
