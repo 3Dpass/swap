@@ -2,10 +2,14 @@ import { createBrowserRouter, Navigate } from "react-router-dom";
 import PoolsPage from "../../pages/PoolsPage";
 import SwapPage from "../../pages/SwapPage";
 import LiquidityPage from "../../pages/LiquidityPage/index.tsx";
+import DevelopersPage from "../../pages/DevelopersPage";
+import AddTokenPage from "../../pages/AddTokenPage";
 import {
   HOME_ROUTE,
   POOLS_ROUTE,
   SWAP_ROUTE,
+  DEVELOPERS_ROUTE,
+  ADD_TOKEN_ROUTE,
   ADD_LIQUIDITY,
   ADD_LIQUIDITY_TO_EXISTING,
   REMOVE_LIQUIDITY_FROM_EXISTING,
@@ -49,6 +53,14 @@ const router = createBrowserRouter([
       {
         path: SWAP_ROUTE,
         element: <SwapPage />,
+      },
+      {
+        path: DEVELOPERS_ROUTE,
+        element: <DevelopersPage />,
+      },
+      {
+        path: ADD_TOKEN_ROUTE,
+        element: <AddTokenPage />,
       },
     ],
   },

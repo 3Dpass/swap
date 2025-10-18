@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import LanguageSwitcher from "../../atom/LanguageSwitcher/index.tsx";
 
 const Footer = () => {
@@ -7,6 +8,27 @@ const Footer = () => {
         <div className="flex flex-col items-center justify-between gap-4 text-center sm:flex-row sm:gap-2">
           {/* Links section */}
           <div className="flex flex-col items-center gap-3 text-sm sm:flex-row sm:gap-0">
+            <Link
+              to="/developers"
+              className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
+            >
+              Developers
+            </Link>
+            <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
+            <Link
+              to="/add-token"
+              className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
+            >
+              Add a Token
+            </Link>
+            <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
+            <span className="mx-3 hidden text-gray-300 dark:text-dark-text-tertiary sm:inline-block">
+              This is an open-source free software. Use it at your own risk.
+            </span>
+          </div>
+
+          {/* Language switcher */}
+          <div className="flex items-center gap-2">
             <a
               href="https://github.com/3Dpass/swap"
               target="_blank"
@@ -27,30 +49,7 @@ const Footer = () => {
                 />
               </svg>
             </a>
-
             <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
-
-            <a
-              href="https://github.com/3Dpass/swap/blob/main/ASSET_CONVERSION_PALLET.md"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
-            >
-              Substrate RPC API
-            </a>
-            <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
-            <a
-              href="https://github.com/3Dpass/3DP/tree/main/precompiles/assets-conversion"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
-            >
-              EVM Solidity interface
-            </a>
-          </div>
-
-          {/* Language switcher */}
-          <div className="flex items-center gap-2">
             <LanguageSwitcher />
           </div>
         </div>

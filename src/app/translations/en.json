@@ -25,6 +25,14 @@
     "swap": {
       "title": "Swap",
       "description": "Swap tokens freely on 3DPswap Decentralized Exchange"
+    },
+    "developers": {
+      "title": "Developers",
+      "description": "Resources and documentation for developers building on 3DPswap"
+    },
+    "addToken": {
+      "title": "Add a Token",
+      "description": "Learn how to add new tokens to 3DPswap"
     }
   },
   "button": {

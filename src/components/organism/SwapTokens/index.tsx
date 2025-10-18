@@ -1,6 +1,6 @@
 import Decimal from "decimal.js";
 import { t } from "i18next";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import useGetNetwork from "../../../app/hooks/useGetNetwork";
 import { InputEditedProps, PoolCardProps, TokenDecimalsErrorProps, TokenProps } from "../../../app/types";
 import { ActionType, InputEditedType, TokenPosition, TokenSelection, TransactionTypes } from "../../../app/types/enum";
@@ -69,6 +69,7 @@ type TokenSelectedProps = {
 const SwapTokens = () => {
   const { state, dispatch } = useAppContext();
   const { nativeTokenSymbol, assethubSubscanUrl } = useGetNetwork();
+  const youPayInputRef = useRef<HTMLInputElement>(null);
 
   // EVM swap hook for MetaMask transactions
   const { executeSwap: executeEVMSwap, canPerformEVMSwap } = useEVMSwap();
@@ -1306,6 +1307,13 @@ const SwapTokens = () => {
     });
   }, []);
 
+  // Auto-focus the "You pay" input field when component mounts
+  useEffect(() => {
+    if (youPayInputRef.current) {
+      youPayInputRef.current.focus();
+    }
+  }, []);
+
   // Transaction timeout is now handled by useTransactionTimeout hook
 
   const calculatePriceImpact = async () => {
@@ -1503,6 +1511,7 @@ const SwapTokens = () => {
         </h3>
         <hr className="mb-0.5 mt-1 w-full border-[0.7px] border-gray-50 dark:border-dark-border-primary" />
         <TokenAmountInput
+          ref={youPayInputRef}
           tokenText={selectedTokens.tokenA?.tokenSymbol}
           tokenBalance={selectedTokens.tokenA?.tokenBalance}
           tokenId={selectedTokens.tokenA?.tokenId}
