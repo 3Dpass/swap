@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "Título OG",
+      "description": "Descrição OG",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Resumo do Twitter Card",
+      "title": "Título do Twitter",
+      "description": "Descrição do Twitter",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "Interface do usuário 3DPswap",
+      "description": "Exchange descentralizada 3DPswap",
+      "keywords": "3DPswap, DEX, Exchange descentralizada"
+    },
+    "pools": {
+      "title": "Pools de liquidez",
+      "description": "Pools de liquidez 3DPswap"
+    },
+    "swap": {
+      "title": "Trocar",
+      "description": "Troque tokens livremente na exchange descentralizada 3DPswap"
+    }
+  },
+  "button": {
+    "deposit": "Depositar",
+    "withdraw": "Sacar",
+    "newPosition": "Nova posição",
+    "insufficientTokenAmount": "Quantidade de {{token}} insuficiente",
+    "insufficientTokenLiquidity": "Liquidez de {{token}} insuficiente no pool",
+    "minimumTokenAmountExceeded": "Quantidade mínima de token de ativo excedida",
+    "toLowForSwap": "Quantidade de {{token}} muito baixa - impacto de slippage",
+    "enterAmount": "Inserir quantidade",
+    "selectToken": "Selecionar token",
+    "swap": "Trocar",
+    "pool": "Pools de liquidez",
+    "confirmSwap": "Confirmar troca",
+    "connectWallet": "Conectar carteira"
+  },
+  "modal": {
+    "connectWallet": "Conectar uma carteira",
+    "selectToken": "Selecionar token",
+    "successfulWithdrawal": "Saque bem-sucedido",
+    "priceImpact": "Impacto no preço",
+    "expectedOutput": "Saída esperada",
+    "minimumOutput": "Saída mínima",
+    "added": "adicionado",
+    "swap": {
+      "swapped": "Trocado",
+      "successfullySwapped": "Troca bem-sucedida",
+      "reviewSwap": "Revisar troca"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "Revisar adição de liquidez",
+      "poolSuccessfullyCreated": "Pool de liquidez criado com sucesso",
+      "creationOfPoolFailed": "Falha na criação do pool de liquidez"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "Revisar remoção de liquidez",
+      "successfulWithdrawal": "Saque bem-sucedido",
+      "withdrawal": "Saque"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "Revisar adição de liquidez",
+      "successfullyAddedToPool": "Adicionado com sucesso ao pool",
+      "successfullyAddedLiquidity": "Liquidez adicionada com sucesso"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "Total de tokens bloqueados",
+    "deposited": "Depositado",
+    "lpTokens": "Tokens LP"
+  },
+  "wallet": {
+    "notConnected": "Não conectado",
+    "noWalletFound": "Nenhuma carteira encontrada!"
+  },
+  "tokenAmountInput": {
+    "youPay": "Você paga",
+    "youReceive": "Você recebe",
+    "slippageTolerance": "Tolerância de slippage",
+    "auto": "Automático",
+    "custom": "Personalizado"
+  },
+  "headerTopNav": {
+    "swap": "Trocar",
+    "pool": "Pool de liquidez",
+    "bridge": "Ponte"
+  },
+  "pageError": {
+    "error": "Erro:",
+    "tryAgain": "Tentar novamente",
+    "minimalAmountRequirement": "A quantidade mínima necessária para o token {{token}} é {{value}}.",
+    "lowLiquidity": "Aviso: Este pool tem baixa liquidez, há risco de que a transação não seja concluída.",
+    "tooManyDecimals": "Muitas casas decimais para o token {{token}}, por favor reduza, o máximo permitido para este token é {{decimals}} casas decimais.",
+    "tradingMinimum": "Sua ordem de trading está abaixo do mínimo de trading.",
+    "tokenCanNotCreate": "{\"token\":\"NãoPodeCriar\"}",
+    "tokenCanNotCreateWarning": "Sua conta atingiu o limite de 16 ativos e pools de liquidez no total. Queime ou envie todos os ativos de um certo tipo da sua conta, ou retire todos os ativos de um pool para dar espaço para outro tipo. Alternativamente, conecte outra carteira e use-a para novos ativos e pools.",
+    "lowMinimalAmountAssetToken": "O token {{tokenSymbol}} selecionado que você quer receber está abaixo da quantidade mínima {{minimalAmount}}.",
+    "transactionTimeout": "Parece que a transação está demorando mais que o usual.\nPor favor verifique o status da transação na sua carteira clicando em {{url}}",
+    "maxValueLessThanMinAmount": "O valor máximo é menor que a quantidade mínima."
+  },
+  "pageNotFound": "Página não encontrada",
+  "poolsPage": {
+    "pools": "Pools de liquidez",
+    "earnFeesByProvidingLiquidity": "Ganhe taxas fornecendo liquidez.",
+    "activeLiquidityPositions": "Posições de liquidez ativas aparecerão aqui.",
+    "connectWalletToView": "Conecte sua carteira para ver suas posições de liquidez.",
+    "noActiveLiquidityPositions": "Nenhuma posição de liquidez ativa.",
+    "addLiquidity": "Adicionar liquidez",
+    "poolExists": "Não é necessário criar um novo pool. A liquidez pode ser adicionada ao existente.",
+    "removeLiquidity": "Remover liquidez",
+    "withdrawalAmount": "Quantidade de saque",
+    "newPosition": "Nova posição",
+    "doNotHaveLiquidityPair": "Você não tem tokens deste par de liquidez.",
+    "connectWallet": "Por favor conecte sua carteira",
+    "assetsWait": "Buscando seus saldos de tokens, por favor aguarde alguns segundos",
+    "errorFetchingPools": "Erro ao buscar pools: {{error}}",
+    "minimumAmountExceeded": "O saque completo desta quantidade não é possível, pois a quantidade mínima definida por token deve permanecer no pool."
+  },
+  "swapPage": {
+    "addLiquidity": "Adicionar liquidez",
+    "removeLiquidity": "Remover liquidez",
+    "swap": "Trocar",
+    "poolExists": "Não é necessário criar um novo pool. A liquidez pode ser adicionada ao existente.",
+    "palletSlippageError": "A quantidade de saída calculada é menor que a quantidade mínima fornecida.",
+    "slippageError": "A transação não pôde ser concluída devido ao slippage definido."
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "Preparando transação...",
+    "validatingInputs": "Validando entradas...",
+    "checkingBalances": "Verificando saldos...",
+    "calculatingRoute": "Calculando melhor rota...",
+    "signing": "Assinando transação...",
+    "waitingForNewBlock": "Aguardando novo bloco...",
+    "waitingForConfirmation": "Aguardando confirmação...",
+    "waitingForFinalization": "Aguardando finalização...",
+    "finalizing": "Finalizando transação...",
+    "updatingBalances": "Atualizando saldos...",
+    "success": "Transação bem-sucedida!",
+    "error": "Transação falhou"
+  },
+  "footer": {
+    "poweredBy": "Desenvolvido por",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "Detalhes da conexão",
+    "networkName": "Nome da rede",
+    "rpcUrl": "URL RPC",
+    "chainId": "ID da cadeia",
+    "ss58Format": "Formato SS58",
+    "blockExplorer": "Explorador de blocos",
+    "copy": "Copiar"
+  }
+}

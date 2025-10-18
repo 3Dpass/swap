@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OG Заголовок",
+      "description": "OG Описание",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Сводка Twitter Card",
+      "title": "Twitter Заголовок",
+      "description": "Twitter Описание",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "Пользовательский интерфейс 3DPswap",
+      "description": "Децентрализованная биржа 3DPswap",
+      "keywords": "3DPswap, DEX, Децентрализованная биржа"
+    },
+    "pools": {
+      "title": "Пуллы ликвидности",
+      "description": "Пуллы ликвидности 3DPswap"
+    },
+    "swap": {
+      "title": "Обмен",
+      "description": "Свободно обменивайте токены на децентрализованной бирже 3DPswap"
+    }
+  },
+  "button": {
+    "deposit": "Депозит",
+    "withdraw": "Вывод",
+    "newPosition": "Новая позиция",
+    "insufficientTokenAmount": "Недостаточное количество {{token}}",
+    "insufficientTokenLiquidity": "Недостаточная ликвидность {{token}} в пулле",
+    "minimumTokenAmountExceeded": "Превышено минимальное количество токенов активов",
+    "toLowForSwap": "Количество {{token}} слишком низкое - влияние проскальзывания",
+    "enterAmount": "Введите сумму",
+    "selectToken": "Выберите токен",
+    "swap": "Обмен",
+    "pool": "Пуллы ликвидности",
+    "confirmSwap": "Подтвердить обмен",
+    "connectWallet": "Подключить кошелек"
+  },
+  "modal": {
+    "connectWallet": "Подключить кошелек",
+    "selectToken": "Выберите токен",
+    "successfulWithdrawal": "Успешный вывод",
+    "priceImpact": "Влияние на цену",
+    "expectedOutput": "Ожидаемый выход",
+    "minimumOutput": "Минимальный выход",
+    "added": "добавлено",
+    "swap": {
+      "swapped": "Обменено",
+      "successfullySwapped": "Успешно обменено",
+      "reviewSwap": "Проверить обмен"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "Проверить добавление ликвидности",
+      "poolSuccessfullyCreated": "Пулл ликвидности успешно создан",
+      "creationOfPoolFailed": "Создание пулла ликвидности не удалось"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "Проверить удаление ликвидности",
+      "successfulWithdrawal": "Успешный вывод",
+      "withdrawal": "Вывод"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "Проверить добавление ликвидности",
+      "successfullyAddedToPool": "Успешно добавлено в пулл",
+      "successfullyAddedLiquidity": "Ликвидность успешно добавлена"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "Всего заблокированных токенов",
+    "deposited": "Депозит",
+    "lpTokens": "LP токены"
+  },
+  "wallet": {
+    "notConnected": "Не подключен",
+    "noWalletFound": "Кошелек не найден!"
+  },
+  "tokenAmountInput": {
+    "youPay": "Вы платите",
+    "youReceive": "Вы получаете",
+    "slippageTolerance": "Допуск проскальзывания",
+    "auto": "Авто",
+    "custom": "Пользовательский"
+  },
+  "headerTopNav": {
+    "swap": "Обмен",
+    "pool": "Пулл ликвидности",
+    "bridge": "Мост"
+  },
+  "pageError": {
+    "error": "Ошибка:",
+    "tryAgain": "Попробовать снова",
+    "minimalAmountRequirement": "Минимально необходимое количество для токена {{token}} составляет {{value}}.",
+    "lowLiquidity": "Предупреждение: У этого пулла низкая ликвидность, есть риск, что транзакция не будет завершена.",
+    "tooManyDecimals": "Слишком много десятичных знаков для токена {{token}}, пожалуйста, уменьшите, максимум разрешено для этого токена {{decimals}} десятичных знаков.",
+    "tradingMinimum": "Ваш торговый ордер ниже торгового минимума.",
+    "tokenCanNotCreate": "{\"token\":\"НеМожетСоздать\"}",
+    "tokenCanNotCreateWarning": "Ваш аккаунт достиг лимита в 16 активов и пуллов ликвидности в общей сложности. Сожгите или отправьте все активы определенного типа с вашего аккаунта, или выведите все активы из пулла, чтобы освободить место для другого типа. Альтернативно подключите другой кошелек и используйте его для новых активов и пуллов.",
+    "lowMinimalAmountAssetToken": "Выбранный токен {{tokenSymbol}}, который вы хотите получить, ниже минимального количества {{minimalAmount}}.",
+    "transactionTimeout": "Похоже, что транзакция занимает больше времени, чем обычно.\nПожалуйста, проверьте статус транзакции в вашем кошельке, нажав на {{url}}",
+    "maxValueLessThanMinAmount": "Максимальное значение меньше минимального количества."
+  },
+  "pageNotFound": "Страница не найдена",
+  "poolsPage": {
+    "pools": "Пуллы ликвидности",
+    "earnFeesByProvidingLiquidity": "Зарабатывайте комиссии, предоставляя ликвидность.",
+    "activeLiquidityPositions": "Активные позиции ликвидности будут отображаться здесь.",
+    "connectWalletToView": "Подключите кошелек, чтобы просмотреть ваши позиции ликвидности.",
+    "noActiveLiquidityPositions": "Нет активных позиций ликвидности.",
+    "addLiquidity": "Добавить ликвидность",
+    "poolExists": "Нет необходимости создавать новый пулл. Ликвидность может быть добавлена к существующему.",
+    "removeLiquidity": "Удалить ликвидность",
+    "withdrawalAmount": "Сумма вывода",
+    "newPosition": "Новая позиция",
+    "doNotHaveLiquidityPair": "У вас нет токенов из этой пары ликвидности.",
+    "connectWallet": "Пожалуйста, подключите ваш кошелек",
+    "assetsWait": "Получение ваших балансов токенов, пожалуйста, подождите несколько секунд",
+    "errorFetchingPools": "Ошибка получения пуллов: {{error}}",
+    "minimumAmountExceeded": "Полный вывод этой суммы невозможен, так как определенное минимальное количество за токен должно оставаться в пулле."
+  },
+  "swapPage": {
+    "addLiquidity": "Добавить ликвидность",
+    "removeLiquidity": "Удалить ликвидность",
+    "swap": "Обмен",
+    "poolExists": "Нет необходимости создавать новый пулл. Ликвидность может быть добавлена к существующему.",
+    "palletSlippageError": "Рассчитанное количество на выходе меньше предоставленного минимального количества.",
+    "slippageError": "Транзакция не могла быть завершена из-за установленного проскальзывания."
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "Подготовка транзакции...",
+    "validatingInputs": "Проверка входных данных...",
+    "checkingBalances": "Проверка балансов...",
+    "calculatingRoute": "Расчет лучшего маршрута...",
+    "signing": "Подписание транзакции...",
+    "waitingForNewBlock": "Ожидание нового блока...",
+    "waitingForConfirmation": "Ожидание подтверждения...",
+    "waitingForFinalization": "Ожидание финализации...",
+    "finalizing": "Финализация транзакции...",
+    "updatingBalances": "Обновление балансов...",
+    "success": "Транзакция успешна!",
+    "error": "Транзакция не удалась"
+  },
+  "footer": {
+    "poweredBy": "Работает на",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "Детали подключения",
+    "networkName": "Имя сети",
+    "rpcUrl": "RPC URL",
+    "chainId": "ID цепочки",
+    "ss58Format": "SS58 Формат",
+    "blockExplorer": "Обозреватель блоков",
+    "copy": "Копировать"
+  }
+}

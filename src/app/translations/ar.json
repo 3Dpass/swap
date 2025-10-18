@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "عنوان OG",
+      "description": "وصف OG",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "ملخص بطاقة تويتر",
+      "title": "عنوان تويتر",
+      "description": "وصف تويتر",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "واجهة مستخدم 3DPswap",
+      "description": "بورصة 3DPswap اللامركزية",
+      "keywords": "3DPswap, DEX, بورصة لامركزية"
+    },
+    "pools": {
+      "title": "مجمعات السيولة",
+      "description": "مجمعات سيولة 3DPswap"
+    },
+    "swap": {
+      "title": "تبديل",
+      "description": "بدّل الرموز المميزة بحرية في بورصة 3DPswap اللامركزية"
+    }
+  },
+  "button": {
+    "deposit": "إيداع",
+    "withdraw": "سحب",
+    "newPosition": "موضع جديد",
+    "insufficientTokenAmount": "كمية {{token}} غير كافية",
+    "insufficientTokenLiquidity": "سيولة {{token}} غير كافية في المجمع",
+    "minimumTokenAmountExceeded": "تم تجاوز الحد الأدنى لكمية الرمز المميز للأصل",
+    "toLowForSwap": "كمية {{token}} منخفضة جداً - تأثير الانزلاق",
+    "enterAmount": "أدخل المبلغ",
+    "selectToken": "اختر الرمز المميز",
+    "swap": "تبديل",
+    "pool": "مجمعات السيولة",
+    "confirmSwap": "تأكيد التبديل",
+    "connectWallet": "ربط المحفظة"
+  },
+  "modal": {
+    "connectWallet": "ربط محفظة",
+    "selectToken": "اختر الرمز المميز",
+    "successfulWithdrawal": "سحب ناجح",
+    "priceImpact": "تأثير السعر",
+    "expectedOutput": "المخرجات المتوقعة",
+    "minimumOutput": "الحد الأدنى للمخرجات",
+    "added": "تمت الإضافة",
+    "swap": {
+      "swapped": "تم التبديل",
+      "successfullySwapped": "تم التبديل بنجاح",
+      "reviewSwap": "مراجعة التبديل"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "مراجعة إضافة السيولة",
+      "poolSuccessfullyCreated": "تم إنشاء مجمع السيولة بنجاح",
+      "creationOfPoolFailed": "فشل في إنشاء مجمع السيولة"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "مراجعة إزالة السيولة",
+      "successfulWithdrawal": "سحب ناجح",
+      "withdrawal": "سحب"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "مراجعة إضافة السيولة",
+      "successfullyAddedToPool": "تمت الإضافة بنجاح إلى المجمع",
+      "successfullyAddedLiquidity": "تمت إضافة السيولة بنجاح"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "إجمالي الرموز المميزة المقفلة",
+    "deposited": "مودع",
+    "lpTokens": "رموز LP"
+  },
+  "wallet": {
+    "notConnected": "غير متصل",
+    "noWalletFound": "لم يتم العثور على محفظة!"
+  },
+  "tokenAmountInput": {
+    "youPay": "أنت تدفع",
+    "youReceive": "أنت تستلم",
+    "slippageTolerance": "تحمل الانزلاق",
+    "auto": "تلقائي",
+    "custom": "مخصص"
+  },
+  "headerTopNav": {
+    "swap": "تبديل",
+    "pool": "مجمع السيولة",
+    "bridge": "جسر"
+  },
+  "pageError": {
+    "error": "خطأ:",
+    "tryAgain": "حاول مرة أخرى",
+    "minimalAmountRequirement": "الحد الأدنى المطلوب للرمز المميز {{token}} هو {{value}}.",
+    "lowLiquidity": "تحذير: هذا المجمع لديه سيولة منخفضة، هناك خطر من عدم اكتمال المعاملة.",
+    "tooManyDecimals": "عدد كبير جداً من الكسور العشرية للرمز المميز {{token}}، يرجى التقليل، الحد الأقصى المسموح لهذا الرمز المميز هو {{decimals}} كسور عشرية.",
+    "tradingMinimum": "أمر التداول الخاص بك أقل من الحد الأدنى للتداول.",
+    "tokenCanNotCreate": "{\"token\":\"لايمكنإنشاؤه\"}",
+    "tokenCanNotCreateWarning": "حسابك وصل إلى حد 16 أصل ومجمعات سيولة إجمالية. احرق أو أرسل جميع الأصول من نوع معين من حسابك، أو اسحب جميع الأصول من مجمع لإفساح المجال لنوع آخر. بدلاً من ذلك، اربط محفظة أخرى واستخدمها للأصول والمجمعات الجديدة.",
+    "lowMinimalAmountAssetToken": "الرمز المميز {{tokenSymbol}} المحدد الذي تريد استلامه أقل من الحد الأدنى {{minimalAmount}}.",
+    "transactionTimeout": "يبدو أن المعاملة تستغرق وقتاً أطول من المعتاد.\nيرجى التحقق من حالة المعاملة في محفظتك بالنقر على {{url}}",
+    "maxValueLessThanMinAmount": "القيمة القصوى أقل من الحد الأدنى."
+  },
+  "pageNotFound": "الصفحة غير موجودة",
+  "poolsPage": {
+    "pools": "مجمعات السيولة",
+    "earnFeesByProvidingLiquidity": "اكسب الرسوم من خلال توفير السيولة.",
+    "activeLiquidityPositions": "مواضع السيولة النشطة ستظهر هنا.",
+    "connectWalletToView": "اربط محفظتك لعرض مواضع السيولة الخاصة بك.",
+    "noActiveLiquidityPositions": "لا توجد مواضع سيولة نشطة.",
+    "addLiquidity": "إضافة سيولة",
+    "poolExists": "لا حاجة لإنشاء مجمع جديد. يمكن إضافة السيولة إلى الموجود.",
+    "removeLiquidity": "إزالة السيولة",
+    "withdrawalAmount": "مبلغ السحب",
+    "newPosition": "موضع جديد",
+    "doNotHaveLiquidityPair": "ليس لديك رموز مميزة من زوج السيولة هذا.",
+    "connectWallet": "يرجى ربط محفظتك",
+    "assetsWait": "جاري جلب أرصدة الرموز المميزة الخاصة بك، يرجى الانتظار بضع ثوانٍ",
+    "errorFetchingPools": "خطأ في جلب المجمعات: {{error}}",
+    "minimumAmountExceeded": "السحب الكامل لهذا المبلغ غير ممكن، حيث يجب أن يبقى الحد الأدنى المحدد لكل رمز مميز في المجمع."
+  },
+  "swapPage": {
+    "addLiquidity": "إضافة سيولة",
+    "removeLiquidity": "إزالة السيولة",
+    "swap": "تبديل",
+    "poolExists": "لا حاجة لإنشاء مجمع جديد. يمكن إضافة السيولة إلى الموجود.",
+    "palletSlippageError": "كمية المخرجات المحسوبة أقل من الحد الأدنى المقدم.",
+    "slippageError": "لم تتمكن المعاملة من الاكتمال بسبب الانزلاق المحدد."
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "جاري تحضير المعاملة...",
+    "validatingInputs": "جاري التحقق من المدخلات...",
+    "checkingBalances": "جاري فحص الأرصدة...",
+    "calculatingRoute": "جاري حساب أفضل مسار...",
+    "signing": "جاري توقيع المعاملة...",
+    "waitingForNewBlock": "في انتظار كتلة جديدة...",
+    "waitingForConfirmation": "في انتظار التأكيد...",
+    "waitingForFinalization": "في انتظار الإنهاء...",
+    "finalizing": "جاري إنهاء المعاملة...",
+    "updatingBalances": "جاري تحديث الأرصدة...",
+    "success": "تمت المعاملة بنجاح!",
+    "error": "فشلت المعاملة"
+  },
+  "footer": {
+    "poweredBy": "مدعوم من",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "تفاصيل الاتصال",
+    "networkName": "اسم الشبكة",
+    "rpcUrl": "رابط RPC",
+    "chainId": "معرف السلسلة",
+    "ss58Format": "تنسيق SS58",
+    "blockExplorer": "مستكشف الكتل",
+    "copy": "نسخ"
+  }
+}

@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OG Titel",
+      "description": "OG Beschreibung",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Twitter Card Zusammenfassung",
+      "title": "Twitter Titel",
+      "description": "Twitter Beschreibung",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "3DPswap Benutzeroberfläche",
+      "description": "3DPswap Dezentrale Börse",
+      "keywords": "3DPswap, DEX, Dezentrale Börse"
+    },
+    "pools": {
+      "title": "Liquiditätspools",
+      "description": "3DPswap Liquiditätspools"
+    },
+    "swap": {
+      "title": "Tauschen",
+      "description": "Tauschen Sie Token frei auf der 3DPswap Dezentralen Börse"
+    }
+  },
+  "button": {
+    "deposit": "Einzahlen",
+    "withdraw": "Abheben",
+    "newPosition": "Neue Position",
+    "insufficientTokenAmount": "Unzureichende {{token}} Menge",
+    "insufficientTokenLiquidity": "Unzureichende {{token}} Liquidität im Pool",
+    "minimumTokenAmountExceeded": "Mindest-Token-Menge überschritten",
+    "toLowForSwap": "{{token}} Menge zu niedrig - Slippage-Auswirkung",
+    "enterAmount": "Betrag eingeben",
+    "selectToken": "Token auswählen",
+    "swap": "Tauschen",
+    "pool": "Liquiditätspools",
+    "confirmSwap": "Tausch bestätigen",
+    "connectWallet": "Wallet verbinden"
+  },
+  "modal": {
+    "connectWallet": "Wallet verbinden",
+    "selectToken": "Token auswählen",
+    "successfulWithdrawal": "Erfolgreiche Auszahlung",
+    "priceImpact": "Preisauswirkung",
+    "expectedOutput": "Erwartete Ausgabe",
+    "minimumOutput": "Mindestausgabe",
+    "added": "hinzugefügt",
+    "swap": {
+      "swapped": "Getauscht",
+      "successfullySwapped": "Erfolgreich getauscht",
+      "reviewSwap": "Tausch überprüfen"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "Liquiditätshinzufügung überprüfen",
+      "poolSuccessfullyCreated": "Liquiditätspool erfolgreich erstellt",
+      "creationOfPoolFailed": "Erstellung des Liquiditätspools fehlgeschlagen"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "Liquiditätsentfernung überprüfen",
+      "successfulWithdrawal": "Erfolgreiche Auszahlung",
+      "withdrawal": "Auszahlung"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "Liquiditätshinzufügung überprüfen",
+      "successfullyAddedToPool": "Erfolgreich zum Pool hinzugefügt",
+      "successfullyAddedLiquidity": "Liquidität erfolgreich hinzugefügt"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "Gesamte gesperrte Token",
+    "deposited": "Eingezahlt",
+    "lpTokens": "LP Token"
+  },
+  "wallet": {
+    "notConnected": "Nicht verbunden",
+    "noWalletFound": "Kein Wallet gefunden!"
+  },
+  "tokenAmountInput": {
+    "youPay": "Sie zahlen",
+    "youReceive": "Sie erhalten",
+    "slippageTolerance": "Slippage-Toleranz",
+    "auto": "Automatisch",
+    "custom": "Benutzerdefiniert"
+  },
+  "headerTopNav": {
+    "swap": "Tauschen",
+    "pool": "Liquiditätspool",
+    "bridge": "Bridge"
+  },
+  "pageError": {
+    "error": "Fehler:",
+    "tryAgain": "Erneut versuchen",
+    "minimalAmountRequirement": "Die mindestens erforderliche Menge für den {{token}} Token beträgt {{value}}.",
+    "lowLiquidity": "Warnung: Dieser Pool hat niedrige Liquidität, es besteht das Risiko, dass die Transaktion nicht abgeschlossen wird.",
+    "tooManyDecimals": "Zu viele {{token}} Token-Dezimalstellen, bitte reduzieren, maximal erlaubt für diesen Token sind {{decimals}} Dezimalstellen.",
+    "tradingMinimum": "Ihre Bestellung liegt unter dem Handelsminimum.",
+    "tokenCanNotCreate": "{\"token\":\"KannNichtErstellen\"}",
+    "tokenCanNotCreateWarning": "Ihr Konto hat das Limit von 16 Assets und Liquiditätspools insgesamt erreicht. Verbrennen oder senden Sie alle Assets eines bestimmten Typs von Ihrem Konto, oder heben Sie alle Assets aus einem Pool ab, um Platz für einen anderen Typ zu schaffen. Alternativ verbinden Sie ein anderes Wallet und verwenden Sie es für neue Assets und Pools.",
+    "lowMinimalAmountAssetToken": "Der ausgewählte {{tokenSymbol}} Token, den Sie erhalten möchten, liegt unter dem Mindestbetrag {{minimalAmount}}.",
+    "transactionTimeout": "Es scheint, dass die Transaktion länger als üblich dauert.\nBitte überprüfen Sie den Status der Transaktion in Ihrem Wallet, indem Sie auf {{url}} klicken",
+    "maxValueLessThanMinAmount": "Der Maximalwert ist kleiner als der Mindestbetrag."
+  },
+  "pageNotFound": "Seite nicht gefunden",
+  "poolsPage": {
+    "pools": "Liquiditätspools",
+    "earnFeesByProvidingLiquidity": "Verdienen Sie Gebühren durch Bereitstellung von Liquidität.",
+    "activeLiquidityPositions": "Aktive Liquiditätspositionen werden hier angezeigt.",
+    "connectWalletToView": "Verbinden Sie Ihr Wallet, um Ihre Liquiditätspositionen anzuzeigen.",
+    "noActiveLiquidityPositions": "Keine aktiven Liquiditätspositionen.",
+    "addLiquidity": "Liquidität hinzufügen",
+    "poolExists": "Kein neuer Pool erforderlich. Liquidität kann zum bestehenden hinzugefügt werden.",
+    "removeLiquidity": "Liquidität entfernen",
+    "withdrawalAmount": "Auszahlungsbetrag",
+    "newPosition": "Neue Position",
+    "doNotHaveLiquidityPair": "Sie haben keine Token aus diesem Liquiditätspaar.",
+    "connectWallet": "Bitte verbinden Sie Ihr Wallet",
+    "assetsWait": "Abrufen Ihrer Token-Guthaben, bitte warten Sie einige Sekunden",
+    "errorFetchingPools": "Fehler beim Abrufen der Pools: {{error}}",
+    "minimumAmountExceeded": "Vollständige Auszahlung dieses Betrags ist nicht möglich, da der definierte Mindestbetrag pro Token im Pool bleiben muss."
+  },
+  "swapPage": {
+    "addLiquidity": "Liquidität hinzufügen",
+    "removeLiquidity": "Liquidität entfernen",
+    "swap": "Tauschen",
+    "poolExists": "Kein neuer Pool erforderlich. Liquidität kann zum bestehenden hinzugefügt werden.",
+    "palletSlippageError": "Berechnete Ausgabemenge ist kleiner als die bereitgestellte Mindestmenge.",
+    "slippageError": "Die Transaktion konnte aufgrund der eingestellten Slippage nicht abgeschlossen werden."
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "Transaktion vorbereiten...",
+    "validatingInputs": "Eingaben validieren...",
+    "checkingBalances": "Guthaben überprüfen...",
+    "calculatingRoute": "Beste Route berechnen...",
+    "signing": "Transaktion signieren...",
+    "waitingForNewBlock": "Auf neuen Block warten...",
+    "waitingForConfirmation": "Auf Bestätigung warten...",
+    "waitingForFinalization": "Auf Finalisierung warten...",
+    "finalizing": "Transaktion finalisieren...",
+    "updatingBalances": "Guthaben aktualisieren...",
+    "success": "Transaktion erfolgreich!",
+    "error": "Transaktion fehlgeschlagen"
+  },
+  "footer": {
+    "poweredBy": "Unterstützt von",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "Verbindungsdetails",
+    "networkName": "Netzwerkname",
+    "rpcUrl": "RPC URL",
+    "chainId": "Chain ID",
+    "ss58Format": "SS58 Format",
+    "blockExplorer": "Block Explorer",
+    "copy": "Kopieren"
+  }
+}

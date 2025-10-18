@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OG Başlık",
+      "description": "OG Açıklama",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Twitter Kart Özeti",
+      "title": "Twitter Başlık",
+      "description": "Twitter Açıklama",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "3DPswap Kullanıcı Arayüzü",
+      "description": "3DPswap Merkezi Olmayan Borsa",
+      "keywords": "3DPswap, DEX, Merkezi Olmayan Borsa"
+    },
+    "pools": {
+      "title": "Likidite Havuzları",
+      "description": "3DPswap Likidite Havuzları"
+    },
+    "swap": {
+      "title": "Takas",
+      "description": "3DPswap Merkezi Olmayan Borsasında tokenları özgürce takas edin"
+    }
+  },
+  "button": {
+    "deposit": "Yatır",
+    "withdraw": "Çek",
+    "newPosition": "Yeni Pozisyon",
+    "insufficientTokenAmount": "Yetersiz {{token}} miktarı",
+    "insufficientTokenLiquidity": "Havuzda yetersiz {{token}} likiditesi",
+    "minimumTokenAmountExceeded": "Minimum varlık token miktarı aşıldı",
+    "toLowForSwap": "{{token}} miktarı çok düşük - kayma etkisi",
+    "enterAmount": "Miktar girin",
+    "selectToken": "Token seçin",
+    "swap": "Takas",
+    "pool": "Likidite Havuzları",
+    "confirmSwap": "Takası Onayla",
+    "connectWallet": "Cüzdan Bağla"
+  },
+  "modal": {
+    "connectWallet": "Cüzdan Bağla",
+    "selectToken": "Token seçin",
+    "successfulWithdrawal": "Başarılı Çekim",
+    "priceImpact": "Fiyat Etkisi",
+    "expectedOutput": "Beklenen çıktı",
+    "minimumOutput": "Minimum çıktı",
+    "added": "eklendi",
+    "swap": {
+      "swapped": "Takas edildi",
+      "successfullySwapped": "Başarıyla takas edildi",
+      "reviewSwap": "Takası gözden geçir"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "Likidite ekleme işlemini gözden geçir",
+      "poolSuccessfullyCreated": "Likidite Havuzu Başarıyla Oluşturuldu",
+      "creationOfPoolFailed": "Likidite havuzu oluşturma başarısız"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "Likidite çıkarma işlemini gözden geçir",
+      "successfulWithdrawal": "Başarılı Çekim",
+      "withdrawal": "Çekim"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "Likidite ekleme işlemini gözden geçir",
+      "successfullyAddedToPool": "Havuza başarıyla eklendi",
+      "successfullyAddedLiquidity": "Likidite başarıyla eklendi"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "Toplam kilitli tokenlar",
+    "deposited": "Yatırıldı",
+    "lpTokens": "LP tokenları"
+  },
+  "wallet": {
+    "notConnected": "Bağlı değil",
+    "noWalletFound": "Cüzdan bulunamadı!"
+  },
+  "tokenAmountInput": {
+    "youPay": "Siz ödersiniz",
+    "youReceive": "Siz alırsınız",
+    "slippageTolerance": "Kayma toleransı",
+    "auto": "Otomatik",
+    "custom": "Özel"
+  },
+  "headerTopNav": {
+    "swap": "Takas",
+    "pool": "Likidite Havuzu",
+    "bridge": "Köprü"
+  },
+  "pageError": {
+    "error": "Hata:",
+    "tryAgain": "Tekrar dene",
+    "minimalAmountRequirement": "{{token}} tokenı için minimum gerekli miktar {{value}}'dir.",
+    "lowLiquidity": "Uyarı: Bu havuzun düşük likiditesi var, işlemin tamamlanmama riski bulunmaktadır.",
+    "tooManyDecimals": "{{token}} tokenı için çok fazla ondalık basamak, lütfen azaltın, bu token için izin verilen maksimum {{decimals}} ondalık basamaktır.",
+    "tradingMinimum": "Trading emriniz trading minimumunun altında.",
+    "tokenCanNotCreate": "{\"token\":\"Oluşturulamaz\"}",
+    "tokenCanNotCreateWarning": "Hesabınız toplam 16 varlık ve likidite havuzu limitine ulaştı. Hesabınızdan belirli bir türdeki tüm varlıkları yakın veya gönderin, veya başka bir tür için yer açmak için havuzdan tüm varlıkları çekin. Alternatif olarak başka bir cüzdan bağlayın ve yeni varlıklar ve havuzlar için kullanın.",
+    "lowMinimalAmountAssetToken": "Almak istediğiniz seçili {{tokenSymbol}} tokenı minimum miktar {{minimalAmount}}'ın altında.",
+    "transactionTimeout": "İşlem normalden daha uzun sürüyor gibi görünüyor.\nLütfen {{url}}'ye tıklayarak cüzdanınızda işlemin durumunu kontrol edin",
+    "maxValueLessThanMinAmount": "Maksimum değer minimum miktardan küçük."
+  },
+  "pageNotFound": "Sayfa bulunamadı",
+  "poolsPage": {
+    "pools": "Likidite Havuzları",
+    "earnFeesByProvidingLiquidity": "Likidite sağlayarak ücret kazanın.",
+    "activeLiquidityPositions": "Aktif likidite pozisyonları burada görünecek.",
+    "connectWalletToView": "Likidite pozisyonlarınızı görüntülemek için cüzdanınızı bağlayın.",
+    "noActiveLiquidityPositions": "Aktif likidite pozisyonu yok.",
+    "addLiquidity": "Likidite Ekle",
+    "poolExists": "Yeni havuz oluşturmaya gerek yok. Likidite mevcut olana eklenebilir.",
+    "removeLiquidity": "Likidite Çıkar",
+    "withdrawalAmount": "Çekim miktarı",
+    "newPosition": "Yeni Pozisyon",
+    "doNotHaveLiquidityPair": "Bu likidite çiftinden tokenlarınız yok.",
+    "connectWallet": "Lütfen cüzdanınızı bağlayın",
+    "assetsWait": "Token bakiyeleriniz getiriliyor, lütfen birkaç saniye bekleyin",
+    "errorFetchingPools": "Havuzlar getirilirken hata: {{error}}",
+    "minimumAmountExceeded": "Bu miktarın tam çekimi mümkün değil, çünkü token başına tanımlanan minimum miktar havuzda kalmalıdır."
+  },
+  "swapPage": {
+    "addLiquidity": "Likidite Ekle",
+    "removeLiquidity": "Likidite Çıkar",
+    "swap": "Takas",
+    "poolExists": "Yeni havuz oluşturmaya gerek yok. Likidite mevcut olana eklenebilir.",
+    "palletSlippageError": "Hesaplanan çıktı miktarı sağlanan minimum miktardan az.",
+    "slippageError": "Belirlenen kayma nedeniyle işlem tamamlanamadı."
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "İşlem hazırlanıyor...",
+    "validatingInputs": "Girdiler doğrulanıyor...",
+    "checkingBalances": "Bakiyeler kontrol ediliyor...",
+    "calculatingRoute": "En iyi rota hesaplanıyor...",
+    "signing": "İşlem imzalanıyor...",
+    "waitingForNewBlock": "Yeni blok bekleniyor...",
+    "waitingForConfirmation": "Onay bekleniyor...",
+    "waitingForFinalization": "Sonlandırma bekleniyor...",
+    "finalizing": "İşlem sonlandırılıyor...",
+    "updatingBalances": "Bakiyeler güncelleniyor...",
+    "success": "İşlem başarılı!",
+    "error": "İşlem başarısız"
+  },
+  "footer": {
+    "poweredBy": "Destekleyen",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "Bağlantı Detayları",
+    "networkName": "Ağ Adı",
+    "rpcUrl": "RPC URL",
+    "chainId": "Zincir ID",
+    "ss58Format": "SS58 Formatı",
+    "blockExplorer": "Blok Gezgini",
+    "copy": "Kopyala"
+  }
+}

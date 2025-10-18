@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OG शीर्षक",
+      "description": "OG विवरण",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "ट्विटर कार्ड सारांश",
+      "title": "ट्विटर शीर्षक",
+      "description": "ट्विटर विवरण",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "3DPswap उपयोगकर्ता इंटरफेस",
+      "description": "3DPswap विकेंद्रीकृत एक्सचेंज",
+      "keywords": "3DPswap, DEX, विकेंद्रीकृत एक्सचेंज"
+    },
+    "pools": {
+      "title": "तरलता पूल",
+      "description": "3DPswap तरलता पूल"
+    },
+    "swap": {
+      "title": "स्वैप",
+      "description": "3DPswap विकेंद्रीकृत एक्सचेंज पर टोकन को स्वतंत्र रूप से स्वैप करें"
+    }
+  },
+  "button": {
+    "deposit": "जमा करें",
+    "withdraw": "निकालें",
+    "newPosition": "नई स्थिति",
+    "insufficientTokenAmount": "{{token}} राशि अपर्याप्त",
+    "insufficientTokenLiquidity": "पूल में {{token}} तरलता अपर्याप्त",
+    "minimumTokenAmountExceeded": "न्यूनतम संपत्ति टोकन राशि पार",
+    "toLowForSwap": "{{token}} राशि बहुत कम - स्लिपेज प्रभाव",
+    "enterAmount": "राशि दर्ज करें",
+    "selectToken": "टोकन चुनें",
+    "swap": "स्वैप",
+    "pool": "तरलता पूल",
+    "confirmSwap": "स्वैप की पुष्टि करें",
+    "connectWallet": "वॉलेट कनेक्ट करें"
+  },
+  "modal": {
+    "connectWallet": "वॉलेट कनेक्ट करें",
+    "selectToken": "टोकन चुनें",
+    "successfulWithdrawal": "सफल निकासी",
+    "priceImpact": "मूल्य प्रभाव",
+    "expectedOutput": "अपेक्षित आउटपुट",
+    "minimumOutput": "न्यूनतम आउटपुट",
+    "added": "जोड़ा गया",
+    "swap": {
+      "swapped": "स्वैप किया गया",
+      "successfullySwapped": "सफलतापूर्वक स्वैप किया गया",
+      "reviewSwap": "स्वैप की समीक्षा करें"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "तरलता जोड़ने की समीक्षा करें",
+      "poolSuccessfullyCreated": "तरलता पूल सफलतापूर्वक बनाया गया",
+      "creationOfPoolFailed": "तरलता पूल का निर्माण विफल"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "तरलता हटाने की समीक्षा करें",
+      "successfulWithdrawal": "सफल निकासी",
+      "withdrawal": "निकासी"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "तरलता जोड़ने की समीक्षा करें",
+      "successfullyAddedToPool": "पूल में सफलतापूर्वक जोड़ा गया",
+      "successfullyAddedLiquidity": "तरलता सफलतापूर्वक जोड़ी गई"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "कुल लॉक किए गए टोकन",
+    "deposited": "जमा किया गया",
+    "lpTokens": "LP टोकन"
+  },
+  "wallet": {
+    "notConnected": "कनेक्ट नहीं",
+    "noWalletFound": "कोई वॉलेट नहीं मिला!"
+  },
+  "tokenAmountInput": {
+    "youPay": "आप भुगतान करते हैं",
+    "youReceive": "आप प्राप्त करते हैं",
+    "slippageTolerance": "स्लिपेज सहनशीलता",
+    "auto": "ऑटो",
+    "custom": "कस्टम"
+  },
+  "headerTopNav": {
+    "swap": "स्वैप",
+    "pool": "तरलता पूल",
+    "bridge": "ब्रिज"
+  },
+  "pageError": {
+    "error": "त्रुटि:",
+    "tryAgain": "फिर से कोशिश करें",
+    "minimalAmountRequirement": "{{token}} टोकन के लिए न्यूनतम आवश्यक राशि {{value}} है।",
+    "lowLiquidity": "चेतावनी: इस पूल में कम तरलता है, लेनदेन पूरा न होने का जोखिम है।",
+    "tooManyDecimals": "{{token}} टोकन के लिए बहुत अधिक दशमलव, कृपया कम करें, इस टोकन के लिए अधिकतम अनुमतित {{decimals}} दशमलव हैं।",
+    "tradingMinimum": "आपका ट्रेडिंग ऑर्डर ट्रेडिंग न्यूनतम से कम है।",
+    "tokenCanNotCreate": "{\"token\":\"नहींबनायाजासकता\"}",
+    "tokenCanNotCreateWarning": "आपके खाते ने कुल 16 संपत्तियों और तरलता पूलों की सीमा तक पहुंच गया है। अपने खाते से किसी निश्चित प्रकार की सभी संपत्तियों को जलाएं या भेजें, या दूसरे प्रकार के लिए जगह बनाने के लिए पूल से सभी संपत्तियों को निकालें। वैकल्पिक रूप से दूसरा वॉलेट कनेक्ट करें और नई संपत्तियों और पूलों के लिए इसका उपयोग करें।",
+    "lowMinimalAmountAssetToken": "आपके द्वारा प्राप्त करना चाहने वाला चयनित {{tokenSymbol}} टोकन न्यूनतम राशि {{minimalAmount}} से कम है।",
+    "transactionTimeout": "ऐसा लगता है कि लेनदेन सामान्य से अधिक समय ले रहा है।\nकृपया {{url}} पर क्लिक करके अपने वॉलेट में लेनदेन की स्थिति की जांच करें",
+    "maxValueLessThanMinAmount": "अधिकतम मूल्य न्यूनतम राशि से कम है।"
+  },
+  "pageNotFound": "पृष्ठ नहीं मिला",
+  "poolsPage": {
+    "pools": "तरलता पूल",
+    "earnFeesByProvidingLiquidity": "तरलता प्रदान करके शुल्क कमाएं।",
+    "activeLiquidityPositions": "सक्रिय तरलता स्थितियां यहां दिखाई देंगी।",
+    "connectWalletToView": "अपनी तरलता स्थितियों को देखने के लिए अपना वॉलेट कनेक्ट करें।",
+    "noActiveLiquidityPositions": "कोई सक्रिय तरलता स्थिति नहीं।",
+    "addLiquidity": "तरलता जोड़ें",
+    "poolExists": "नया पूल बनाने की आवश्यकता नहीं। मौजूदा पूल में तरलता जोड़ी जा सकती है।",
+    "removeLiquidity": "तरलता हटाएं",
+    "withdrawalAmount": "निकासी राशि",
+    "newPosition": "नई स्थिति",
+    "doNotHaveLiquidityPair": "आपके पास इस तरलता जोड़ी के टोकन नहीं हैं।",
+    "connectWallet": "कृपया अपना वॉलेट कनेक्ट करें",
+    "assetsWait": "आपके टोकन बैलेंस प्राप्त कर रहे हैं, कृपया कुछ सेकंड प्रतीक्षा करें",
+    "errorFetchingPools": "पूल प्राप्त करने में त्रुटि: {{error}}",
+    "minimumAmountExceeded": "इस राशि की पूर्ण निकासी संभव नहीं है, क्योंकि प्रति टोकन परिभाषित न्यूनतम राशि पूल में रहनी चाहिए।"
+  },
+  "swapPage": {
+    "addLiquidity": "तरलता जोड़ें",
+    "removeLiquidity": "तरलता हटाएं",
+    "swap": "स्वैप",
+    "poolExists": "नया पूल बनाने की आवश्यकता नहीं। मौजूदा पूल में तरलता जोड़ी जा सकती है।",
+    "palletSlippageError": "गणना की गई आउटपुट राशि प्रदान की गई न्यूनतम राशि से कम है।",
+    "slippageError": "निर्धारित स्लिपेज के कारण लेनदेन पूरा नहीं हो सका।"
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "लेनदेन तैयार कर रहे हैं...",
+    "validatingInputs": "इनपुट सत्यापित कर रहे हैं...",
+    "checkingBalances": "बैलेंस जांच रहे हैं...",
+    "calculatingRoute": "सर्वोत्तम मार्ग की गणना कर रहे हैं...",
+    "signing": "लेनदेन पर हस्ताक्षर कर रहे हैं...",
+    "waitingForNewBlock": "नए ब्लॉक की प्रतीक्षा कर रहे हैं...",
+    "waitingForConfirmation": "पुष्टि की प्रतीक्षा कर रहे हैं...",
+    "waitingForFinalization": "अंतिम रूप की प्रतीक्षा कर रहे हैं...",
+    "finalizing": "लेनदेन को अंतिम रूप दे रहे हैं...",
+    "updatingBalances": "बैलेंस अपडेट कर रहे हैं...",
+    "success": "लेनदेन सफल!",
+    "error": "लेनदेन विफल"
+  },
+  "footer": {
+    "poweredBy": "द्वारा संचालित",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "कनेक्शन विवरण",
+    "networkName": "नेटवर्क नाम",
+    "rpcUrl": "RPC URL",
+    "chainId": "चेन ID",
+    "ss58Format": "SS58 प्रारूप",
+    "blockExplorer": "ब्लॉक एक्सप्लोरर",
+    "copy": "कॉपी करें"
+  }
+}

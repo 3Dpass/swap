@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OG 标题",
+      "description": "OG 描述",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Twitter 卡片摘要",
+      "title": "Twitter 标题",
+      "description": "Twitter 描述",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "3DPswap 用户界面",
+      "description": "3DPswap 去中心化交易所",
+      "keywords": "3DPswap, DEX, 去中心化交易所"
+    },
+    "pools": {
+      "title": "流动性池",
+      "description": "3DPswap 流动性池"
+    },
+    "swap": {
+      "title": "交换",
+      "description": "在 3DPswap 去中心化交易所自由交换代币"
+    }
+  },
+  "button": {
+    "deposit": "存入",
+    "withdraw": "提取",
+    "newPosition": "新仓位",
+    "insufficientTokenAmount": "{{token}} 数量不足",
+    "insufficientTokenLiquidity": "池中 {{token}} 流动性不足",
+    "minimumTokenAmountExceeded": "超过最小资产代币数量",
+    "toLowForSwap": "{{token}} 数量过低 - 滑点影响",
+    "enterAmount": "输入数量",
+    "selectToken": "选择代币",
+    "swap": "交换",
+    "pool": "流动性池",
+    "confirmSwap": "确认交换",
+    "connectWallet": "连接钱包"
+  },
+  "modal": {
+    "connectWallet": "连接钱包",
+    "selectToken": "选择代币",
+    "successfulWithdrawal": "提取成功",
+    "priceImpact": "价格影响",
+    "expectedOutput": "预期输出",
+    "minimumOutput": "最小输出",
+    "added": "已添加",
+    "swap": {
+      "swapped": "已交换",
+      "successfullySwapped": "交换成功",
+      "reviewSwap": "审查交换"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "审查添加流动性",
+      "poolSuccessfullyCreated": "流动性池创建成功",
+      "creationOfPoolFailed": "流动性池创建失败"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "审查移除流动性",
+      "successfulWithdrawal": "提取成功",
+      "withdrawal": "提取"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "审查添加流动性",
+      "successfullyAddedToPool": "成功添加到池中",
+      "successfullyAddedLiquidity": "成功添加流动性"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "总锁定代币",
+    "deposited": "已存入",
+    "lpTokens": "LP 代币"
+  },
+  "wallet": {
+    "notConnected": "未连接",
+    "noWalletFound": "未找到钱包！"
+  },
+  "tokenAmountInput": {
+    "youPay": "您支付",
+    "youReceive": "您收到",
+    "slippageTolerance": "滑点容忍度",
+    "auto": "自动",
+    "custom": "自定义"
+  },
+  "headerTopNav": {
+    "swap": "交换",
+    "pool": "流动性池",
+    "bridge": "桥接"
+  },
+  "pageError": {
+    "error": "错误：",
+    "tryAgain": "重试",
+    "minimalAmountRequirement": "{{token}} 代币的最小要求数量为 {{value}}。",
+    "lowLiquidity": "警告：此池流动性较低，存在交易无法完成的风险。",
+    "tooManyDecimals": "{{token}} 代币小数位数过多，请减少，此代币允许的最大小数位数为 {{decimals}} 位。",
+    "tradingMinimum": "您的订单交易低于交易最小值。",
+    "tokenCanNotCreate": "{\"token\":\"无法创建\"}",
+    "tokenCanNotCreateWarning": "您的账户已达到 16 个资产和流动性池的总限制。请从您的账户中销毁或发送某种类型的所有资产，或从池中提取所有资产以为另一种类型腾出空间。或者连接另一个钱包并使用它来创建新资产和池。",
+    "lowMinimalAmountAssetToken": "您想要接收的选定 {{tokenSymbol}} 代币低于最小数量 {{minimalAmount}}。",
+    "transactionTimeout": "交易似乎比平时花费更长时间。\n请点击 {{url}} 在您的钱包中检查交易状态",
+    "maxValueLessThanMinAmount": "最大值小于最小数量。"
+  },
+  "pageNotFound": "页面未找到",
+  "poolsPage": {
+    "pools": "流动性池",
+    "earnFeesByProvidingLiquidity": "通过提供流动性赚取费用。",
+    "activeLiquidityPositions": "活跃的流动性仓位将在此处显示。",
+    "connectWalletToView": "连接钱包以查看您的流动性仓位。",
+    "noActiveLiquidityPositions": "没有活跃的流动性仓位。",
+    "addLiquidity": "添加流动性",
+    "poolExists": "无需创建新池。可以将流动性添加到现有池中。",
+    "removeLiquidity": "移除流动性",
+    "withdrawalAmount": "提取数量",
+    "newPosition": "新仓位",
+    "doNotHaveLiquidityPair": "您没有此流动性对的代币。",
+    "connectWallet": "请连接您的钱包",
+    "assetsWait": "正在获取您的代币余额，请等待几秒钟",
+    "errorFetchingPools": "获取池时出错：{{error}}",
+    "minimumAmountExceeded": "无法完全提取此数量，因为每个代币的已定义最小数量必须保留在池中。"
+  },
+  "swapPage": {
+    "addLiquidity": "添加流动性",
+    "removeLiquidity": "移除流动性",
+    "swap": "交换",
+    "poolExists": "无需创建新池。可以将流动性添加到现有池中。",
+    "palletSlippageError": "计算出的输出数量小于提供的最小数量。",
+    "slippageError": "由于设置的滑点，交易无法完成。"
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "准备交易中...",
+    "validatingInputs": "验证输入中...",
+    "checkingBalances": "检查余额中...",
+    "calculatingRoute": "计算最佳路线中...",
+    "signing": "签署交易中...",
+    "waitingForNewBlock": "等待新区块中...",
+    "waitingForConfirmation": "等待确认中...",
+    "waitingForFinalization": "等待最终确认中...",
+    "finalizing": "最终确认交易中...",
+    "updatingBalances": "更新余额中...",
+    "success": "交易成功！",
+    "error": "交易失败"
+  },
+  "footer": {
+    "poweredBy": "技术支持",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "连接详情",
+    "networkName": "网络名称",
+    "rpcUrl": "RPC URL",
+    "chainId": "链 ID",
+    "ss58Format": "SS58 格式",
+    "blockExplorer": "区块浏览器",
+    "copy": "复制"
+  }
+}

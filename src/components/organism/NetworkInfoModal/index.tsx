@@ -2,6 +2,7 @@ import React from "react";
 import Modal from "../../atom/Modal";
 import { NETWORKS } from "../../../networkConfig";
 import { NetworkKeys } from "../../../app/types/enum";
+import { t } from "i18next";
 
 interface NetworkInfoModalProps {
   isOpen: boolean;
@@ -18,12 +19,14 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
   return (
     <Modal isOpen={isOpen} onClose={onClose}>
       <div className="p-6">
-        <h2 className="mb-6 text-heading-3 font-bold text-black dark:text-dark-text-primary">Connection Details</h2>
+        <h2 className="mb-6 text-heading-3 font-bold text-black dark:text-dark-text-primary">
+          {t("networkInfo.connectionDetails")}
+        </h2>
 
         <div className="space-y-4">
           <div>
             <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">
-              Network Name
+              {t("networkInfo.networkName")}
             </div>
             <div className="rounded-lg border border-gray-200 bg-purple-100 p-3 dark:border-dark-border-primary dark:bg-dark-bg-card">
               <span className="font-medium text-gray-300 dark:text-dark-text-primary">
@@ -33,7 +36,9 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
           </div>
 
           <div>
-            <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">RPC URL</div>
+            <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">
+              {t("networkInfo.rpcUrl")}
+            </div>
             <div className="flex items-center gap-2">
               <div className="flex-1 rounded-lg border border-gray-200 bg-purple-100 p-3 dark:border-dark-border-primary dark:bg-dark-bg-card">
                 <span className="font-mono text-small text-gray-300 dark:text-dark-text-primary">
@@ -44,14 +49,14 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
                 onClick={() => copyToClipboard(currentNetwork.rpcUrl)}
                 className="rounded-lg bg-pink px-3 py-2 text-small font-medium text-white transition-colors duration-200 hover:bg-pink hover:opacity-80"
               >
-                Copy
+                {t("networkInfo.copy")}
               </button>
             </div>
           </div>
 
           <div>
             <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">
-              Chain ID
+              {t("networkInfo.chainId")}
             </div>
             <div className="rounded-lg border border-gray-200 bg-purple-100 p-3 dark:border-dark-border-primary dark:bg-dark-bg-card">
               <span className="font-medium text-gray-300 dark:text-dark-text-primary">{currentNetwork.chainId}</span>
@@ -60,7 +65,7 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
 
           <div>
             <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">
-              SS58 Format
+              {t("networkInfo.ss58Format")}
             </div>
             <div className="rounded-lg border border-gray-200 bg-purple-100 p-3 dark:border-dark-border-primary dark:bg-dark-bg-card">
               <span className="font-medium text-gray-300 dark:text-dark-text-primary">{currentNetwork.ss58Format}</span>
@@ -70,7 +75,7 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
           {currentNetwork.assethubSubscanUrl && (
             <div>
               <div className="mb-2 block text-small font-medium text-gray-200 dark:text-dark-text-secondary">
-                Block Explorer
+                {t("networkInfo.blockExplorer")}
               </div>
               <div className="flex items-center gap-2">
                 <div className="flex-1 rounded-lg border border-gray-200 bg-purple-100 p-3 dark:border-dark-border-primary dark:bg-dark-bg-card">
@@ -87,7 +92,7 @@ const NetworkInfoModal: React.FC<NetworkInfoModalProps> = ({ isOpen, onClose }) 
                   onClick={() => copyToClipboard(currentNetwork.assethubSubscanUrl!)}
                   className="rounded-lg bg-pink px-3 py-2 text-small font-medium text-white transition-colors duration-200 hover:bg-pink hover:opacity-80"
                 >
-                  Copy
+                  {t("networkInfo.copy")}
                 </button>
               </div>
             </div>

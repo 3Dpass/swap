@@ -75,33 +75,36 @@ export const smartBalanceDisplay = (balance: string | number | undefined, decima
   if (!balance && balance !== 0) return "0";
 
   const numBalance = typeof balance === "string" ? parseFloat(balance) : balance;
+  const decimalPlaces = parseInt(decimals);
 
-  // If balance is a reasonable number (>= 0.001), assume it's already formatted
-  // This handles cases where wallet service already formatted the balance
-  if (numBalance >= 0.001) {
-    const decimalPlaces = parseInt(decimals);
-    const balanceStr = numBalance.toString();
+  // If balance is zero, return "0"
+  if (numBalance === 0) return "0";
 
-    // Check if it has more decimal places than allowed and truncate if needed
-    if (balanceStr.includes(".")) {
-      const parts = balanceStr.split(".");
-      if (parts[1] && parts[1].length > decimalPlaces) {
-        return `${parts[0]}.${parts[1].substring(0, decimalPlaces)}`;
-      }
+  // Check if balance is already formatted by looking for decimal point
+  const balanceStr = numBalance.toString();
+  const hasDecimalPoint = balanceStr.includes(".");
+
+  if (hasDecimalPoint) {
+    // Balance has decimal point - likely already formatted
+    // Just ensure it doesn't exceed the token's decimal limit
+    const parts = balanceStr.split(".");
+    if (parts[1] && parts[1].length > decimalPlaces) {
+      return `${parts[0]}.${parts[1].substring(0, decimalPlaces)}`;
     }
-
     return balanceStr;
   }
 
-  // If balance is very small (< 0.001), it might be double-formatted
-  // Try to detect if this is the case and handle appropriately
-  if (numBalance > 0 && numBalance < 0.001) {
-    // This might be a double-formatted balance, return as-is but with precision limit
-    const decimalPlaces = parseInt(decimals);
-    return numBalance.toFixed(Math.min(decimalPlaces, 18)); // Limit to prevent excessive decimals
-  }
+  // Balance is a whole number - could be raw blockchain value or already formatted
+  // Use a threshold to detect raw blockchain values
+  // Raw blockchain values are typically very large (e.g., 24795503631344215)
+  // Already formatted values are typically reasonable (e.g., 24795)
+  const threshold = Math.pow(10, Math.max(6, decimalPlaces - 2)); // Dynamic threshold based on decimals
 
-  // For zero or very large numbers, apply standard formatting
-  // (This handles raw balances from blockchain)
-  return formatDecimalsFromToken(balance, decimals);
+  if (numBalance >= threshold) {
+    // Very large number - likely raw blockchain value, apply decimal formatting
+    return formatDecimalsFromToken(balance, decimals);
+  } else {
+    // Reasonable number without decimal point - likely already formatted
+    return balanceStr;
+  }
 };

@@ -4,8 +4,7 @@ import React, { useRef, useState } from "react";
 import { NumericFormat } from "react-number-format";
 import useClickOutside from "../../../app/hooks/useClickOutside";
 import { ButtonVariants } from "../../../app/types/enum";
-import { formatDecimalsFromToken } from "../../../app/util/helper";
-import { safeTokenBalanceClean } from "../../../app/util/tokenBalance";
+import { smartBalanceDisplay } from "../../../app/util/tokenBalance";
 import { LottieSmall } from "../../../assets/loader";
 import Button from "../../atom/Button";
 
@@ -129,8 +128,8 @@ const TokenAmountInput = ({
             disabled={disabled || !onMaxClick}
             type="button"
           >
-            {tokenId && tokenText && Number(safeTokenBalanceClean(tokenBalance)) !== 0
-              ? formatDecimalsFromToken(Number(safeTokenBalanceClean(tokenBalance)), tokenDecimals as string)
+            {tokenId && tokenText && Number(tokenBalance) !== 0
+              ? smartBalanceDisplay(tokenBalance, tokenDecimals as string)
               : tokenBalance || 0}
           </button>
           {tokenText &&

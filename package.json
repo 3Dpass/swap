@@ -42,6 +42,7 @@
     "decimal.js": "^10.4.3",
     "ethers": "5.7.2",
     "i18next": "^23.11.2",
+    "i18next-browser-languagedetector": "^8.2.0",
     "jazzicon": "^1.5.0",
     "lottie-react": "^2.4.0",
     "react": "^18.2.0",

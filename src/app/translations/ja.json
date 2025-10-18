@@ -1,0 +1,162 @@
+{
+  "seo": {
+    "dotAcp": "DOT ACP",
+    "og": {
+      "title": "OGタイトル",
+      "description": "OG説明",
+      "image": "https://example.com/image.jpg",
+      "url": "https://example.com/page"
+    },
+    "twitter": {
+      "card": "Twitterカードサマリー",
+      "title": "Twitterタイトル",
+      "description": "Twitter説明",
+      "image": "https://example.com/twitter-image.jpg"
+    },
+    "global": {
+      "title": "3DPswapユーザーインターフェース",
+      "description": "3DPswap分散型取引所",
+      "keywords": "3DPswap, DEX, 分散型取引所"
+    },
+    "pools": {
+      "title": "流動性プール",
+      "description": "3DPswap流動性プール"
+    },
+    "swap": {
+      "title": "スワップ",
+      "description": "3DPswap分散型取引所でトークンを自由にスワップ"
+    }
+  },
+  "button": {
+    "deposit": "入金",
+    "withdraw": "出金",
+    "newPosition": "新しいポジション",
+    "insufficientTokenAmount": "{{token}}数量不足",
+    "insufficientTokenLiquidity": "プール内の{{token}}流動性不足",
+    "minimumTokenAmountExceeded": "最小アセットトークン数量を超過",
+    "toLowForSwap": "{{token}}数量が低すぎます - スリッページ影響",
+    "enterAmount": "数量を入力",
+    "selectToken": "トークンを選択",
+    "swap": "スワップ",
+    "pool": "流動性プール",
+    "confirmSwap": "スワップを確認",
+    "connectWallet": "ウォレットを接続"
+  },
+  "modal": {
+    "connectWallet": "ウォレットを接続",
+    "selectToken": "トークンを選択",
+    "successfulWithdrawal": "出金成功",
+    "priceImpact": "価格への影響",
+    "expectedOutput": "期待される出力",
+    "minimumOutput": "最小出力",
+    "added": "追加済み",
+    "swap": {
+      "swapped": "スワップ済み",
+      "successfullySwapped": "スワップ成功",
+      "reviewSwap": "スワップを確認"
+    },
+    "createPool": {
+      "reviewAddingLiquidity": "流動性追加を確認",
+      "poolSuccessfullyCreated": "流動性プール作成成功",
+      "creationOfPoolFailed": "流動性プールの作成に失敗"
+    },
+    "removeFromPool": {
+      "reviewRemoveLiquidity": "流動性削除を確認",
+      "successfulWithdrawal": "出金成功",
+      "withdrawal": "出金"
+    },
+    "addTooExistingPool": {
+      "reviewAddingLiquidity": "流動性追加を確認",
+      "successfullyAddedToPool": "プールに正常に追加",
+      "successfullyAddedLiquidity": "流動性を正常に追加"
+    }
+  },
+  "poolDataCard": {
+    "totalTokensLocked": "ロックされた総トークン",
+    "deposited": "入金済み",
+    "lpTokens": "LPトークン"
+  },
+  "wallet": {
+    "notConnected": "未接続",
+    "noWalletFound": "ウォレットが見つかりません！"
+  },
+  "tokenAmountInput": {
+    "youPay": "支払い",
+    "youReceive": "受け取り",
+    "slippageTolerance": "スリッページ許容度",
+    "auto": "自動",
+    "custom": "カスタム"
+  },
+  "headerTopNav": {
+    "swap": "スワップ",
+    "pool": "流動性プール",
+    "bridge": "ブリッジ"
+  },
+  "pageError": {
+    "error": "エラー：",
+    "tryAgain": "再試行",
+    "minimalAmountRequirement": "{{token}}トークンの最小必要数量は{{value}}です。",
+    "lowLiquidity": "警告：このプールは流動性が低く、取引が完了しないリスクがあります。",
+    "tooManyDecimals": "{{token}}トークンの小数点以下桁数が多すぎます。減らしてください。このトークンで許可される最大桁数は{{decimals}}桁です。",
+    "tradingMinimum": "お客様の注文取引は取引最小値を下回っています。",
+    "tokenCanNotCreate": "{\"token\":\"作成不可\"}",
+    "tokenCanNotCreateWarning": "お客様のアカウントは合計16個のアセットと流動性プールの制限に達しました。アカウントから特定のタイプのすべてのアセットを焼却または送信するか、プールからすべてのアセットを出金して別のタイプのためのスペースを作ってください。または、別のウォレットを接続して新しいアセットとプールに使用してください。",
+    "lowMinimalAmountAssetToken": "受け取りたい選択された{{tokenSymbol}}トークンは最小数量{{minimalAmount}}を下回っています。",
+    "transactionTimeout": "取引が通常より時間がかかっているようです。\n{{url}}をクリックしてウォレットで取引の状態を確認してください",
+    "maxValueLessThanMinAmount": "最大値が最小数量より小さいです。"
+  },
+  "pageNotFound": "ページが見つかりません",
+  "poolsPage": {
+    "pools": "流動性プール",
+    "earnFeesByProvidingLiquidity": "流動性を提供して手数料を獲得。",
+    "activeLiquidityPositions": "アクティブな流動性ポジションがここに表示されます。",
+    "connectWalletToView": "流動性ポジションを表示するにはウォレットを接続してください。",
+    "noActiveLiquidityPositions": "アクティブな流動性ポジションはありません。",
+    "addLiquidity": "流動性を追加",
+    "poolExists": "新しいプールを作成する必要はありません。既存のプールに流動性を追加できます。",
+    "removeLiquidity": "流動性を削除",
+    "withdrawalAmount": "出金数量",
+    "newPosition": "新しいポジション",
+    "doNotHaveLiquidityPair": "この流動性ペアのトークンをお持ちではありません。",
+    "connectWallet": "ウォレットを接続してください",
+    "assetsWait": "トークン残高を取得中です。数秒お待ちください",
+    "errorFetchingPools": "プールの取得エラー：{{error}}",
+    "minimumAmountExceeded": "この数量の完全出金は不可能です。トークンあたりの定義された最小数量はプール内に残る必要があります。"
+  },
+  "swapPage": {
+    "addLiquidity": "流動性を追加",
+    "removeLiquidity": "流動性を削除",
+    "swap": "スワップ",
+    "poolExists": "新しいプールを作成する必要はありません。既存のプールに流動性を追加できます。",
+    "palletSlippageError": "計算された出力数量が提供された最小数量より少ないです。",
+    "slippageError": "設定されたスリッページにより取引を完了できませんでした。"
+  },
+  "transactionStatus": {
+    "idle": "",
+    "preparing": "取引を準備中...",
+    "validatingInputs": "入力を検証中...",
+    "checkingBalances": "残高を確認中...",
+    "calculatingRoute": "最適ルートを計算中...",
+    "signing": "取引に署名中...",
+    "waitingForNewBlock": "新しいブロックを待機中...",
+    "waitingForConfirmation": "確認を待機中...",
+    "waitingForFinalization": "最終化を待機中...",
+    "finalizing": "取引を最終化中...",
+    "updatingBalances": "残高を更新中...",
+    "success": "取引成功！",
+    "error": "取引失敗"
+  },
+  "footer": {
+    "poweredBy": "提供",
+    "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "接続詳細",
+    "networkName": "ネットワーク名",
+    "rpcUrl": "RPC URL",
+    "chainId": "チェーンID",
+    "ss58Format": "SS58フォーマット",
+    "blockExplorer": "ブロックエクスプローラー",
+    "copy": "コピー"
+  }
+}

@@ -14,17 +14,17 @@
       "image": "https://example.com/twitter-image.jpg"
     },
     "global": {
-      "title": "DOT ACP App",
-      "description": "DOT ACP App description",
-      "keywords": "keyword1, keyword2, keyword3"
+      "title": "3DPswap User Interface",
+      "description": "3DPswap Decentralized Exchange",
+      "keywords": "3DPswap, DEX, Decentralized Exchange"
     },
     "pools": {
       "title": "Pools",
-      "description": "DOT ACP Pools Page description"
+      "description": "3DPswap Liquidity Pools"
     },
     "swap": {
       "title": "Swap",
-      "description": "DOT ACP Swap Details Page description"
+      "description": "Swap tokens freely on 3DPswap Decentralized Exchange"
     }
   },
   "button": {
@@ -149,5 +149,14 @@
   "footer": {
     "poweredBy": "Powered by",
     "company": "MVP Workshop"
+  },
+  "networkInfo": {
+    "connectionDetails": "Connection Details",
+    "networkName": "Network Name",
+    "rpcUrl": "RPC URL",
+    "chainId": "Chain ID",
+    "ss58Format": "SS58 Format",
+    "blockExplorer": "Block Explorer",
+    "copy": "Copy"
   }
 }
