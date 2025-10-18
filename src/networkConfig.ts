@@ -2,6 +2,7 @@ import { NetworkKeys } from "./app/types/enum";
 import { EVM_PRECOMPILES } from "./config/evmPrecompiles";
 
 type NetworkConfig = {
+  networkName: string;
   nativeTokenSymbol: string;
   rpcUrl: string;
   parents: number;
@@ -13,6 +14,7 @@ type NetworkConfig = {
 
 export const NETWORKS: Record<NetworkKeys, NetworkConfig> = {
   [NetworkKeys.P3D]: {
+    networkName: "3Dpass",
     nativeTokenSymbol: "P3D",
     rpcUrl: "wss://rpc.3dpass.org",
     parents: 1,

@@ -1,5 +1,3 @@
-import { t } from "i18next";
-
 const Footer = () => {
   return (
     <footer className="border-t border-gray-100 bg-gray-50">
@@ -35,19 +33,6 @@ const Footer = () => {
               EVM Solidity interface
             </a>
             <span className="mx-3 hidden text-gray-300 sm:inline-block">|</span>
-          </div>
-
-          {/* Powered by section */}
-          <div className="flex items-center gap-1 text-sm">
-            <span className="text-gray-500">{t("footer.poweredBy")}</span>
-            <a
-              href="https://mvpworkshop.co/"
-              rel="noopener noreferrer"
-              target="_blank"
-              className="font-medium text-gray-600 transition-colors hover:text-pink"
-            >
-              {t("footer.company")}
-            </a>
           </div>
         </div>
       </div>

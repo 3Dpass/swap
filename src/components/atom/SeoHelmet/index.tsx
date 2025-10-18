@@ -17,7 +17,7 @@ const SeoHelmet: FC = () => {
   const myLocation = replace.length > 0 ? replace?.[0] : location.pathname;
 
   const { title, description } = SEO_ROUTES[myLocation as keyof typeof SEO_ROUTES] || {
-    title: "3DPswap DEX",
+    title: "3DPSwap | Trade tokens freely on 3DPswap Decentralized Exchange",
     description: "Swap tokens on The Ledger of Things",
   };
 

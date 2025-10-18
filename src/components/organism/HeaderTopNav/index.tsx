@@ -25,6 +25,9 @@ import { LottieSmall } from "../../../assets/loader/index.tsx";
 import useClickOutside from "../../../app/hooks/useClickOutside.ts";
 import useGetNetwork from "../../../app/hooks/useGetNetwork.ts";
 import ThemeToggle from "../../atom/ThemeToggle/index.tsx";
+import NetworkInfoModal from "../NetworkInfoModal/index.tsx";
+import { NETWORKS } from "../../../networkConfig";
+import { NetworkKeys } from "../../../app/types/enum";
 
 const HeaderTopNav = () => {
   const { state, dispatch } = useAppContext();
@@ -37,6 +40,7 @@ const HeaderTopNav = () => {
   const [walletConnectOpen, setWalletConnectOpen] = useState(false);
   const [supportedWallets, setSupportedWallets] = useState<Wallet[]>([] as Wallet[]);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [networkInfoOpen, setNetworkInfoOpen] = useState(false);
   const mobileMenuRef = useRef<HTMLDivElement>(null);
 
   useClickOutside(mobileMenuRef, () => setMobileMenuOpen(false));
@@ -97,6 +101,21 @@ const HeaderTopNav = () => {
     const wallets = getSupportedWallets();
     setSupportedWallets(wallets);
   }, []);
+
+  const NetworkButton = () => {
+    const currentNetwork = NETWORKS[NetworkKeys.P3D];
+    return (
+      <button
+        onClick={() => setNetworkInfoOpen(true)}
+        className="flex items-center gap-2 rounded-lg border border-gray-200 bg-purple-100 px-3 py-2 transition-colors duration-200 hover:bg-purple-200 dark:border-dark-border-primary dark:bg-dark-bg-secondary dark:hover:bg-dark-bg-tertiary"
+      >
+        <div className="h-2 w-2 rounded-full bg-green-500"></div>
+        <span className="text-small font-medium text-gray-300 dark:text-dark-text-primary">
+          {currentNetwork.networkName}
+        </span>
+      </button>
+    );
+  };
 
   const WalletButton = () => {
     if (walletConnectLoading) {
@@ -185,14 +204,16 @@ const HeaderTopNav = () => {
           </a>
         </div>
 
-        {/* Desktop Wallet Button and Theme Toggle */}
+        {/* Desktop Wallet Button, Network Button and Theme Toggle */}
         <div className="hidden items-center gap-3 md:flex">
+          <NetworkButton />
           <ThemeToggle />
           <WalletButton />
         </div>
 
         {/* Mobile Menu Button and Wallet */}
         <div className="flex items-center gap-2 md:hidden">
+          <NetworkButton />
           <ThemeToggle />
           <WalletButton />
           <button
@@ -265,6 +286,8 @@ const HeaderTopNav = () => {
         supportedWallets={supportedWallets}
         handleConnect={handleConnect}
       />
+
+      <NetworkInfoModal isOpen={networkInfoOpen} onClose={() => setNetworkInfoOpen(false)} />
     </>
   );
 };
