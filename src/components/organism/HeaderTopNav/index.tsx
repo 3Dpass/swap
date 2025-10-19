@@ -1,6 +1,6 @@
 import classNames from "classnames";
-import { NavLink, useLocation } from "react-router-dom";
-import { POOLS_ROUTE, SWAP_ROUTE } from "../../../app/router/routes.ts";
+import { NavLink, Link, useLocation } from "react-router-dom";
+import { POOLS_ROUTE, SWAP_ROUTE, HOME_ROUTE } from "../../../app/router/routes.ts";
 import Logo from "../../../assets/img/3dpswap-logo.svg?react";
 import AccountIdenticon from "../../atom/AccountIdenticon";
 import { ActionType, ButtonVariants, WalletConnectSteps } from "../../../app/types/enum.ts";
@@ -167,7 +167,9 @@ const HeaderTopNav = () => {
       <nav className="relative flex h-[60px] items-center justify-between bg-white px-2 py-3 transition-colors duration-300 dark:bg-dark-bg-primary sm:h-[70px] sm:px-6 sm:py-4 lg:h-[80px] lg:px-10 lg:py-5">
         {/* Logo - fixed size, no distortion */}
         <div className="flex-shrink-0">
-          <Logo className="h-auto w-[100px] sm:w-[120px] lg:w-[150px]" />
+          <Link to={HOME_ROUTE} className="block transition-opacity hover:opacity-80">
+            <Logo className="h-auto w-[100px] sm:w-[120px] lg:w-[150px]" />
+          </Link>
         </div>
 
         {/* Desktop Navigation */}

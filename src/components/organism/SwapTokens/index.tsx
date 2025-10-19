@@ -1309,10 +1309,32 @@ const SwapTokens = () => {
 
   // Auto-focus the "You pay" input field when component mounts
   useEffect(() => {
-    if (youPayInputRef.current) {
-      youPayInputRef.current.focus();
-    }
+    const focusInput = () => {
+      if (youPayInputRef.current && !youPayInputRef.current.disabled) {
+        youPayInputRef.current.focus();
+      }
+    };
+
+    // Try to focus immediately
+    focusInput();
+
+    // Also try after a short delay to ensure the component is fully rendered
+    const timeoutId = setTimeout(focusInput, 100);
+
+    return () => clearTimeout(timeoutId);
   }, []);
+
+  // Refocus when the input becomes enabled (e.g., when wallet connects)
+  useEffect(() => {
+    if (selectedAccount && youPayInputRef.current && !youPayInputRef.current.disabled) {
+      const timeoutId = setTimeout(() => {
+        if (youPayInputRef.current && !youPayInputRef.current.disabled) {
+          youPayInputRef.current.focus();
+        }
+      }, 200);
+      return () => clearTimeout(timeoutId);
+    }
+  }, [selectedAccount]);
 
   // Transaction timeout is now handled by useTransactionTimeout hook
 
