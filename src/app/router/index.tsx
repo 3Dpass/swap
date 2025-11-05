@@ -4,12 +4,14 @@ import SwapPage from "../../pages/SwapPage";
 import LiquidityPage from "../../pages/LiquidityPage/index.tsx";
 import DevelopersPage from "../../pages/DevelopersPage";
 import AddTokenPage from "../../pages/AddTokenPage";
+import StablecoinsPage from "../../pages/StablecoinsPage";
 import {
   HOME_ROUTE,
   POOLS_ROUTE,
   SWAP_ROUTE,
   DEVELOPERS_ROUTE,
   ADD_TOKEN_ROUTE,
+  STABLECOINS_ROUTE,
   ADD_LIQUIDITY,
   ADD_LIQUIDITY_TO_EXISTING,
   REMOVE_LIQUIDITY_FROM_EXISTING,
@@ -61,6 +63,10 @@ const router = createBrowserRouter([
       {
         path: ADD_TOKEN_ROUTE,
         element: <AddTokenPage />,
+      },
+      {
+        path: STABLECOINS_ROUTE,
+        element: <StablecoinsPage />,
       },
     ],
   },

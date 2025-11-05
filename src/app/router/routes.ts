@@ -8,6 +8,7 @@ const REMOVE_LIQUIDITY_FROM_EXISTING = "remove-liquidity/:id";
 const SWAP_ROUTE = "swap";
 const DEVELOPERS_ROUTE = "developers";
 const ADD_TOKEN_ROUTE = "add-token";
+const STABLECOINS_ROUTE = "stablecoins";
 const POOLS_ADD_LIQUIDITY = "/pools/add-liquidity";
 const POOLS_PAGE = "/pools";
 
@@ -28,6 +29,10 @@ const SEO_ROUTES = {
     title: t("seo.addToken.title"),
     description: t("seo.addToken.description"),
   },
+  [STABLECOINS_ROUTE]: {
+    title: t("seo.stablecoins.title"),
+    description: t("seo.stablecoins.description"),
+  },
 };
 
 export {
@@ -36,6 +41,7 @@ export {
   SWAP_ROUTE,
   DEVELOPERS_ROUTE,
   ADD_TOKEN_ROUTE,
+  STABLECOINS_ROUTE,
   ADD_LIQUIDITY,
   POOLS_ADD_LIQUIDITY,
   POOLS_PAGE,

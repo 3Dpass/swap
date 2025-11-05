@@ -16,6 +16,13 @@ const Footer = () => {
             </Link>
             <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
             <Link
+              to="/stablecoins"
+              className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
+            >
+              Stablecoins
+            </Link>
+            <span className="mx-3 hidden text-gray-300 dark:text-dark-border-primary sm:inline-block">|</span>
+            <Link
               to="/add-token"
               className="font-medium text-gray-600 transition-colors hover:text-pink dark:text-dark-text-secondary dark:hover:text-pink"
             >
