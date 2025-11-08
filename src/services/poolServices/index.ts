@@ -604,6 +604,8 @@ export const createPoolCardsArray = async (
               lpTokenAsset: lpToken,
               lpTokenId: lpTokenId,
               assetTokenId: asset2IsNative ? asset1TokenId : asset2TokenId,
+              asset1TokenId: asset1TokenId,
+              asset2TokenId: asset2TokenId,
               totalTokensLocked: {
                 asset1Token: {
                   decimals: asset1Decimals,

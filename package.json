@@ -16,7 +16,8 @@
     "check:packages": "pnpm up --latest --interactive",
     "prepare": "is-ci || husky",
     "postinstall": "is-ci || husky || true",
-    "setup": "pnpm install && husky"
+    "setup": "pnpm install && husky",
+    "fetch-pairs": "node scripts/fetchAllPairs.js"
   },
   "lint-staged": {
     "**/*.{ts,tsx}": [

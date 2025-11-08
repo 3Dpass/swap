@@ -8,6 +8,9 @@ import { useNavigate } from "react-router-dom";
 import { ADD_LIQUIDITY_TO_EXISTING, REMOVE_LIQUIDITY_FROM_EXISTING } from "../../app/router/routes";
 import { urlTo, formatCompactNumber } from "../../app/util/helper";
 import { useAppContext } from "../../state";
+import { useState } from "react";
+import { convertAssetIdToEVMAddress, convertAssetIdToLiquidityPoolAddress } from "../../app/util/assetAddressConverter";
+import useGetNetwork from "../../app/hooks/useGetNetwork";
 
 type PoolDataCardProps = {
   tokenPair: string;
@@ -17,6 +20,8 @@ type PoolDataCardProps = {
   asset2TokenSymbol: string;
   lpTokenAsset: LpTokenAsset | null;
   assetTokenId: string;
+  asset1TokenId: string | null;
+  asset2TokenId: string | null;
   lpTokenId: string | null;
 };
 
@@ -27,14 +32,19 @@ const PoolDataCard = ({
   asset2TokenSymbol,
   lpTokenAsset,
   assetTokenId,
+  asset1TokenId,
+  asset2TokenId,
   lpTokenId,
 }: PoolDataCardProps) => {
   const navigate = useNavigate();
   const { state } = useAppContext();
   const { tokenBalances, selectedAccount } = state;
+  const [showDetails, setShowDetails] = useState(false);
+  const { assethubSubscanUrl } = useGetNetwork();
 
   // Reorder tokens so native token (P3D) is always second
   const isAsset1Native = asset1TokenSymbol === "P3D";
+  const isAsset2Native = asset2TokenSymbol === "P3D";
 
   const firstTokenSymbol = isAsset1Native ? asset2TokenSymbol : asset1TokenSymbol;
   const secondTokenSymbol = isAsset1Native ? asset1TokenSymbol : asset2TokenSymbol;
@@ -43,6 +53,16 @@ const PoolDataCard = ({
 
   // Reconstruct token pair name with correct order
   const displayTokenPair = `${firstTokenSymbol}-${secondTokenSymbol}`;
+
+  // Determine TokenA and TokenB asset IDs
+  // TokenA = asset1, TokenB = asset2
+  const tokenAAssetId = isAsset1Native ? "0" : asset1TokenId;
+  const tokenBAssetId = isAsset2Native ? "0" : asset2TokenId;
+
+  // Convert asset IDs to EVM addresses
+  const lpTokenEVMAddress = lpTokenId ? convertAssetIdToLiquidityPoolAddress(lpTokenId) : null;
+  const tokenAEVMAddress = tokenAAssetId ? convertAssetIdToEVMAddress(tokenAAssetId) : null;
+  const tokenBEVMAddress = tokenBAssetId ? convertAssetIdToEVMAddress(tokenBAssetId) : null;
 
   const onDepositClick = () => {
     navigate(urlTo(ADD_LIQUIDITY_TO_EXISTING, { id: assetTokenId }), {
@@ -141,6 +161,91 @@ const PoolDataCard = ({
             </div>
           </div>
         </div>
+      </div>
+
+      {/* Details section with Hide/Show control */}
+      <div className="px-4 pb-3">
+        <button
+          onClick={() => setShowDetails(!showDetails)}
+          className="flex w-full items-center justify-between rounded-lg bg-gray-50 px-3 py-2 text-sm font-medium text-gray-700 transition-colors hover:bg-gray-100 dark:bg-dark-bg-card dark:text-dark-text-secondary dark:hover:bg-dark-bg-tertiary"
+        >
+          <span>Details</span>
+          <span className="text-xs">{showDetails ? "Hide" : "Show"}</span>
+        </button>
+        {showDetails && (
+          <div className="mt-2 rounded-lg bg-gray-50 p-3 dark:bg-dark-bg-card">
+            <div className="space-y-2 text-xs">
+              <div>
+                <p className="font-medium text-gray-700 dark:text-dark-text-primary">Pair:</p>
+                <p className="mt-1 font-mono text-gray-600 dark:text-dark-text-secondary">
+                  {lpTokenId ? (
+                    <>
+                      Pool AssetId # {lpTokenId}, EVM: {lpTokenEVMAddress}
+                    </>
+                  ) : (
+                    "N/A"
+                  )}
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700 dark:text-dark-text-primary">TokenA:</p>
+                <p className="mt-1 font-mono text-gray-600 dark:text-dark-text-secondary">
+                  {isAsset1Native ? (
+                    <>Native, EVM: {tokenAEVMAddress}</>
+                  ) : tokenAAssetId ? (
+                    <>
+                      AssetId #{" "}
+                      {assethubSubscanUrl ? (
+                        <a
+                          href={`${assethubSubscanUrl}/#/assets/${tokenAAssetId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="View on explorer"
+                          className="text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          {tokenAAssetId}
+                        </a>
+                      ) : (
+                        tokenAAssetId
+                      )}
+                      , EVM: {tokenAEVMAddress}
+                    </>
+                  ) : (
+                    "N/A"
+                  )}
+                </p>
+              </div>
+              <div>
+                <p className="font-medium text-gray-700 dark:text-dark-text-primary">TokenB:</p>
+                <p className="mt-1 font-mono text-gray-600 dark:text-dark-text-secondary">
+                  {isAsset2Native ? (
+                    <>Native, EVM: {tokenBEVMAddress}</>
+                  ) : tokenBAssetId ? (
+                    <>
+                      AssetId #{" "}
+                      {assethubSubscanUrl ? (
+                        <a
+                          href={`${assethubSubscanUrl}/#/assets/${tokenBAssetId}`}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          title="View on explorer"
+                          className="text-blue-600 underline hover:text-blue-800 dark:text-blue-400 dark:hover:text-blue-300"
+                        >
+                          {tokenBAssetId}
+                        </a>
+                      ) : (
+                        tokenBAssetId
+                      )}
+                      , EVM: {tokenBEVMAddress}
+                    </>
+                  ) : (
+                    "N/A"
+                  )}
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Action buttons */}
