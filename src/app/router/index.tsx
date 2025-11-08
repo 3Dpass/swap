@@ -1,5 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import PoolsPage from "../../pages/PoolsPage";
+import SinglePoolPage from "../../pages/SinglePoolPage";
 import SwapPage from "../../pages/SwapPage";
 import LiquidityPage from "../../pages/LiquidityPage/index.tsx";
 import DevelopersPage from "../../pages/DevelopersPage";
@@ -15,6 +16,7 @@ import {
   ADD_LIQUIDITY,
   ADD_LIQUIDITY_TO_EXISTING,
   REMOVE_LIQUIDITY_FROM_EXISTING,
+  POOL_DETAIL,
 } from "./routes";
 import MainLayout from "../../layout/MainLayout.tsx";
 import NotFoundPage from "../../pages/NotFoundPage";
@@ -49,6 +51,10 @@ const router = createBrowserRouter([
             path: REMOVE_LIQUIDITY_FROM_EXISTING,
             element: <LiquidityPage />,
             index: true,
+          },
+          {
+            path: POOL_DETAIL,
+            element: <SinglePoolPage />,
           },
         ],
       },

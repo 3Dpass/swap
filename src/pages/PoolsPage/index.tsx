@@ -7,6 +7,7 @@ import { ButtonVariants } from "../../app/types/enum";
 import TokenIcon from "../../assets/img/token-icon.svg?react";
 import { LottieLarge } from "../../assets/loader";
 import Button from "../../components/atom/Button";
+import PoolSearchBar from "../../components/molecule/PoolSearchBar";
 import { useAppContext } from "../../state";
 import PoolDataCard from "./PoolDataCard";
 
@@ -58,6 +59,11 @@ const PoolsPage = () => {
                 ) : null}
               </div>
             </div>
+            {pools.length > 0 && poolsCards.length > 0 && (
+              <div className="mb-6 px-2 sm:px-6 lg:px-10">
+                <PoolSearchBar pools={poolsCards} />
+              </div>
+            )}
             {pools.length > 0 && poolsCards.length > 0 ? (
               <div className="grid grid-cols-1 gap-6 px-2 sm:px-6 md:grid-cols-2 lg:px-10 xl:grid-cols-3">
                 {poolsCards.map((item: PoolCardProps, index: number) => {

@@ -11,6 +11,7 @@ const ADD_TOKEN_ROUTE = "add-token";
 const STABLECOINS_ROUTE = "stablecoins";
 const POOLS_ADD_LIQUIDITY = "/pools/add-liquidity";
 const POOLS_PAGE = "/pools";
+const POOL_DETAIL = ":id";
 
 const SEO_ROUTES = {
   [POOLS_ROUTE]: {
@@ -45,6 +46,7 @@ export {
   ADD_LIQUIDITY,
   POOLS_ADD_LIQUIDITY,
   POOLS_PAGE,
+  POOL_DETAIL,
   SEO_ROUTES,
   ADD_LIQUIDITY_TO_EXISTING,
   REMOVE_LIQUIDITY_FROM_EXISTING,

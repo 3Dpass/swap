@@ -5,7 +5,7 @@ import AddIconPink from "../../assets/img/add-icon-pink.svg?react";
 import { LpTokenAsset } from "../../app/types";
 import { t } from "i18next";
 import { useNavigate } from "react-router-dom";
-import { ADD_LIQUIDITY_TO_EXISTING, REMOVE_LIQUIDITY_FROM_EXISTING } from "../../app/router/routes";
+import { ADD_LIQUIDITY_TO_EXISTING, REMOVE_LIQUIDITY_FROM_EXISTING, POOLS_PAGE } from "../../app/router/routes";
 import { urlTo, formatCompactNumber } from "../../app/util/helper";
 import { useAppContext } from "../../state";
 import { useState } from "react";
@@ -65,13 +65,13 @@ const PoolDataCard = ({
   const tokenBEVMAddress = tokenBAssetId ? convertAssetIdToEVMAddress(tokenBAssetId) : null;
 
   const onDepositClick = () => {
-    navigate(urlTo(ADD_LIQUIDITY_TO_EXISTING, { id: assetTokenId }), {
+    navigate(`${POOLS_PAGE}/${urlTo(ADD_LIQUIDITY_TO_EXISTING, { id: assetTokenId })}`, {
       state: { pageType: LiquidityPageType.addLiquidity },
     });
   };
 
   const onWithdrawClick = () => {
-    navigate(urlTo(REMOVE_LIQUIDITY_FROM_EXISTING, { id: assetTokenId }), {
+    navigate(`${POOLS_PAGE}/${urlTo(REMOVE_LIQUIDITY_FROM_EXISTING, { id: assetTokenId })}`, {
       state: { pageType: LiquidityPageType.removeLiquidity, lpTokenId: lpTokenId },
     });
   };
